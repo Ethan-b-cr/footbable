@@ -1109,6 +1109,39 @@ a {
   line-height: 1.8;
 }
 
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.metric-grid article {
+  padding: 18px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 250, 242, 0.78);
+  border: 1px solid var(--line);
+}
+
+.metric-grid span {
+  display: block;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.metric-grid strong {
+  display: block;
+  margin: 8px 0;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.metric-grid p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 .spotlight-stat-card {
   display: grid;
   gap: 14px;
@@ -1643,6 +1676,7 @@ a {
   .article-list,
   .entity-grid,
   .data-pulse-grid,
+  .metric-grid,
   .article-stat-grid,
   .article-pagination,
   .unlocked-grid,

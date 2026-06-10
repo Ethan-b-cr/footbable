@@ -2,21 +2,21 @@ const animatedSections = document.querySelectorAll(
   ".section, .hero-copy, .hero-panel, .site-footer, .article-hero-copy, .article-side-card, .faq-item"
 );
 
-const observer = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("is-visible");
-      }
-    });
-  },
-  { threshold: 0.16 }
-);
+if ("IntersectionObserver" in window) {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add("is-visible");
+      });
+    },
+    { threshold: 0.16 }
+  );
 
-animatedSections.forEach((section) => {
-  section.classList.add("reveal");
-  observer.observe(section);
-});
+  animatedSections.forEach((section) => {
+    section.classList.add("reveal");
+    observer.observe(section);
+  });
+}
 
 const teamArtwork = {
   Argentina:
@@ -42,13 +42,13 @@ const teamArtwork = {
 };
 
 const playerArtwork = {
-  "Lionel Andrés Messi Cuccittini":
+  "Lionel Andres Messi Cuccittini":
     "https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg",
-  "Kylian Mbappé Lottin":
+  "Kylian Mbappe Lottin":
     "https://upload.wikimedia.org/wikipedia/commons/4/44/Kylian_Mbapp%C3%A9_2022.jpg",
   "Antoine Griezmann":
     "https://upload.wikimedia.org/wikipedia/commons/5/58/Antoine_Griezmann_2018.jpg",
-  "Luka Modrić":
+  "Luka Modric":
     "https://upload.wikimedia.org/wikipedia/commons/2/20/Luka_Modric_2018.jpg",
   "Harry Kane":
     "https://upload.wikimedia.org/wikipedia/commons/d/d1/Harry_Kane_2021.jpg",
@@ -58,7 +58,7 @@ const playerArtwork = {
     "https://upload.wikimedia.org/wikipedia/commons/3/32/Olivier_Giroud_2018.jpg",
   "Achraf Hakimi Mouh":
     "https://upload.wikimedia.org/wikipedia/commons/4/4f/Achraf_Hakimi_2022.jpg",
-  "Neymar da Silva Santos Júnior":
+  "Neymar da Silva Santos Junior":
     "https://upload.wikimedia.org/wikipedia/commons/8/8c/Neymar_2018.jpg",
 };
 
@@ -75,7 +75,6 @@ const normalizeName = (value) =>
 const getMemberSession = () => {
   const rawSession = window.localStorage.getItem("worldCupEdgeMember");
   if (!rawSession) return null;
-
   try {
     return JSON.parse(rawSession);
   } catch {
@@ -84,12 +83,10 @@ const getMemberSession = () => {
 };
 
 const memberSession = getMemberSession();
-
 const formatNumber = (value, digits = 1) => Number(value || 0).toFixed(digits);
 const formatPercent = (value) => `${Number(value || 0).toFixed(1)}%`;
 const perMatch = (value, matches, digits = 2) =>
   matches > 0 ? Number(value / matches).toFixed(digits) : Number(0).toFixed(digits);
-
 const byGoals = (a, b) => (b.goals || 0) - (a.goals || 0);
 const byAppearances = (a, b) => (b.appearances || 0) - (a.appearances || 0);
 
@@ -115,15 +112,12 @@ const contactHint = document.querySelector("#form-hint");
 if (contactForm && contactHint) {
   contactForm.addEventListener("submit", () => {
     const name = document.querySelector("#contact-name")?.value.trim() || "未填写称呼";
-    const plan = document.querySelector("#contact-plan")?.value.trim() || "专业会员";
+    const plan = document.querySelector("#contact-plan")?.value.trim() || "专业会员咨询";
     const note = document.querySelector("#contact-note")?.value.trim() || "未填写需求";
     const email = document.querySelector("#contact-email")?.value.trim() || "未填写邮箱";
     const subjectField = contactForm.querySelector('input[name="_subject"]');
 
-    if (subjectField) {
-      subjectField.value = `World Cup Edge 咨询 - ${plan} - ${name}`;
-    }
-
+    if (subjectField) subjectField.value = `World Cup Edge 咨询 - ${plan} - ${name}`;
     contactHint.textContent = `正在提交咨询：${plan} / ${name} / ${email}`;
     document.querySelector("#contact-note").value = `${note}\n\n联系邮箱：${email}`;
   });
@@ -134,7 +128,7 @@ const loginStatus = document.querySelector("#login-status");
 
 if (loginForm && loginStatus) {
   if (memberSession?.email) {
-    loginStatus.textContent = `当前已登录：${memberSession.email}，正在跳转会员中心。`;
+    loginStatus.textContent = `当前已登录：${memberSession.email}，正在进入会员中心。`;
     window.setTimeout(() => {
       window.location.href = "members.html";
     }, 700);
@@ -142,7 +136,6 @@ if (loginForm && loginStatus) {
 
   loginForm.addEventListener("submit", (event) => {
     event.preventDefault();
-
     const email = document.querySelector("#login-email")?.value.trim();
     const password = document.querySelector("#login-password")?.value.trim();
 
@@ -151,12 +144,10 @@ if (loginForm && loginStatus) {
       return;
     }
 
-    const nextSession = {
-      email,
-      loggedInAt: new Date().toISOString(),
-    };
-
-    window.localStorage.setItem("worldCupEdgeMember", JSON.stringify(nextSession));
+    window.localStorage.setItem(
+      "worldCupEdgeMember",
+      JSON.stringify({ email, loggedInAt: new Date().toISOString() })
+    );
     loginStatus.textContent = `登录成功，正在进入会员中心：${email}`;
     window.location.href = "members.html";
   });
@@ -169,38 +160,31 @@ const memberEmailCard = document.querySelector("#member-email-card");
 const memberEmailText = document.querySelector("#member-email-text");
 const memberLibraryList = document.querySelector("#member-library-list");
 
-if (memberStatusTitle && memberStatusText && memberPrimaryAction) {
-  if (memberSession?.email) {
-    memberStatusTitle.textContent = "当前已登录";
-    memberStatusText.textContent = `当前浏览器已保存会员状态：${memberSession.email}`;
-    memberPrimaryAction.textContent = "继续查看会员深度内容";
-    memberPrimaryAction.href = "article.html?slug=lineup-and-odds";
-
-    if (memberEmailCard && memberEmailText) {
-      memberEmailCard.hidden = false;
-      memberEmailText.textContent = memberSession.email;
-    }
+if (memberStatusTitle && memberStatusText && memberPrimaryAction && memberSession?.email) {
+  memberStatusTitle.textContent = "当前已登录";
+  memberStatusText.textContent = `当前浏览器已保存会员状态：${memberSession.email}`;
+  memberPrimaryAction.textContent = "继续查看会员深度内容";
+  memberPrimaryAction.href = "article.html?slug=lineup-and-odds";
+  if (memberEmailCard && memberEmailText) {
+    memberEmailCard.hidden = false;
+    memberEmailText.textContent = memberSession.email;
   }
 }
 
 const fillArticleLibrary = () => {
   if (!memberLibraryList || !window.worldCupArticles) return;
-
   memberLibraryList.innerHTML = Object.values(window.worldCupArticles)
     .map((article) => {
       const locked = article.requiresMember && !memberSession?.email;
       const href = locked ? "login.html" : `article.html?slug=${article.slug}`;
-      const badge = article.requiresMember ? "会员深度" : "公开分析";
-      const buttonLabel = locked ? "登录后查看" : "进入内容";
-
       return `
         <article class="article-card ${locked ? "locked-card" : ""}">
           <span class="article-meta">${article.category}</span>
           <h3>${article.title}</h3>
           <p>${article.summary}</p>
           <div class="library-row">
-            <span class="library-badge">${badge}</span>
-            <a class="article-link" href="${href}">${buttonLabel}</a>
+            <span class="library-badge">${article.requiresMember ? "会员深度" : "公开分析"}</span>
+            <a class="article-link" href="${href}">${locked ? "登录后查看" : "进入内容"}</a>
           </div>
         </article>
       `;
@@ -237,7 +221,6 @@ if (articleMain && window.worldCupArticles) {
   const article = window.worldCupArticles[slug] || window.worldCupArticles["tempo-breakpoint"];
   const requiresMember = Boolean(article.requiresMember);
   const canViewFullArticle = !requiresMember || Boolean(memberSession?.email);
-
   const title = document.querySelector("#article-title");
   const eyebrow = document.querySelector("#article-eyebrow");
   const description = document.querySelector("#article-description");
@@ -253,17 +236,12 @@ if (articleMain && window.worldCupArticles) {
       ? canViewFullArticle
         ? "查看完整会员内容"
         : "登录后查看完整内容"
-      : "咨询本场解锁";
+      : "进入会员中心";
     articleSideAction.href = requiresMember && !canViewFullArticle ? "login.html" : "members.html";
   }
 
-  if (metaRow) {
-    metaRow.innerHTML = article.meta.map((item) => `<span>${item}</span>`).join("");
-  }
-
-  if (focusList) {
-    focusList.innerHTML = article.focus.map((item) => `<li>${item}</li>`).join("");
-  }
+  if (metaRow) metaRow.innerHTML = article.meta.map((item) => `<span>${item}</span>`).join("");
+  if (focusList) focusList.innerHTML = article.focus.map((item) => `<li>${item}</li>`).join("");
 
   if (articleSourceList && window.worldCupDataSources) {
     articleSourceList.innerHTML = (article.sourceKeys || [])
@@ -271,9 +249,7 @@ if (articleMain && window.worldCupArticles) {
       .filter(Boolean)
       .map(
         (source) => `
-          <a class="source-chip" href="${source.link}" target="_blank" rel="noreferrer">
-            ${source.name}
-          </a>
+          <a class="source-chip" href="${source.link}" target="_blank" rel="noreferrer">${source.name}</a>
         `
       )
       .join("");
@@ -284,22 +260,21 @@ if (articleMain && window.worldCupArticles) {
     .map((section) => {
       const stats = section.stats
         ? `
-            <div class="article-stat-grid">
-              ${section.stats
-                .map(
-                  (stat) => `
-                    <article>
-                      <span>${stat.label}</span>
-                      <strong>${stat.value}</strong>
-                      <p>${stat.text}</p>
-                    </article>
-                  `
-                )
-                .join("")}
-            </div>
-          `
+          <div class="article-stat-grid">
+            ${section.stats
+              .map(
+                (stat) => `
+                  <article>
+                    <span>${stat.label}</span>
+                    <strong>${stat.value}</strong>
+                    <p>${stat.text}</p>
+                  </article>
+                `
+              )
+              .join("")}
+          </div>
+        `
         : "";
-
       return `
         <div class="article-block">
           <p class="eyebrow">${section.label}</p>
@@ -322,9 +297,8 @@ if (articleMain && window.worldCupArticles) {
   if (requiresMember && !canViewFullArticle) {
     if (renderedLockedDescription) {
       renderedLockedDescription.textContent =
-        "这篇内容属于会员深度文章。当前仅开放第一层判断，登录后可继续查看完整结论、阵容修正和风控提示。";
+        "这篇内容属于会员深度文章。当前只开放第一层判断，登录后可继续查看完整结论、阵容修正和后续延伸。";
     }
-
     if (renderedLockedList) {
       renderedLockedList.hidden = false;
       renderedLockedList.innerHTML = `
@@ -333,12 +307,10 @@ if (articleMain && window.worldCupArticles) {
         <li>进入会员中心查看更多深度内容</li>
       `;
     }
-
     if (renderedLockedPrimary) {
       renderedLockedPrimary.textContent = "登录查看完整内容";
       renderedLockedPrimary.href = "login.html";
     }
-
     if (renderedLockedSecondary) {
       renderedLockedSecondary.textContent = "查看会员方案";
       renderedLockedSecondary.href = "members.html";
@@ -359,7 +331,6 @@ if (lockedDescription && lockedList && memberUnlocked && lockedActions && member
     <a class="button button-primary" href="members.html">返回会员中心</a>
     <button class="button button-secondary" type="button" id="locked-logout-button">退出当前会员</button>
   `;
-
   document.querySelector("#locked-logout-button")?.addEventListener("click", () => {
     window.localStorage.removeItem("worldCupEdgeMember");
     window.location.reload();
@@ -392,11 +363,10 @@ const buildTeamCard = (team) => {
   const winRate = formatPercent((team.wins / team.matches) * 100);
   const shotRate = perMatch(team.shots || 0, team.matches, 1);
   const xgRate = perMatch(team.xg_for || 0, team.matches, 2);
-
   return `
     <article class="entity-card">
       <div class="entity-media">
-        <img src="${teamImage}" alt="${team.team} 队画面" loading="lazy">
+        <img src="${teamImage}" alt="${team.team} 球队画面" loading="lazy">
       </div>
       <div class="entity-body">
         <span class="article-meta">球队分析 / 历史样本</span>
@@ -420,11 +390,10 @@ const buildPlayerCard = (player) => {
     fallbackArtwork.player;
   const passRate =
     player.passes > 0 ? formatPercent((player.completed_passes / player.passes) * 100) : "0.0%";
-
   return `
     <article class="entity-card">
       <div class="entity-media">
-        <img src="${playerImage}" alt="${player.player_name} 画面" loading="lazy">
+        <img src="${playerImage}" alt="${player.player_name} 球员画面" loading="lazy">
       </div>
       <div class="entity-body">
         <span class="article-meta">球员分析 / 历史样本</span>
@@ -473,12 +442,12 @@ const renderSnapshot = (snapshot) => {
       <article class="article-card">
         <span class="article-meta">人员记录</span>
         <h3>${snapshot.person_count} 条</h3>
-        <p>覆盖主教练与其他关键人员的样本记录。</p>
+        <p>覆盖教练组与其他关键人员的历史记录。</p>
       </article>
       <article class="article-card">
         <span class="article-meta">球员样本</span>
         <h3>${snapshot.player_count} 人</h3>
-        <p>已覆盖球员出场、首发、分钟、射门、xG 和传球。</p>
+        <p>已覆盖球员出场、首发、分钟、射门、xG 和传球数据。</p>
       </article>
     `;
   }
@@ -493,12 +462,12 @@ const renderSnapshot = (snapshot) => {
       <article>
         <span>球队入口</span>
         <strong>${snapshot.team_count}</strong>
-        <p>每支球队都能单独进入页面看结构和样本。</p>
+        <p>每支球队都可以单独进入页面看结构与样本。</p>
       </article>
       <article>
         <span>球员入口</span>
         <strong>${snapshot.player_count}</strong>
-        <p>核心球星和角色球员都可继续补充到页面层。</p>
+        <p>核心球星和角色球员都能继续补足到页面层。</p>
       </article>
     `;
   }
@@ -513,7 +482,7 @@ const renderSnapshot = (snapshot) => {
       <article class="insight-card muted">
         <span>当前阶段</span>
         <strong>真实数据底座已成型</strong>
-        <p>下一步可以继续补球队风格、球员位置热区和更细粒度事件解释。</p>
+        <p>下一步继续补球队风格、球员角色和更细颗粒度事件解释。</p>
       </article>
     `;
   }
@@ -521,9 +490,9 @@ const renderSnapshot = (snapshot) => {
   if (homepageScorerSpotlight && leadScorer) {
     homepageScorerSpotlight.innerHTML = `
       <div class="spotlight-stat-card">
-        <p class="eyebrow">头号球星样本</p>
+        <p class="eyebrow">头部球星样本</p>
         <h2>${leadScorer.player_name}</h2>
-        <p>${leadScorer.team_name} 当前位于快照射手榜前列。公开层先展示真实样本，第二层再继续延伸个人作用和对位价值。</p>
+        <p>${leadScorer.team_name} 当前位于快照射手榜前列。公开层先展示真实样本，第二层再延伸到个人作用和对位价值。</p>
         <div class="stat-chip-row">
           <span>${leadScorer.goals || 0} 球</span>
           <span>${leadScorer.shots || 0} 次射门</span>
@@ -540,7 +509,7 @@ const renderSnapshot = (snapshot) => {
       <div class="spotlight-stat-card">
         <p class="eyebrow">最新淘汰赛样本</p>
         <h2>${latestFinal.home_team} vs ${latestFinal.away_team}</h2>
-        <p>${latestFinal.season} 年 ${latestFinal.stage}，比分 ${latestFinal.home_score}-${latestFinal.away_score}。这种高价值样本比普通列表更能撑起站点专业感。</p>
+        <p>${latestFinal.season} 年 ${latestFinal.stage}，比分 ${latestFinal.home_score}-${latestFinal.away_score}。这种高价值样本比普通列表更能撑起站点的专业感。</p>
         <div class="stat-chip-row">
           <span>${latestFinal.match_date}</span>
           <span>${latestFinal.stage}</span>
@@ -554,9 +523,9 @@ const renderSnapshot = (snapshot) => {
   if (dataScorerSpotlight && leadScorer) {
     dataScorerSpotlight.innerHTML = `
       <div class="spotlight-stat-card">
-        <p class="eyebrow">头号球星快照</p>
+        <p class="eyebrow">头部球星快照</p>
         <h3>${leadScorer.player_name}</h3>
-        <p>${leadScorer.team_name} 的进攻样本目前最值得首先露出。这个区块可以让数据中心更像真实分析后台，而不是只有表格。</p>
+        <p>${leadScorer.team_name} 的进攻样本目前最值得优先露出。这个区块让数据中心更像真实分析后台，而不只是表格。</p>
         <div class="stat-chip-row">
           <span>${leadScorer.goals || 0} 球</span>
           <span>${leadScorer.shots_on_target || 0} 次射正</span>
@@ -570,9 +539,9 @@ const renderSnapshot = (snapshot) => {
   if (dataFinalSnapshot && latestFinal) {
     dataFinalSnapshot.innerHTML = `
       <div class="spotlight-stat-card">
-        <p class="eyebrow">冠军赛阶段样本</p>
+        <p class="eyebrow">冠军阶段样本</p>
         <h3>${latestFinal.home_team} ${latestFinal.home_score}-${latestFinal.away_score} ${latestFinal.away_team}</h3>
-        <p>${latestFinal.season} 年的 ${latestFinal.stage} 已经进入快照头部样本，后续可以继续补充更细的事件拆解与球员层解释。</p>
+        <p>${latestFinal.season} 年的 ${latestFinal.stage} 已进入快照头部样本，后续还可以继续补更细的事件拆解和球员层解释。</p>
         <div class="stat-chip-row">
           <span>${latestFinal.match_date}</span>
           <span>${latestFinal.stage}</span>
@@ -730,7 +699,6 @@ const renderDataError = () => {
       </article>
     `;
   }
-
   if (teamSummaryTable) teamSummaryTable.innerHTML = '<p class="table-empty">暂无球队汇总。</p>';
   if (latestMatchesTable) latestMatchesTable.innerHTML = '<p class="table-empty">暂无比赛记录。</p>';
   if (playerSummaryTable) playerSummaryTable.innerHTML = '<p class="table-empty">暂无球员汇总。</p>';
@@ -746,6 +714,8 @@ const teamAnalysisBox = document.querySelector("#team-analysis-box");
 const teamPlayersTable = document.querySelector("#team-players-table");
 const teamHeroImage = document.querySelector("#team-hero-image");
 const teamComparisonTable = document.querySelector("#team-comparison-table");
+const teamEfficiencyBox = document.querySelector("#team-efficiency-box");
+const teamStyleBox = document.querySelector("#team-style-box");
 
 const buildTeamNarrative = (team) => {
   const winRate = formatPercent((team.wins / team.matches) * 100);
@@ -759,11 +729,54 @@ const buildTeamNarrative = (team) => {
 
   return `
     <div class="analysis-stack">
-      <p>${team.team} 当前历史样本共 ${team.matches} 场，胜率 ${winRate}，平局占比 ${drawRate}，净胜球 ${goalDiff}。这说明它在世界杯舞台上的成绩稳定度处于什么层级。</p>
-      <p>进攻端场均射门 ${shotRate}，场均 xG ${xgForRate}；防守端场均被打出 xG ${xgAgainstRate}。如果一个队的 xG 长期高于实际进球，通常代表制造机会能力足够，但终结效率仍有波动。</p>
-      <p>射门转化上，本队共有 ${team.shots_on_target || 0} 次射正，射正占比 ${onTargetRate}。公开层适合先看这种稳定指标，再决定是否进入第二层看阵容、赔率与临场修正。</p>
+      <p>${team.team} 当前历史样本共 ${team.matches} 场，胜率 ${winRate}，平局占比 ${drawRate}，净胜球 ${goalDiff}。这决定了它在世界杯舞台上的基本稳定性。</p>
+      <p>进攻端场均射门 ${shotRate}，场均 xG ${xgForRate}；防守端场均被打出 xG ${xgAgainstRate}。如果一支球队长期 xG 高于实际进球，往往说明创造机会能力不错，但终结效率仍有波动。</p>
+      <p>射门转化上，本队共有 ${team.shots_on_target || 0} 次射正，射正占比 ${onTargetRate}。公开层适合先看这种稳定指标，再决定是否进入第二层看阵容、修正和临场变化。</p>
     </div>
   `;
+};
+
+const buildTeamEfficiency = (team) => {
+  const winRate = formatPercent((team.wins / team.matches) * 100);
+  const scoringRate = perMatch(team.goals_for || 0, team.matches, 2);
+  const concedingRate = perMatch(team.goals_against || 0, team.matches, 2);
+  const shotAccuracy =
+    team.shots > 0 ? formatPercent(((team.shots_on_target || 0) / team.shots) * 100) : "0.0%";
+  return `
+    <div class="metric-grid">
+      <article>
+        <span>胜率</span>
+        <strong>${winRate}</strong>
+        <p>衡量长期结果兑现能力。</p>
+      </article>
+      <article>
+        <span>场均进球</span>
+        <strong>${scoringRate}</strong>
+        <p>反映进攻产出的基础强度。</p>
+      </article>
+      <article>
+        <span>场均失球</span>
+        <strong>${concedingRate}</strong>
+        <p>反映防线稳定程度。</p>
+      </article>
+      <article>
+        <span>射正率</span>
+        <strong>${shotAccuracy}</strong>
+        <p>看射门质量是否稳定落在门框范围内。</p>
+      </article>
+    </div>
+  `;
+};
+
+const buildTeamStyleTags = (team) => {
+  const tags = [];
+  if ((team.xg_for || 0) > (team.goals_for || 0)) tags.push("机会制造型");
+  if ((team.goals_for || 0) > (team.xg_for || 0)) tags.push("终结兑现型");
+  if ((team.xg_against || 0) < 1.1 * team.matches) tags.push("防守纪律强");
+  if ((team.shots || 0) / Math.max(team.matches, 1) > 12) tags.push("主动推进型");
+  if ((team.goals_against || 0) / Math.max(team.matches, 1) < 1) tags.push("低失球结构");
+  if (!tags.length) tags.push("样本中性", "需要更多临场修正");
+  return `<div class="stat-chip-row">${tags.map((tag) => `<span>${tag}</span>`).join("")}</div>`;
 };
 
 const playerTitle = document.querySelector("#player-title");
@@ -773,6 +786,8 @@ const playerAnalysisBox = document.querySelector("#player-analysis-box");
 const playerMemberBox = document.querySelector("#player-member-box");
 const playerContextBox = document.querySelector("#player-context-box");
 const playerHeroImage = document.querySelector("#player-hero-image");
+const playerEfficiencyBox = document.querySelector("#player-efficiency-box");
+const playerRoleBox = document.querySelector("#player-role-box");
 
 const buildPlayerNarrative = (player) => {
   const startRate =
@@ -781,17 +796,62 @@ const buildPlayerNarrative = (player) => {
     player.passes > 0 ? formatPercent((player.completed_passes / player.passes) * 100) : "0.0%";
   const shotAccuracy =
     player.shots > 0 ? formatPercent(((player.shots_on_target || 0) / player.shots) * 100) : "0.0%";
-
   return `
     <div class="analysis-stack">
       <p>${player.player_name} 当前样本出场 ${player.appearances} 次，首发率 ${startRate}，估算分钟 ${player.minutes_estimate}。这能先判断他是核心球员、轮换球员还是边缘补位球员。</p>
-      <p>进攻侧目前记录为进球 ${player.goals || 0}、助攻 ${player.assists || 0}、射门 ${player.shots || 0}、xG ${formatNumber(
+      <p>进攻侧记录为进球 ${player.goals || 0}、助攻 ${player.assists || 0}、射门 ${player.shots || 0}、xG ${formatNumber(
     player.xg || 0,
     2
-  )}。如果 xG 高但进球低，通常意味着机会质量不错但终结波动较大。</p>
-      <p>组织侧传球成功率 ${passRate}，射门命中率 ${shotAccuracy}。公开层先展示这些稳定指标，第二层再延伸到对位、角色职责和临场价值。</p>
+  )}。如果 xG 高但进球低，通常意味着机会质量不差但终结波动较大。</p>
+      <p>组织侧传球成功率 ${passRate}，射门命中率 ${shotAccuracy}。公开层先展示这些稳定指标，第二层再延伸到对位、职责和临场价值。</p>
     </div>
   `;
+};
+
+const buildPlayerEfficiency = (player) => {
+  const shotAccuracy =
+    player.shots > 0 ? formatPercent(((player.shots_on_target || 0) / player.shots) * 100) : "0.0%";
+  const passRate =
+    player.passes > 0 ? formatPercent((player.completed_passes / player.passes) * 100) : "0.0%";
+  const xgPerShot =
+    player.shots > 0 ? formatNumber((player.xg || 0) / player.shots, 2) : formatNumber(0, 2);
+  const goalRate =
+    player.appearances > 0 ? formatNumber((player.goals || 0) / player.appearances, 2) : formatNumber(0, 2);
+  return `
+    <div class="metric-grid">
+      <article>
+        <span>每场进球</span>
+        <strong>${goalRate}</strong>
+        <p>看结果端的稳定输出。</p>
+      </article>
+      <article>
+        <span>射门命中率</span>
+        <strong>${shotAccuracy}</strong>
+        <p>看射门是否能稳定形成门框威胁。</p>
+      </article>
+      <article>
+        <span>传球成功率</span>
+        <strong>${passRate}</strong>
+        <p>看持球处理是否稳定。</p>
+      </article>
+      <article>
+        <span>单次射门 xG</span>
+        <strong>${xgPerShot}</strong>
+        <p>看出手位置与机会质量。</p>
+      </article>
+    </div>
+  `;
+};
+
+const buildPlayerRoleTags = (player) => {
+  const tags = [];
+  if ((player.goals || 0) >= 5) tags.push("终结核心");
+  if ((player.assists || 0) >= 2) tags.push("组织支点");
+  if (player.starts >= Math.max(3, Math.floor((player.appearances || 0) * 0.7))) tags.push("稳定首发");
+  if ((player.shots || 0) >= 10) tags.push("高出手球员");
+  if ((player.completed_passes || 0) >= 100) tags.push("参与构建");
+  if (!tags.length) tags.push("轮换角色", "样本待扩充");
+  return `<div class="stat-chip-row">${tags.map((tag) => `<span>${tag}</span>`).join("")}</div>`;
 };
 
 Promise.all([
@@ -851,9 +911,9 @@ Promise.all([
 
     if (playerSearchInput && playersPageList) {
       playerSearchInput.addEventListener("input", () => {
-        const keyword = playerSearchInput.value.trim().toLowerCase();
+        const keyword = normalizeName(playerSearchInput.value.trim()).toLowerCase();
         const filtered = visiblePlayers.filter((player) =>
-          normalizeName(player.player_name).toLowerCase().includes(normalizeName(keyword).toLowerCase())
+          normalizeName(player.player_name).toLowerCase().includes(keyword)
         );
         renderPlayerCards(filtered.slice(0, 24), playersPageList);
       });
@@ -871,26 +931,27 @@ Promise.all([
         .filter((player) => player.team_name === team.team)
         .sort(byGoals)
         .slice(0, 12);
-      const averageGoalsFor = perMatch(team.goals_for, team.matches, 2);
-      const averageGoalsAgainst = perMatch(team.goals_against, team.matches, 2);
 
       teamTitle.textContent = `${team.team} 球队分析页`;
       teamSummaryText.textContent = `${team.team} 在当前世界杯历史样本中共 ${team.matches} 场，进球 ${team.goals_for}，失球 ${team.goals_against}。第一层页面先展示结构和稳定指标，第二层再承接更深判断。`;
       if (teamHeroImage) {
         teamHeroImage.src = teamArtwork[team.team] || fallbackArtwork.team;
-        teamHeroImage.alt = `${team.team} 队伍画面`;
+        teamHeroImage.alt = `${team.team} 球队画面`;
       }
 
       teamStatList.innerHTML = `
         <li>历史场次：${team.matches}</li>
         <li>胜平负：${team.wins} / ${team.draws} / ${team.losses}</li>
-        <li>场均进球：${averageGoalsFor}</li>
-        <li>场均失球：${averageGoalsAgainst}</li>
+        <li>场均进球：${perMatch(team.goals_for, team.matches, 2)}</li>
+        <li>场均失球：${perMatch(team.goals_against, team.matches, 2)}</li>
         <li>射门：${team.shots || 0}</li>
         <li>射正：${team.shots_on_target || 0}</li>
         <li>xG：${formatNumber(team.xg_for || 0, 2)}</li>
         <li>xGA：${formatNumber(team.xg_against || 0, 2)}</li>
       `;
+      teamAnalysisBox.innerHTML = buildTeamNarrative(team);
+      if (teamEfficiencyBox) teamEfficiencyBox.innerHTML = buildTeamEfficiency(team);
+      if (teamStyleBox) teamStyleBox.innerHTML = buildTeamStyleTags(team);
 
       teamMatchesTable.innerHTML = `
         <table class="data-table">
@@ -919,8 +980,6 @@ Promise.all([
         </table>
       `;
 
-      teamAnalysisBox.innerHTML = buildTeamNarrative(team);
-
       teamPlayersTable.innerHTML = `
         <table class="data-table">
           <thead>
@@ -940,7 +999,6 @@ Promise.all([
                   player.passes > 0
                     ? formatPercent((player.completed_passes / player.passes) * 100)
                     : "0.0%";
-
                 return `
                   <tr>
                     <td><a href="player.html?id=${player.player_id}">${player.player_name}</a></td>
@@ -958,9 +1016,7 @@ Promise.all([
       `;
 
       if (teamComparisonTable) {
-        const comparisonPool = teams
-          .filter((item) => item.team !== team.team)
-          .slice(0, 5);
+        const comparisonPool = teams.filter((item) => item.team !== team.team).slice(0, 5);
         teamComparisonTable.innerHTML = `
           <table class="data-table">
             <thead>
@@ -1001,10 +1057,7 @@ Promise.all([
       const currentPlayerId = params.get("id");
       const player = players.find((item) => String(item.player_id) === String(currentPlayerId)) || visiblePlayers[0];
       const team = teams.find((item) => item.team === player.team_name);
-      const teamMates = players
-        .filter((item) => item.team_name === player.team_name)
-        .sort(byGoals)
-        .slice(0, 6);
+      const teamMates = players.filter((item) => item.team_name === player.team_name).sort(byGoals).slice(0, 6);
       const passRate =
         player.passes > 0 ? formatPercent((player.completed_passes / player.passes) * 100) : "0.0%";
       const shotAccuracy =
@@ -1017,7 +1070,7 @@ Promise.all([
           Object.entries(playerArtwork).find(
             ([name]) => normalizeName(name) === normalizeName(player.player_name)
           )?.[1] || fallbackArtwork.player;
-        playerHeroImage.alt = `${player.player_name} 画面`;
+        playerHeroImage.alt = `${player.player_name} 球员画面`;
       }
 
       playerStatList.innerHTML = `
@@ -1034,19 +1087,22 @@ Promise.all([
       `;
 
       playerAnalysisBox.innerHTML = buildPlayerNarrative(player);
+      if (playerEfficiencyBox) playerEfficiencyBox.innerHTML = buildPlayerEfficiency(player);
+      if (playerRoleBox) playerRoleBox.innerHTML = buildPlayerRoleTags(player);
 
       playerMemberBox.innerHTML = `
         <div class="analysis-stack">
-          <p>第二层会员内容会继续补充这名球员在不同对位中的价值、临场名单修正后的角色变化，以及更细的事件级解释。</p>
+          <p>第二层会员内容会继续补这名球员在不同对位中的价值、临场名单修正后的角色变化，以及更细的事件级解释。</p>
           <p>公开层保持克制，只展示足以建立信任的真实样本，不直接堆结论。</p>
         </div>
       `;
 
       playerContextBox.innerHTML = `
         <div class="analysis-stack">
-          <p>${player.team_name} 团队当前历史样本 ${team?.matches || 0} 场，进球 ${
-        team?.goals_for || 0
-      }，xG ${formatNumber(team?.xg_for || 0, 2)}。单个球员的判断必须放回球队结构里看，才不会失真。</p>
+          <p>${player.team_name} 团队当前历史样本 ${team?.matches || 0} 场，进球 ${team?.goals_for || 0}，xG ${formatNumber(
+        team?.xg_for || 0,
+        2
+      )}。单个球员的判断必须放回球队结构里看，才不会失真。</p>
         </div>
         <table class="data-table">
           <thead>

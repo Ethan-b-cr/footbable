@@ -20,7 +20,7 @@ window.worldCupDataSources = {
     name: "FIFA Football Data Platform",
     type: "FIFA 官方平台",
     coverage: "官方赛事信息与数据平台",
-    note: "适合作为官方赛事背景、正式口径和世界杯相关公开资料的参考来源。",
+    note: "适合作为官方赛事背景、正式口径和世界杯公开资料的参考来源。",
     link: "https://inside.fifa.com/innovation/innovating-the-game/football-data-platform",
   },
 };
