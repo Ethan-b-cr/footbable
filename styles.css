@@ -251,6 +251,31 @@ a {
   background: rgba(255, 250, 242, 0.6);
 }
 
+.payment-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.price-figure {
+  margin: 10px 0 6px;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.price-figure span {
+  font-size: 1rem;
+  color: var(--muted);
+  margin-left: 6px;
+}
+
+.pricing-card.featured {
+  border: 1px solid rgba(184, 61, 30, 0.22);
+  box-shadow: 0 24px 60px rgba(184, 61, 30, 0.12);
+}
+
 .hero-metrics {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

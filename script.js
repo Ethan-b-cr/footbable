@@ -88,7 +88,6 @@ const formatPercent = (value) => `${Number(value || 0).toFixed(1)}%`;
 const perMatch = (value, matches, digits = 2) =>
   matches > 0 ? Number(value / matches).toFixed(digits) : Number(0).toFixed(digits);
 const byGoals = (a, b) => (b.goals || 0) - (a.goals || 0);
-const byAppearances = (a, b) => (b.appearances || 0) - (a.appearances || 0);
 
 const loginLink = document.querySelector(".header-link");
 const logoutButton = document.querySelector("#logout-button");
@@ -716,6 +715,15 @@ const teamHeroImage = document.querySelector("#team-hero-image");
 const teamComparisonTable = document.querySelector("#team-comparison-table");
 const teamEfficiencyBox = document.querySelector("#team-efficiency-box");
 const teamStyleBox = document.querySelector("#team-style-box");
+const playerTitle = document.querySelector("#player-title");
+const playerSummaryText = document.querySelector("#player-summary-text");
+const playerStatList = document.querySelector("#player-stat-list");
+const playerAnalysisBox = document.querySelector("#player-analysis-box");
+const playerMemberBox = document.querySelector("#player-member-box");
+const playerContextBox = document.querySelector("#player-context-box");
+const playerHeroImage = document.querySelector("#player-hero-image");
+const playerEfficiencyBox = document.querySelector("#player-efficiency-box");
+const playerRoleBox = document.querySelector("#player-role-box");
 
 const buildTeamNarrative = (team) => {
   const winRate = formatPercent((team.wins / team.matches) * 100);
@@ -778,16 +786,6 @@ const buildTeamStyleTags = (team) => {
   if (!tags.length) tags.push("样本中性", "需要更多临场修正");
   return `<div class="stat-chip-row">${tags.map((tag) => `<span>${tag}</span>`).join("")}</div>`;
 };
-
-const playerTitle = document.querySelector("#player-title");
-const playerSummaryText = document.querySelector("#player-summary-text");
-const playerStatList = document.querySelector("#player-stat-list");
-const playerAnalysisBox = document.querySelector("#player-analysis-box");
-const playerMemberBox = document.querySelector("#player-member-box");
-const playerContextBox = document.querySelector("#player-context-box");
-const playerHeroImage = document.querySelector("#player-hero-image");
-const playerEfficiencyBox = document.querySelector("#player-efficiency-box");
-const playerRoleBox = document.querySelector("#player-role-box");
 
 const buildPlayerNarrative = (player) => {
   const startRate =
