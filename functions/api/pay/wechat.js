@@ -14,6 +14,7 @@ export async function onRequestGet(context) {
     return new Response(
       JSON.stringify({
         ok: false,
+        provider: "wechat",
         message: "微信支付参数未配置。请在 Cloudflare Pages 环境变量中补齐 WECHAT_MCH_ID、WECHAT_APP_ID 等参数。",
         plan,
         config,
@@ -25,9 +26,12 @@ export async function onRequestGet(context) {
   return new Response(
     JSON.stringify({
       ok: false,
+      provider: "wechat",
       message: "微信支付正式下单逻辑待接入。当前结构已预留，可直接替换为 Native/H5 下单代码。",
       plan,
       config,
+      successUrl: `${url.origin}/pay-success.html`,
+      failedUrl: `${url.origin}/pay-failed.html`,
     }),
     { status: 501, headers: { "content-type": "application/json; charset=UTF-8" } }
   );

@@ -20,6 +20,9 @@
 - `members.html`：会员中心
 - `login.html`：会员登录页
 - `thanks.html`：咨询提交成功页
+- `pay.html`：国内支付入口页
+- `pay-success.html`：支付成功页
+- `pay-failed.html`：支付失败页
 - `sources.html`：数据来源页
 - `data.html`：数据中心页
 - `about.html`：方法说明页
@@ -38,6 +41,9 @@
 - `data-sources.js`：数据来源配置
 - `script.js`：前端渲染与交互逻辑
 - `styles.css`：全站样式
+- `functions/api/pay/alipay.js`：支付宝支付占位接口
+- `functions/api/pay/wechat.js`：微信支付占位接口
+- `functions/api/pay/notify.js`：支付异步通知占位接口
 
 ## 本地数据脚本
 
