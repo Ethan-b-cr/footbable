@@ -14,6 +14,36 @@ function main() {
   const people = readJson(path.join(SUMMARY_DIR, "worldcup_person_summary.json"));
   const players = readJson(path.join(SUMMARY_DIR, "worldcup_player_summary.json"));
 
+  const latestMatches = [...matches]
+    .sort((a, b) => {
+      const dateCompare = String(b.match_date).localeCompare(String(a.match_date));
+      if (dateCompare !== 0) return dateCompare;
+      return Number(b.match_id) - Number(a.match_id);
+    })
+    .slice(0, 10);
+
+  const topPlayers = [...players]
+    .sort((a, b) => {
+      if (b.appearances !== a.appearances) return b.appearances - a.appearances;
+      if ((b.minutes_estimate || 0) !== (a.minutes_estimate || 0)) {
+        return (b.minutes_estimate || 0) - (a.minutes_estimate || 0);
+      }
+      return (b.starts || 0) - (a.starts || 0);
+    })
+    .slice(0, 15);
+
+  const topScorers = [...players]
+    .filter((player) => (player.goals || 0) > 0 || (player.xg || 0) > 0 || (player.shots || 0) > 0)
+    .sort((a, b) => {
+      if ((b.goals || 0) !== (a.goals || 0)) return (b.goals || 0) - (a.goals || 0);
+      if ((b.shots_on_target || 0) !== (a.shots_on_target || 0)) {
+        return (b.shots_on_target || 0) - (a.shots_on_target || 0);
+      }
+      if ((b.xg || 0) !== (a.xg || 0)) return (b.xg || 0) - (a.xg || 0);
+      return (b.shots || 0) - (a.shots || 0);
+    })
+    .slice(0, 10);
+
   const snapshot = {
     updated_at: new Date().toISOString(),
     match_count: matches.length,
@@ -22,11 +52,9 @@ function main() {
     player_count: players.length,
     top_teams: teams.slice(0, 10),
     top_people: people.slice(0, 10),
-    top_players: players.slice(0, 15),
-    top_scorers: [...players]
-      .sort((a, b) => (b.goals || 0) - (a.goals || 0))
-      .slice(0, 10),
-    latest_matches: matches.slice(-10).reverse(),
+    top_players: topPlayers,
+    top_scorers: topScorers,
+    latest_matches: latestMatches,
   };
 
   fs.writeFileSync(OUTPUT_FILE, JSON.stringify(snapshot, null, 2), "utf8");

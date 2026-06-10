@@ -382,6 +382,10 @@ const heroTeamStrip = document.querySelector("#hero-team-strip");
 const heroPlayerStrip = document.querySelector("#hero-player-strip");
 const homepageDataBoard = document.querySelector("#homepage-data-board");
 const dataInsightBoard = document.querySelector("#data-insight-board");
+const homepageScorerSpotlight = document.querySelector("#homepage-scorer-spotlight");
+const homepageFinalsBoard = document.querySelector("#homepage-finals-board");
+const dataScorerSpotlight = document.querySelector("#data-scorer-spotlight");
+const dataFinalSnapshot = document.querySelector("#data-final-snapshot");
 
 const buildTeamCard = (team) => {
   const teamImage = teamArtwork[team.team] || fallbackArtwork.team;
@@ -451,6 +455,9 @@ const renderPlayerCards = (players, target) => {
 };
 
 const renderSnapshot = (snapshot) => {
+  const leadScorer = snapshot.top_scorers?.[0];
+  const latestFinal = snapshot.latest_matches?.[0];
+
   if (dataSummaryCards) {
     dataSummaryCards.innerHTML = `
       <article class="article-card">
@@ -508,6 +515,71 @@ const renderSnapshot = (snapshot) => {
         <strong>真实数据底座已成型</strong>
         <p>下一步可以继续补球队风格、球员位置热区和更细粒度事件解释。</p>
       </article>
+    `;
+  }
+
+  if (homepageScorerSpotlight && leadScorer) {
+    homepageScorerSpotlight.innerHTML = `
+      <div class="spotlight-stat-card">
+        <p class="eyebrow">头号球星样本</p>
+        <h2>${leadScorer.player_name}</h2>
+        <p>${leadScorer.team_name} 当前位于快照射手榜前列。公开层先展示真实样本，第二层再继续延伸个人作用和对位价值。</p>
+        <div class="stat-chip-row">
+          <span>${leadScorer.goals || 0} 球</span>
+          <span>${leadScorer.shots || 0} 次射门</span>
+          <span>${formatNumber(leadScorer.xg || 0, 2)} xG</span>
+          <span>${leadScorer.appearances || 0} 次出场</span>
+        </div>
+        <a class="article-link" href="player.html?id=${leadScorer.player_id}">进入球员页</a>
+      </div>
+    `;
+  }
+
+  if (homepageFinalsBoard && latestFinal) {
+    homepageFinalsBoard.innerHTML = `
+      <div class="spotlight-stat-card">
+        <p class="eyebrow">最新淘汰赛样本</p>
+        <h2>${latestFinal.home_team} vs ${latestFinal.away_team}</h2>
+        <p>${latestFinal.season} 年 ${latestFinal.stage}，比分 ${latestFinal.home_score}-${latestFinal.away_score}。这种高价值样本比普通列表更能撑起站点专业感。</p>
+        <div class="stat-chip-row">
+          <span>${latestFinal.match_date}</span>
+          <span>${latestFinal.stage}</span>
+          <span>${latestFinal.home_score}-${latestFinal.away_score}</span>
+        </div>
+        <a class="article-link" href="data.html">进入数据中心</a>
+      </div>
+    `;
+  }
+
+  if (dataScorerSpotlight && leadScorer) {
+    dataScorerSpotlight.innerHTML = `
+      <div class="spotlight-stat-card">
+        <p class="eyebrow">头号球星快照</p>
+        <h3>${leadScorer.player_name}</h3>
+        <p>${leadScorer.team_name} 的进攻样本目前最值得首先露出。这个区块可以让数据中心更像真实分析后台，而不是只有表格。</p>
+        <div class="stat-chip-row">
+          <span>${leadScorer.goals || 0} 球</span>
+          <span>${leadScorer.shots_on_target || 0} 次射正</span>
+          <span>${formatNumber(leadScorer.xg || 0, 2)} xG</span>
+        </div>
+        <a class="article-link" href="player.html?id=${leadScorer.player_id}">查看球员详情</a>
+      </div>
+    `;
+  }
+
+  if (dataFinalSnapshot && latestFinal) {
+    dataFinalSnapshot.innerHTML = `
+      <div class="spotlight-stat-card">
+        <p class="eyebrow">冠军赛阶段样本</p>
+        <h3>${latestFinal.home_team} ${latestFinal.home_score}-${latestFinal.away_score} ${latestFinal.away_team}</h3>
+        <p>${latestFinal.season} 年的 ${latestFinal.stage} 已经进入快照头部样本，后续可以继续补充更细的事件拆解与球员层解释。</p>
+        <div class="stat-chip-row">
+          <span>${latestFinal.match_date}</span>
+          <span>${latestFinal.stage}</span>
+          <span>${latestFinal.home_team}</span>
+          <span>${latestFinal.away_team}</span>
+        </div>
+      </div>
     `;
   }
 
