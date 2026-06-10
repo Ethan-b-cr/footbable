@@ -11,6 +11,7 @@
     href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap"
     rel="stylesheet"
   >
+  <script src="site-config.js"></script>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -48,7 +49,8 @@
         <aside class="article-side-card">
           <span class="record-label">准备事项</span>
           <ul>
-            <li>ICP备案域名</li>
+            <li>公开可访问的网站地址</li>
+            <li>一台有公网 IP 的服务器</li>
             <li>支付宝商家账号</li>
             <li>微信支付商户号</li>
             <li>异步通知地址</li>
@@ -68,8 +70,8 @@
             <li>会员文章入口</li>
           </ul>
           <div class="payment-action-row">
-            <a class="button button-primary" href="/functions/api/pay/alipay?plan=monthly">支付宝开通</a>
-            <a class="button button-secondary" href="/functions/api/pay/wechat?plan=monthly">微信扫码开通</a>
+            <button class="button button-primary payment-button" data-provider="alipay" data-plan="monthly" type="button">支付宝开通</button>
+            <button class="button button-secondary payment-button" data-provider="wechat" data-plan="monthly" type="button">微信扫码开通</button>
           </div>
         </article>
 
@@ -84,8 +86,8 @@
             <li>更高频率更新</li>
           </ul>
           <div class="payment-action-row">
-            <a class="button button-primary" href="/functions/api/pay/alipay?plan=quarterly">支付宝开通</a>
-            <a class="button button-secondary" href="/functions/api/pay/wechat?plan=quarterly">微信扫码开通</a>
+            <button class="button button-primary payment-button" data-provider="alipay" data-plan="quarterly" type="button">支付宝开通</button>
+            <button class="button button-secondary payment-button" data-provider="wechat" data-plan="quarterly" type="button">微信扫码开通</button>
           </div>
         </article>
 
@@ -100,8 +102,8 @@
             <li>赛后复盘摘要</li>
           </ul>
           <div class="payment-action-row">
-            <a class="button button-primary" href="/functions/api/pay/alipay?plan=single">支付宝开通</a>
-            <a class="button button-secondary" href="/functions/api/pay/wechat?plan=single">微信扫码开通</a>
+            <button class="button button-primary payment-button" data-provider="alipay" data-plan="single" type="button">支付宝开通</button>
+            <button class="button button-secondary payment-button" data-provider="wechat" data-plan="single" type="button">微信扫码开通</button>
           </div>
         </article>
       </section>
@@ -119,8 +121,21 @@
         </article>
         <article class="article-card">
           <span class="article-meta">联调状态</span>
-          <h3>当前为支付就绪结构</h3>
-          <p>只差正式商户参数、密钥和通知接口签名校验，就能切到真实收款模式。</p>
+          <h3>当前为自建后端可接入结构</h3>
+          <p id="payment-mode-copy">当前已切到公开站点 + 自建支付接口模式，不买域名也能先联调。</p>
+        </article>
+      </section>
+
+      <section class="section article-list">
+        <article class="article-card">
+          <span class="article-meta">无域名方案</span>
+          <h3>前台继续公开，支付后端单独部署</h3>
+          <p>内容继续用公开站点展示，支付接口部署到服务器公网 IP，后续再把正式商户参数接上去。</p>
+        </article>
+        <article class="article-card">
+          <span class="article-meta">切换方式</span>
+          <h3>拿到服务器 IP 后可直接切</h3>
+          <p>后续只要用带 `payApi` 参数的地址打开本页一次，就会自动记住新的支付接口地址，不需要重新改代码。</p>
         </article>
       </section>
     </main>
@@ -132,5 +147,6 @@
       <a href="terms.html">服务条款</a>
     </footer>
   </div>
+  <script src="script.js"></script>
 </body>
 </html>

@@ -4,15 +4,20 @@
 
 - 支付宝：网页支付
 - 微信支付：优先扫码支付（Native）
+- 架构：前台继续用 `https://footbable.pages.dev/`，支付后端单独部署到服务器公网 IP
 
 ## 当前已完成
 
 - 新增 `pay.html` 作为国内支付入口页
-- 新增 Cloudflare Pages Functions 占位接口：
+- 新增自建支付后端骨架：
+  - `server/server.js`
+  - `server/package.json`
+- 保留 Cloudflare Pages Functions 占位接口：
   - `functions/api/pay/alipay.js`
   - `functions/api/pay/wechat.js`
   - `functions/api/pay/notify.js`
 - 会员中心页已改成引导用户进入支付页
+- 前端已支持通过 `site-config.js` 或 `pay.html?payApi=...` 切换支付接口地址
 
 ## 上线前还需要补
 
@@ -51,7 +56,7 @@
 - `paid_at`
 - `expire_at`
 
-## Cloudflare Pages 环境变量建议
+## 自建支付后端环境变量建议
 
 - `ALIPAY_APP_ID`
 - `ALIPAY_GATEWAY`

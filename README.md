@@ -1,8 +1,8 @@
 # World Cup Edge
 
-`World Cup Edge` 是一个面向世界杯分析的网站项目，目标是把它做成一个可公开访问、并且有第一层公开分析与第二层深度内容分层的网站。
+`World Cup Edge` 是一个面向世界杯分析的公开网站项目，当前采用 `前台公开站点 + 自建支付后端` 的方案推进，不买域名也能先上线、先联调、先验证会员转化链路。
 
-当前项目已经不是一个本地演示页，而是一个可直接部署到公网的静态前端站点，包含：
+当前项目已经不是一个本地演示页，而是一个可直接部署到公网的站点，包含：
 
 - 首页公开分析入口
 - 球队分析库与球队详情页
@@ -10,8 +10,39 @@
 - 数据中心与数据来源页
 - 动态文章详情页
 - 登录页与会员中心页
+- 无域名场景下可单独部署到服务器公网 IP 的支付后端骨架
 - FAQ / 方法说明 / 隐私政策 / 服务条款 / 404 / 提交成功页
 - 本地历史数据抓取与快照脚本
+
+## 当前公开地址
+
+- 前台站点：`https://footbable.pages.dev/`
+- 支付后端：建议部署到你自己的服务器公网 `IP:PORT`
+
+## 不买域名的当前方案
+
+不买域名时，项目拆成两部分：
+
+- 前台继续放在 `Cloudflare Pages`
+- 支付后端单独放在一台有公网 IP 的服务器
+
+前端支付接口配置在 `site-config.js`：
+
+```js
+window.FOOTBABLE_CONFIG = {
+  paymentApiBase: window.location.origin,
+  paymentMode: "public-self-host",
+};
+```
+
+当你把后端部署到服务器后，只需要把 `paymentApiBase` 改成服务器地址，例如：
+
+```js
+window.FOOTBABLE_CONFIG = {
+  paymentApiBase: "http://123.123.123.123:8788",
+  paymentMode: "public-self-host",
+};
+```
 
 ## 当前页面
 
@@ -44,6 +75,8 @@
 - `functions/api/pay/alipay.js`：支付宝支付占位接口
 - `functions/api/pay/wechat.js`：微信支付占位接口
 - `functions/api/pay/notify.js`：支付异步通知占位接口
+- `site-config.js`：前端支付接口地址配置
+- `server/server.js`：自建支付后端骨架
 
 ## 本地数据脚本
 
@@ -153,6 +186,31 @@ git push origin main
 
 Cloudflare Pages 会自动重新部署。
 
+## 自建支付后端部署
+
+```powershell
+cd server
+npm install
+npm start
+```
+
+默认监听：
+
+- `http://0.0.0.0:8788`
+
+可用接口：
+
+- `GET /health`
+- `GET /api/pay/alipay?plan=monthly`
+- `GET /api/pay/wechat?plan=monthly`
+- `POST /api/pay/notify`
+
+第一版目标：
+
+- 先让前端不再依赖 Cloudflare Functions
+- 先把支付接口稳定地挂到服务器公网 IP
+- 后续直接在这台服务器上接正式支付宝 / 微信支付
+
 ## 表单说明
 
 咨询表单当前通过 `FormSubmit` 提交到：
@@ -165,7 +223,7 @@ Cloudflare Pages 会自动重新部署。
 
 1. 正式用户鉴权
 2. 正式会员权限控制
-3. 正式支付与开通流程
+3. 在 `server/server.js` 中接正式支付宝 / 微信支付
 4. 自动化数据同步
 5. 更细的球队与球员分析模型
 6. 更多历史样本与实时数据接入

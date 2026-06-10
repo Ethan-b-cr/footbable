@@ -105,6 +105,28 @@ if (logoutButton && memberSession?.email) {
   });
 }
 
+const paymentButtons = document.querySelectorAll(".payment-button");
+const paymentModeCopy = document.querySelector("#payment-mode-copy");
+
+if (paymentModeCopy && window.FOOTBABLE_CONFIG?.paymentMode === "public-self-host") {
+  paymentModeCopy.textContent = `当前已切到公开站点 + 自建支付接口模式。当前支付接口地址：${window.FOOTBABLE_CONFIG.paymentApiBase}`;
+}
+
+if (paymentButtons.length > 0) {
+  const paymentApiBase = (window.FOOTBABLE_CONFIG?.paymentApiBase || window.location.origin).replace(/\/$/, "");
+
+  paymentButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const provider = button.dataset.provider;
+      const plan = button.dataset.plan;
+
+      if (!provider || !plan) return;
+
+      window.location.href = `${paymentApiBase}/api/pay/${provider}?plan=${encodeURIComponent(plan)}`;
+    });
+  });
+}
+
 const contactForm = document.querySelector("#contact-form");
 const contactHint = document.querySelector("#form-hint");
 
@@ -356,19 +378,24 @@ const homepageScorerSpotlight = document.querySelector("#homepage-scorer-spotlig
 const homepageFinalsBoard = document.querySelector("#homepage-finals-board");
 const dataScorerSpotlight = document.querySelector("#data-scorer-spotlight");
 const dataFinalSnapshot = document.querySelector("#data-final-snapshot");
+const FREE_TEAM_LIMIT = 3;
+const FREE_PLAYER_LIMIT = 3;
 
-const buildTeamCard = (team) => {
+const buildTeamCard = (team, locked = false) => {
   const teamImage = teamArtwork[team.team] || fallbackArtwork.team;
   const winRate = formatPercent((team.wins / team.matches) * 100);
   const shotRate = perMatch(team.shots || 0, team.matches, 1);
   const xgRate = perMatch(team.xg_for || 0, team.matches, 2);
+  const href = locked ? "members.html" : `team.html?team=${encodeURIComponent(team.team)}`;
+  const linkText = locked ? "会员可查看" : "进入球队页面";
+  const badgeText = locked ? "会员球队档案" : "球队分析 / 历史样本";
   return `
-    <article class="entity-card">
+    <article class="entity-card ${locked ? "locked-card" : ""}">
       <div class="entity-media">
         <img src="${teamImage}" alt="${team.team} 球队画面" loading="lazy">
       </div>
       <div class="entity-body">
-        <span class="article-meta">球队分析 / 历史样本</span>
+        <span class="article-meta">${badgeText}</span>
         <h3>${team.team}</h3>
         <p>样本 ${team.matches} 场，胜率 ${winRate}，场均射门 ${shotRate}，场均 xG ${xgRate}。</p>
         <div class="entity-tags">
@@ -376,26 +403,29 @@ const buildTeamCard = (team) => {
           <span>${team.goals_against} 失球</span>
           <span>${team.shots_on_target || 0} 次射正</span>
         </div>
-        <a class="article-link" href="team.html?team=${encodeURIComponent(team.team)}">进入球队页面</a>
+        <a class="article-link" href="${href}">${linkText}</a>
       </div>
     </article>
   `;
 };
 
-const buildPlayerCard = (player) => {
+const buildPlayerCard = (player, locked = false) => {
   const normalizedPlayerName = normalizeName(player.player_name);
   const playerImage =
     Object.entries(playerArtwork).find(([name]) => normalizeName(name) === normalizedPlayerName)?.[1] ||
     fallbackArtwork.player;
   const passRate =
     player.passes > 0 ? formatPercent((player.completed_passes / player.passes) * 100) : "0.0%";
+  const href = locked ? "members.html" : `player.html?id=${player.player_id}`;
+  const linkText = locked ? "会员可查看" : "进入球员页面";
+  const badgeText = locked ? "会员球员档案" : "球员分析 / 历史样本";
   return `
-    <article class="entity-card">
+    <article class="entity-card ${locked ? "locked-card" : ""}">
       <div class="entity-media">
         <img src="${playerImage}" alt="${player.player_name} 球员画面" loading="lazy">
       </div>
       <div class="entity-body">
-        <span class="article-meta">球员分析 / 历史样本</span>
+        <span class="article-meta">${badgeText}</span>
         <h3>${player.player_name}</h3>
         <p>${player.team_name}，出场 ${player.appearances}，进球 ${player.goals || 0}，xG ${formatNumber(
     player.xg || 0,
@@ -406,20 +436,24 @@ const buildPlayerCard = (player) => {
           <span>${passRate} 传球成功率</span>
           <span>${player.shots || 0} 次射门</span>
         </div>
-        <a class="article-link" href="player.html?id=${player.player_id}">进入球员页面</a>
+        <a class="article-link" href="${href}">${linkText}</a>
       </div>
     </article>
   `;
 };
 
-const renderTeamCards = (teams, target) => {
+const renderTeamCards = (teams, target, freeLimit = teams.length) => {
   if (!target) return;
-  target.innerHTML = teams.map(buildTeamCard).join("");
+  target.innerHTML = teams
+    .map((team, index) => buildTeamCard(team, index >= freeLimit))
+    .join("");
 };
 
-const renderPlayerCards = (players, target) => {
+const renderPlayerCards = (players, target, freeLimit = players.length) => {
   if (!target) return;
-  target.innerHTML = players.map(buildPlayerCard).join("");
+  target.innerHTML = players
+    .map((player, index) => buildPlayerCard(player, index >= freeLimit))
+    .join("");
 };
 
 const renderSnapshot = (snapshot) => {
@@ -866,8 +900,8 @@ Promise.all([
     const visiblePlayers = sortedPlayers.filter((player) => player.appearances >= 3);
 
     renderSnapshot(snapshot);
-    renderTeamCards(teams.slice(0, 6), teamLibraryList);
-    renderPlayerCards(visiblePlayers.slice(0, 6), playerLibraryList);
+    renderTeamCards(teams.slice(0, 6), teamLibraryList, FREE_TEAM_LIMIT);
+    renderPlayerCards(visiblePlayers.slice(0, 6), playerLibraryList, FREE_PLAYER_LIMIT);
     renderTeamCards(teams.slice(0, 24), teamsPageList);
     renderPlayerCards(visiblePlayers.slice(0, 24), playersPageList);
 

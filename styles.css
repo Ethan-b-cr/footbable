@@ -319,6 +319,88 @@ a {
   border-radius: var(--radius-xl);
 }
 
+.hero-stage {
+  display: grid;
+  gap: 16px;
+  background: linear-gradient(180deg, rgba(255, 248, 238, 0.84), rgba(248, 237, 220, 0.9));
+}
+
+.hero-stage-main {
+  position: relative;
+  overflow: hidden;
+  min-height: 420px;
+  border-radius: var(--radius-xl);
+}
+
+.hero-stage-main img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hero-stage-overlay {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 28px;
+  background: linear-gradient(180deg, transparent 0%, rgba(16, 11, 8, 0.9) 100%);
+  color: #fff7ef;
+}
+
+.hero-stage-overlay span,
+.hero-stage-card span,
+.footer-stage-overlay span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 245, 232, 0.76);
+}
+
+.hero-stage-overlay strong,
+.hero-stage-card strong,
+.footer-stage-overlay strong {
+  display: block;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 2.3rem;
+  line-height: 0.96;
+}
+
+.hero-stage-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.hero-stage-card {
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 252, 246, 0.92);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.hero-stage-card img {
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+  display: block;
+}
+
+.hero-stage-card div {
+  padding: 16px;
+}
+
+.hero-stage-card span {
+  color: var(--accent);
+}
+
+.hero-stage-card strong {
+  color: var(--ink);
+  font-size: 1.55rem;
+}
+
 .panel-label {
   margin-bottom: 16px;
   color: var(--muted);
@@ -425,6 +507,7 @@ a {
 .pricing-card {
   padding: 22px;
   border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(255, 252, 247, 0.94), rgba(247, 237, 222, 0.84));
 }
 
 .card-top {
@@ -512,7 +595,7 @@ a {
 .trust-grid article {
   padding: 24px;
   border-radius: var(--radius-lg);
-  background: rgba(255, 250, 242, 0.72);
+  background: linear-gradient(180deg, rgba(255, 251, 244, 0.92), rgba(247, 237, 223, 0.82));
   border: 1px solid var(--line);
 }
 
@@ -790,6 +873,33 @@ a {
 
 .locked-card {
   border-color: rgba(184, 61, 30, 0.18);
+  position: relative;
+}
+
+.locked-card::before {
+  content: "会员";
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 2;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(21, 18, 14, 0.88);
+  color: #fff7ef;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.locked-card .entity-media {
+  position: relative;
+}
+
+.locked-card .entity-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(16, 12, 9, 0.08), rgba(16, 12, 9, 0.28));
 }
 
 .source-box {
@@ -1455,17 +1565,23 @@ a {
 }
 
 .site-footer {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 0.72fr 1.28fr;
   align-items: stretch;
-  gap: 20px;
+  gap: 22px;
   margin-top: 18px;
-  padding: 24px 26px;
-  border-radius: var(--radius-xl);
+  padding: 26px;
+  border-radius: 34px;
+  background: linear-gradient(135deg, rgba(24, 18, 14, 0.96), rgba(61, 34, 20, 0.96));
+  color: #fff7ef;
 }
 
 .footer-copy {
-  max-width: 320px;
+  max-width: 360px;
+}
+
+.footer-copy p {
+  color: rgba(255, 245, 233, 0.82);
 }
 
 .contact-panel {
@@ -1485,8 +1601,42 @@ a {
 
 .footer-links a,
 .mini-footer a {
-  color: var(--muted);
+  color: rgba(255, 243, 230, 0.72);
   font-size: 0.95rem;
+}
+
+.footer-stage {
+  display: grid;
+  gap: 18px;
+}
+
+.footer-stage-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 280px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 244, 232, 0.12);
+}
+
+.footer-stage-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.footer-stage-overlay {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 24px;
+  background: linear-gradient(180deg, transparent 0%, rgba(16, 11, 8, 0.88) 100%);
+  color: #fff7ef;
+}
+
+.footer-action-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
 }
 
 .contact-card {
@@ -1692,6 +1842,7 @@ a {
   .match-grid,
   .trust-grid,
   .visual-grid,
+  .hero-stage-grid,
   .hero-strip,
   .membership-grid,
   .pricing-grid,
@@ -1716,6 +1867,10 @@ a {
 
   .mini-grid {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .site-footer {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -1753,6 +1908,10 @@ a {
     flex-direction: column;
   }
 
+  .footer-action-row {
+    flex-direction: column;
+  }
+
   .form-actions {
     flex-direction: column;
   }
@@ -1773,6 +1932,10 @@ a {
 
   .entity-media {
     height: 200px;
+  }
+
+  .hero-stage-main {
+    min-height: 320px;
   }
 
   .match-card h2 {
