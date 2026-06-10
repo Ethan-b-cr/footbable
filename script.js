@@ -1,5 +1,5 @@
 const animatedSections = document.querySelectorAll(
-  ".section, .hero-copy, .hero-panel, .site-footer, .article-hero-copy, .article-side-card, .faq-item"
+  ".section, .hero-copy, .hero-panel, .site-footer, .article-hero-copy, .article-side-card, .faq-item, .home-pulse-slot"
 );
 
 if ("IntersectionObserver" in window) {
@@ -19,58 +19,76 @@ if ("IntersectionObserver" in window) {
 }
 
 const teamArtwork = {
-  Argentina:
-    "https://upload.wikimedia.org/wikipedia/commons/0/05/Argentina_campeon_del_mundo_2022.jpg",
-  France:
-    "https://upload.wikimedia.org/wikipedia/commons/2/21/France_champion_of_the_Football_World_Cup_Russia_2018.jpg",
-  Brazil:
-    "https://upload.wikimedia.org/wikipedia/commons/3/37/Brazil_national_football_team_training_2018.jpg",
-  England:
-    "https://upload.wikimedia.org/wikipedia/commons/f/f2/England_national_football_team_2022.jpg",
-  Croatia:
-    "https://upload.wikimedia.org/wikipedia/commons/8/89/Croatia_national_football_team_2018.jpg",
-  Morocco:
-    "https://upload.wikimedia.org/wikipedia/commons/b/bf/Morocco_national_football_team_2018.jpg",
-  Netherlands:
-    "https://upload.wikimedia.org/wikipedia/commons/5/59/Netherlands_national_football_team_2017.jpg",
-  Portugal:
-    "https://upload.wikimedia.org/wikipedia/commons/7/71/Portugal_national_football_team_2022.jpg",
-  Belgium:
-    "https://upload.wikimedia.org/wikipedia/commons/7/75/Belgium_national_football_team_2018.jpg",
-  Spain:
-    "https://upload.wikimedia.org/wikipedia/commons/3/31/Spain_national_football_team_2018.jpg",
+  Argentina: "assets/images/argentina-team.png",
+  France: "assets/images/france-team.png",
+  Brazil: "assets/images/brazil-team.png",
+  England: "assets/images/england-team.png",
+  Croatia: "assets/images/france-team.png",
+  Morocco: "assets/images/argentina-team.png",
+  Netherlands: "assets/images/england-team.png",
+  Portugal: "assets/images/portugal-team.png",
+  Belgium: "assets/images/belgium-team.png",
+  Spain: "assets/images/france-team.png",
 };
 
 const playerArtwork = {
-  "Lionel Andres Messi Cuccittini":
-    "https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg",
-  "Kylian Mbappe Lottin":
-    "https://upload.wikimedia.org/wikipedia/commons/4/44/Kylian_Mbapp%C3%A9_2022.jpg",
-  "Antoine Griezmann":
-    "https://upload.wikimedia.org/wikipedia/commons/5/58/Antoine_Griezmann_2018.jpg",
-  "Luka Modric":
-    "https://upload.wikimedia.org/wikipedia/commons/2/20/Luka_Modric_2018.jpg",
-  "Harry Kane":
-    "https://upload.wikimedia.org/wikipedia/commons/d/d1/Harry_Kane_2021.jpg",
-  "Kevin De Bruyne":
-    "https://upload.wikimedia.org/wikipedia/commons/9/97/Kevin_De_Bruyne_201807091.jpg",
-  "Olivier Giroud":
-    "https://upload.wikimedia.org/wikipedia/commons/3/32/Olivier_Giroud_2018.jpg",
-  "Achraf Hakimi Mouh":
-    "https://upload.wikimedia.org/wikipedia/commons/4/4f/Achraf_Hakimi_2022.jpg",
-  "Neymar da Silva Santos Junior":
-    "https://upload.wikimedia.org/wikipedia/commons/8/8c/Neymar_2018.jpg",
+  "Lionel Andres Messi Cuccittini": "assets/images/messi.jpg",
+  "Kylian Mbappe Lottin": "assets/images/mbappe.jpg",
+  "Antoine Griezmann": "assets/images/mbappe.jpg",
+  "Luka Modric": "assets/images/modric.jpg",
+  "Harry Kane": "assets/images/harry-kane.jpg",
+  "Kevin De Bruyne": "assets/images/ronaldo.jpg",
+  "Olivier Giroud": "assets/images/mbappe.jpg",
+  "Achraf Hakimi Mouh": "assets/images/mbappe.jpg",
+  "Neymar da Silva Santos Junior": "assets/images/ronaldo.jpg",
+  "Cristiano Ronaldo dos Santos Aveiro": "assets/images/ronaldo.jpg",
+  "Jair Ventura Filho": "assets/images/ronaldo.jpg",
 };
 
 const fallbackArtwork = {
-  team: "https://upload.wikimedia.org/wikipedia/commons/2/21/France_champion_of_the_Football_World_Cup_Russia_2018.jpg",
-  player: "https://upload.wikimedia.org/wikipedia/commons/4/44/Kylian_Mbapp%C3%A9_2022.jpg",
+  team: "assets/images/world-cup-trophy.jpg",
+  player: "assets/images/mbappe.jpg",
 };
+
+const featuredTeamOrder = ["Argentina", "Brazil", "France", "England", "Belgium", "Portugal"];
+const featuredPlayerOrder = [
+  "Lionel Andres Messi Cuccittini",
+  "Kylian Mbappe Lottin",
+  "Cristiano Ronaldo dos Santos Aveiro",
+  "Harry Kane",
+  "Luka Modric",
+  "Olivier Giroud",
+];
 
 const normalizeName = (value) =>
   String(value || "")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "");
+
+const getPlayerImage = (playerName) =>
+  Object.entries(playerArtwork).find(([name]) => normalizeName(name) === normalizeName(playerName))?.[1] ||
+  fallbackArtwork.player;
+
+const pickFeaturedTeams = (teams) => {
+  const featured = featuredTeamOrder
+    .map((name) => teams.find((team) => team.team === name))
+    .filter(Boolean);
+  const remainder = teams.filter((team) => !featured.some((item) => item.team === team.team));
+  return [...featured, ...remainder];
+};
+
+const pickFeaturedPlayers = (players) => {
+  const featured = featuredPlayerOrder
+    .map((name) => players.find((player) => normalizeName(player.player_name) === normalizeName(name)))
+    .filter(Boolean);
+  const remainder = players.filter(
+    (player) =>
+      !featured.some(
+        (item) => String(item.player_id) === String(player.player_id)
+      )
+  );
+  return [...featured, ...remainder];
+};
 
 const getMemberSession = () => {
   const rawSession = window.localStorage.getItem("worldCupEdgeMember");
@@ -384,12 +402,12 @@ const FREE_PLAYER_LIMIT = 3;
 const isMemberUnlocked = Boolean(memberSession?.email);
 const isFreeTeam = (teamName, teams) =>
   isMemberUnlocked ||
-  teams
+  pickFeaturedTeams(teams)
     .slice(0, FREE_TEAM_LIMIT)
     .some((team) => String(team.team) === String(teamName));
 const isFreePlayer = (playerId, players) =>
   isMemberUnlocked ||
-  players
+  pickFeaturedPlayers(players)
     .slice(0, FREE_PLAYER_LIMIT)
     .some((player) => String(player.player_id) === String(playerId));
 
@@ -422,10 +440,7 @@ const buildTeamCard = (team, locked = false) => {
 };
 
 const buildPlayerCard = (player, locked = false) => {
-  const normalizedPlayerName = normalizeName(player.player_name);
-  const playerImage =
-    Object.entries(playerArtwork).find(([name]) => normalizeName(name) === normalizedPlayerName)?.[1] ||
-    fallbackArtwork.player;
+  const playerImage = getPlayerImage(player.player_name);
   const passRate =
     player.passes > 0 ? formatPercent((player.completed_passes / player.passes) * 100) : "0.0%";
   const href = locked ? "members.html" : `player.html?id=${player.player_id}`;
@@ -520,48 +535,54 @@ const renderSnapshot = (snapshot) => {
   if (dataInsightBoard) {
     dataInsightBoard.innerHTML = `
       <article class="insight-card">
-        <span>快照时间</span>
+        <span>最新快照</span>
         <strong>${snapshot.updated_at.slice(0, 10)}</strong>
-        <p>数据中心当前展示的是最近一次构建后的本地快照。</p>
+        <p>${snapshot.match_count} 场比赛，${snapshot.team_count} 支球队，${snapshot.player_count} 名球员。</p>
       </article>
       <article class="insight-card muted">
-        <span>当前阶段</span>
-        <strong>真实数据底座已成型</strong>
-        <p>下一步继续补球队风格、球员角色和更细颗粒度事件解释。</p>
+        <span>开通后可看</span>
+        <strong>焦点战完整版</strong>
+        <p>首发变化、阵容修正、完整球队档案和完整球员档案。</p>
       </article>
     `;
   }
 
   if (homepageScorerSpotlight && leadScorer) {
+    const leadScorerImage = getPlayerImage(leadScorer.player_name);
     homepageScorerSpotlight.innerHTML = `
-      <div class="spotlight-stat-card">
-        <p class="eyebrow">头部球星样本</p>
-        <h2>${leadScorer.player_name}</h2>
-        <p>${leadScorer.team_name} 当前位于快照射手榜前列，进球、射门和 xG 样本都足够突出。</p>
-        <div class="stat-chip-row">
-          <span>${leadScorer.goals || 0} 球</span>
-          <span>${leadScorer.shots || 0} 次射门</span>
-          <span>${formatNumber(leadScorer.xg || 0, 2)} xG</span>
-          <span>${leadScorer.appearances || 0} 次出场</span>
+      <article class="pulse-media-card">
+        <img src="${leadScorerImage}" alt="${leadScorer.player_name} 球员画面" loading="lazy">
+        <div class="pulse-media-copy">
+          <span>头号球星</span>
+          <h2>${leadScorer.player_name}</h2>
+          <p>${leadScorer.team_name}，进球和 xG 都够硬。</p>
+          <div class="stat-chip-row">
+            <span>${leadScorer.goals || 0} 球</span>
+            <span>${formatNumber(leadScorer.xg || 0, 2)} xG</span>
+            <span>${leadScorer.appearances || 0} 场</span>
+          </div>
+          <a class="article-link" href="player.html?id=${leadScorer.player_id}">查看球员</a>
         </div>
-        <a class="article-link" href="player.html?id=${leadScorer.player_id}">进入球员页</a>
-      </div>
+      </article>
     `;
   }
 
   if (homepageFinalsBoard && latestFinal) {
     homepageFinalsBoard.innerHTML = `
-      <div class="spotlight-stat-card">
-        <p class="eyebrow">最新淘汰赛样本</p>
-        <h2>${latestFinal.home_team} vs ${latestFinal.away_team}</h2>
-        <p>${latestFinal.season} 年 ${latestFinal.stage}，比分 ${latestFinal.home_score}-${latestFinal.away_score}。这种高价值样本比普通列表更能撑起站点的专业感。</p>
-        <div class="stat-chip-row">
-          <span>${latestFinal.match_date}</span>
-          <span>${latestFinal.stage}</span>
-          <span>${latestFinal.home_score}-${latestFinal.away_score}</span>
+      <article class="pulse-media-card pulse-media-card-final">
+        <img src="assets/images/argentina-champion.jpg" alt="冠军比赛画面" loading="lazy">
+        <div class="pulse-media-copy">
+          <span>冠军样本</span>
+          <h2>${latestFinal.home_team} vs ${latestFinal.away_team}</h2>
+          <p>${latestFinal.stage}，比分 ${latestFinal.home_score}-${latestFinal.away_score}。</p>
+          <div class="stat-chip-row">
+            <span>${latestFinal.match_date}</span>
+            <span>${latestFinal.stage}</span>
+            <span>${latestFinal.home_score}-${latestFinal.away_score}</span>
+          </div>
+          <a class="article-link" href="data.html">查看数据</a>
         </div>
-        <a class="article-link" href="data.html">进入数据中心</a>
-      </div>
+      </article>
     `;
   }
 
@@ -913,20 +934,23 @@ Promise.all([
     const sortedPlayers = [...players].sort(byGoals);
     const visiblePlayers = sortedPlayers.filter((player) => player.appearances >= 3);
 
+    const featuredTeams = pickFeaturedTeams(teams);
+    const featuredPlayers = pickFeaturedPlayers(visiblePlayers);
+
     renderSnapshot(snapshot);
-    renderTeamCards(teams.slice(0, 6), teamLibraryList, FREE_TEAM_LIMIT);
-    renderPlayerCards(visiblePlayers.slice(0, 6), playerLibraryList, FREE_PLAYER_LIMIT);
+    renderTeamCards(featuredTeams.slice(0, 6), teamLibraryList, FREE_TEAM_LIMIT);
+    renderPlayerCards(featuredPlayers.slice(0, 6), playerLibraryList, FREE_PLAYER_LIMIT);
     renderTeamCards(teams.slice(0, 24), teamsPageList);
     renderPlayerCards(visiblePlayers.slice(0, 24), playersPageList);
 
     if (heroTeamStrip) {
-      heroTeamStrip.innerHTML = teams
+      heroTeamStrip.innerHTML = featuredTeams
         .slice(0, 3)
         .map(
           (team) => `
             <a class="hero-strip-card" href="team.html?team=${encodeURIComponent(team.team)}">
               <strong>${team.team}</strong>
-              <span>${team.matches} 场历史样本</span>
+              <span>${team.matches} 场真实样本</span>
             </a>
           `
         )
@@ -934,7 +958,7 @@ Promise.all([
     }
 
     if (heroPlayerStrip) {
-      heroPlayerStrip.innerHTML = visiblePlayers
+      heroPlayerStrip.innerHTML = featuredPlayers
         .slice(0, 3)
         .map(
           (player) => `
@@ -1126,10 +1150,7 @@ Promise.all([
       playerTitle.textContent = `${player.player_name} 球员分析页`;
       playerSummaryText.textContent = `${player.player_name} 当前归属 ${player.team_name}，历史样本出场 ${player.appearances} 次。这里会集中展示他的出场样本、角色定位和效率表现。`;
       if (playerHeroImage) {
-        playerHeroImage.src =
-          Object.entries(playerArtwork).find(
-            ([name]) => normalizeName(name) === normalizeName(player.player_name)
-          )?.[1] || fallbackArtwork.player;
+        playerHeroImage.src = getPlayerImage(player.player_name);
         playerHeroImage.alt = `${player.player_name} 球员画面`;
       }
 
