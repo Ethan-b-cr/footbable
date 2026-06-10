@@ -318,7 +318,7 @@ if (articleMain && window.worldCupArticles) {
   if (requiresMember && !canViewFullArticle) {
     if (renderedLockedDescription) {
       renderedLockedDescription.textContent =
-        "这篇内容属于会员深度文章。当前只开放第一层判断，登录后可继续查看完整结论、阵容修正和后续延伸。";
+        "这篇内容属于会员深度文章。登录后可继续查看完整结论、阵容修正和后续延伸。";
     }
     if (renderedLockedList) {
       renderedLockedList.hidden = false;
@@ -380,6 +380,18 @@ const dataScorerSpotlight = document.querySelector("#data-scorer-spotlight");
 const dataFinalSnapshot = document.querySelector("#data-final-snapshot");
 const FREE_TEAM_LIMIT = 3;
 const FREE_PLAYER_LIMIT = 3;
+
+const isMemberUnlocked = Boolean(memberSession?.email);
+const isFreeTeam = (teamName, teams) =>
+  isMemberUnlocked ||
+  teams
+    .slice(0, FREE_TEAM_LIMIT)
+    .some((team) => String(team.team) === String(teamName));
+const isFreePlayer = (playerId, players) =>
+  isMemberUnlocked ||
+  players
+    .slice(0, FREE_PLAYER_LIMIT)
+    .some((player) => String(player.player_id) === String(playerId));
 
 const buildTeamCard = (team, locked = false) => {
   const teamImage = teamArtwork[team.team] || fallbackArtwork.team;
@@ -493,14 +505,14 @@ const renderSnapshot = (snapshot) => {
         <p>所有公开判断都从真实世界杯历史数据起步。</p>
       </article>
       <article>
-        <span>球队入口</span>
+        <span>球队档案</span>
         <strong>${snapshot.team_count}</strong>
-        <p>每支球队都可以单独进入页面看结构与样本。</p>
+        <p>每支球队都可以单独查看样本、效率和代表性比赛。</p>
       </article>
       <article>
-        <span>球员入口</span>
+        <span>球员档案</span>
         <strong>${snapshot.player_count}</strong>
-        <p>核心球星和角色球员都能继续补足到页面层。</p>
+        <p>核心球星和角色球员都能补齐到独立球员页面。</p>
       </article>
     `;
   }
@@ -525,7 +537,7 @@ const renderSnapshot = (snapshot) => {
       <div class="spotlight-stat-card">
         <p class="eyebrow">头部球星样本</p>
         <h2>${leadScorer.player_name}</h2>
-        <p>${leadScorer.team_name} 当前位于快照射手榜前列。公开层先展示真实样本，第二层再延伸到个人作用和对位价值。</p>
+        <p>${leadScorer.team_name} 当前位于快照射手榜前列，进球、射门和 xG 样本都足够突出。</p>
         <div class="stat-chip-row">
           <span>${leadScorer.goals || 0} 球</span>
           <span>${leadScorer.shots || 0} 次射门</span>
@@ -608,7 +620,9 @@ const renderSnapshot = (snapshot) => {
             .map(
               (team) => `
                 <tr>
-                  <td><a href="team.html?team=${encodeURIComponent(team.team)}">${team.team}</a></td>
+                  <td><a href="${isFreeTeam(team.team, snapshot.top_teams) ? `team.html?team=${encodeURIComponent(
+                    team.team
+                  )}` : "members.html"}">${team.team}</a></td>
                   <td>${team.matches}</td>
                   <td>${team.wins}</td>
                   <td>${team.draws}</td>
@@ -672,7 +686,7 @@ const renderSnapshot = (snapshot) => {
             .map(
               (player) => `
                 <tr>
-                  <td><a href="player.html?id=${player.player_id}">${player.player_name}</a></td>
+                  <td><a href="${isFreePlayer(player.player_id, snapshot.top_players) ? `player.html?id=${player.player_id}` : "members.html"}">${player.player_name}</a></td>
                   <td>${player.team_name}</td>
                   <td>${player.appearances}</td>
                   <td>${player.starts}</td>
@@ -706,7 +720,7 @@ const renderSnapshot = (snapshot) => {
             .map(
               (player) => `
                 <tr>
-                  <td><a href="player.html?id=${player.player_id}">${player.player_name}</a></td>
+                  <td><a href="${isFreePlayer(player.player_id, snapshot.top_scorers) ? `player.html?id=${player.player_id}` : "members.html"}">${player.player_name}</a></td>
                   <td>${player.team_name}</td>
                   <td>${player.goals || 0}</td>
                   <td>${player.shots || 0}</td>
@@ -773,7 +787,7 @@ const buildTeamNarrative = (team) => {
     <div class="analysis-stack">
       <p>${team.team} 当前历史样本共 ${team.matches} 场，胜率 ${winRate}，平局占比 ${drawRate}，净胜球 ${goalDiff}。这决定了它在世界杯舞台上的基本稳定性。</p>
       <p>进攻端场均射门 ${shotRate}，场均 xG ${xgForRate}；防守端场均被打出 xG ${xgAgainstRate}。如果一支球队长期 xG 高于实际进球，往往说明创造机会能力不错，但终结效率仍有波动。</p>
-      <p>射门转化上，本队共有 ${team.shots_on_target || 0} 次射正，射正占比 ${onTargetRate}。公开层适合先看这种稳定指标，再决定是否进入第二层看阵容、修正和临场变化。</p>
+      <p>射门转化上，本队共有 ${team.shots_on_target || 0} 次射正，射正占比 ${onTargetRate}。这些稳定指标能帮助判断这支球队的真实进攻质量和比赛上限。</p>
     </div>
   `;
 };
@@ -835,7 +849,7 @@ const buildPlayerNarrative = (player) => {
     player.xg || 0,
     2
   )}。如果 xG 高但进球低，通常意味着机会质量不差但终结波动较大。</p>
-      <p>组织侧传球成功率 ${passRate}，射门命中率 ${shotAccuracy}。公开层先展示这些稳定指标，第二层再延伸到对位、职责和临场价值。</p>
+      <p>组织侧传球成功率 ${passRate}，射门命中率 ${shotAccuracy}。这些指标能帮助判断他的职责、效率和在比赛里的真实作用。</p>
     </div>
   `;
 };
@@ -907,7 +921,7 @@ Promise.all([
 
     if (heroTeamStrip) {
       heroTeamStrip.innerHTML = teams
-        .slice(0, 5)
+        .slice(0, 3)
         .map(
           (team) => `
             <a class="hero-strip-card" href="team.html?team=${encodeURIComponent(team.team)}">
@@ -921,7 +935,7 @@ Promise.all([
 
     if (heroPlayerStrip) {
       heroPlayerStrip.innerHTML = visiblePlayers
-        .slice(0, 5)
+        .slice(0, 3)
         .map(
           (player) => `
             <a class="hero-strip-card" href="player.html?id=${player.player_id}">
@@ -955,6 +969,13 @@ Promise.all([
       const params = new URLSearchParams(window.location.search);
       const currentTeamName = params.get("team");
       const team = teams.find((item) => item.team === currentTeamName) || teams[0];
+      const canViewTeam = isFreeTeam(team.team, teams);
+
+      if (!canViewTeam) {
+        window.location.href = "members.html";
+        return;
+      }
+
       const recentMatches = matches
         .filter((match) => match.home_team === team.team || match.away_team === team.team)
         .sort((a, b) => String(b.match_date).localeCompare(String(a.match_date)))
@@ -965,7 +986,7 @@ Promise.all([
         .slice(0, 12);
 
       teamTitle.textContent = `${team.team} 球队分析页`;
-      teamSummaryText.textContent = `${team.team} 在当前世界杯历史样本中共 ${team.matches} 场，进球 ${team.goals_for}，失球 ${team.goals_against}。第一层页面先展示结构和稳定指标，第二层再承接更深判断。`;
+      teamSummaryText.textContent = `${team.team} 在当前世界杯历史样本中共 ${team.matches} 场，进球 ${team.goals_for}，失球 ${team.goals_against}。这里会集中展示这支球队的样本、效率和比赛轮廓。`;
       if (teamHeroImage) {
         teamHeroImage.src = teamArtwork[team.team] || fallbackArtwork.team;
         teamHeroImage.alt = `${team.team} 球队画面`;
@@ -1088,6 +1109,13 @@ Promise.all([
       const params = new URLSearchParams(window.location.search);
       const currentPlayerId = params.get("id");
       const player = players.find((item) => String(item.player_id) === String(currentPlayerId)) || visiblePlayers[0];
+      const canViewPlayer = isFreePlayer(player.player_id, visiblePlayers);
+
+      if (!canViewPlayer) {
+        window.location.href = "members.html";
+        return;
+      }
+
       const team = teams.find((item) => item.team === player.team_name);
       const teamMates = players.filter((item) => item.team_name === player.team_name).sort(byGoals).slice(0, 6);
       const passRate =
@@ -1096,7 +1124,7 @@ Promise.all([
         player.shots > 0 ? formatPercent(((player.shots_on_target || 0) / player.shots) * 100) : "0.0%";
 
       playerTitle.textContent = `${player.player_name} 球员分析页`;
-      playerSummaryText.textContent = `${player.player_name} 当前归属 ${player.team_name}，历史样本出场 ${player.appearances} 次。第一层公开页先解释样本与角色，第二层再看更深层临场价值。`;
+      playerSummaryText.textContent = `${player.player_name} 当前归属 ${player.team_name}，历史样本出场 ${player.appearances} 次。这里会集中展示他的出场样本、角色定位和效率表现。`;
       if (playerHeroImage) {
         playerHeroImage.src =
           Object.entries(playerArtwork).find(
@@ -1124,8 +1152,8 @@ Promise.all([
 
       playerMemberBox.innerHTML = `
         <div class="analysis-stack">
-          <p>第二层会员内容会继续补这名球员在不同对位中的价值、临场名单修正后的角色变化，以及更细的事件级解释。</p>
-          <p>公开层保持克制，只展示足以建立信任的真实样本，不直接堆结论。</p>
+          <p>会员内容会继续补这名球员在不同对位中的价值、临场名单修正后的角色变化，以及更细的事件级解释。</p>
+          <p>完整文章会同步补齐焦点战背景、阵容变化和赛前更新。</p>
         </div>
       `;
 
