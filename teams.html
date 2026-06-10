@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>球队分析库 | World Cup Edge</title>
+  <meta name="description" content="查看世界杯球队分析库，基于真实历史样本展示球队结构、射门、xG 和独立页面入口。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell article-shell">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="World Cup Edge 首页">
+        <span class="brand-mark">W</span>
+        <span class="brand-copy">
+          <strong>World Cup Edge</strong>
+          <span>世界杯数据分析站</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="index.html#matches">公开分析</a>
+        <a href="teams.html">球队</a>
+        <a href="players.html">球员</a>
+        <a href="data.html">数据中心</a>
+        <a href="sources.html">数据来源</a>
+      </nav>
+      <div class="header-actions">
+        <a class="header-link" href="login.html">会员登录</a>
+        <a class="header-cta" href="members.html">进入第二层</a>
+        <button class="header-ghost" id="logout-button" type="button" hidden>退出登录</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="article-hero article-hero-visual">
+        <div class="article-hero-copy">
+          <p class="eyebrow">球队分析库</p>
+          <h1>球队页必须像球队页，而不是文章的附属段落</h1>
+          <p class="hero-text">
+            这里把世界杯球队拆成独立页面。先看真实历史样本、射门、xG、代表性比赛和核心球员，再决定是否进入更深层内容。
+          </p>
+        </div>
+        <aside class="article-side-card">
+          <img
+            class="hero-side-image"
+            src="https://upload.wikimedia.org/wikipedia/commons/2/21/France_champion_of_the_Football_World_Cup_Russia_2018.jpg"
+            alt="冠军球队庆祝画面"
+          >
+        </aside>
+      </section>
+
+      <section class="section">
+        <div class="filter-bar">
+          <label class="filter-field">
+            <span>搜索球队</span>
+            <input id="team-search-input" type="search" placeholder="输入球队名，例如 Brazil">
+          </label>
+        </div>
+      </section>
+
+      <section class="section entity-grid" id="teams-page-list"></section>
+    </main>
+
+    <footer class="mini-footer">
+      <a href="index.html">返回首页</a>
+      <a href="players.html">球员分析库</a>
+      <a href="data.html">数据中心</a>
+      <a href="sources.html">数据来源</a>
+    </footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

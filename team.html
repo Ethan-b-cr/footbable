@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>球队详情 | World Cup Edge</title>
+  <meta name="description" content="查看球队详情页，包括世界杯历史样本、射门、xG、代表性比赛与核心球员对比。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell article-shell">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="World Cup Edge 首页">
+        <span class="brand-mark">W</span>
+        <span class="brand-copy">
+          <strong>World Cup Edge</strong>
+          <span>世界杯数据分析站</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="teams.html">球队</a>
+        <a href="players.html">球员</a>
+        <a href="data.html">数据中心</a>
+        <a href="sources.html">数据来源</a>
+      </nav>
+      <div class="header-actions">
+        <a class="header-link" href="login.html">会员登录</a>
+        <a class="header-cta" href="members.html">进入第二层</a>
+        <button class="header-ghost" id="logout-button" type="button" hidden>退出登录</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="article-hero article-hero-visual">
+        <div class="article-hero-copy">
+          <p class="eyebrow">球队详情</p>
+          <h1 id="team-title">球队详情加载中</h1>
+          <p class="hero-text" id="team-summary-text">这里会展示球队在世界杯历史样本中的公开分析入口。</p>
+        </div>
+        <aside class="article-side-card">
+          <img id="team-hero-image" class="hero-side-image" src="" alt="球队画面">
+        </aside>
+      </section>
+
+      <section class="section data-grid">
+        <div class="faq-item">
+          <h2>基础统计</h2>
+          <ul id="team-stat-list" class="detail-list">
+            <li>数据加载中</li>
+          </ul>
+        </div>
+        <div class="faq-item">
+          <h2>公开层判断</h2>
+          <div id="team-analysis-box" class="table-shell"></div>
+        </div>
+      </section>
+
+      <section class="section data-grid">
+        <div class="faq-item">
+          <h2>代表性比赛样本</h2>
+          <div id="team-matches-table" class="table-shell"></div>
+        </div>
+        <div class="faq-item">
+          <h2>与其他球队的横向比较</h2>
+          <div id="team-comparison-table" class="table-shell"></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="faq-item">
+          <h2>本队核心球员样本</h2>
+          <div id="team-players-table" class="table-shell"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="mini-footer">
+      <a href="teams.html">返回球队库</a>
+      <a href="data.html">数据中心</a>
+      <a href="sources.html">数据来源</a>
+      <a href="members.html">进入第二层</a>
+    </footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

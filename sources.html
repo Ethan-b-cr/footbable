@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数据来源 | World Cup Edge</title>
+  <meta name="description" content="查看 World Cup Edge 当前使用和计划接入的真实足球数据来源。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell article-shell">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="World Cup Edge 首页">
+        <span class="brand-mark">W</span>
+        <span class="brand-copy">
+          <strong>World Cup Edge</strong>
+          <span>世界杯数据分析站</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="index.html#matches">公开分析</a>
+        <a href="teams.html">球队</a>
+        <a href="players.html">球员</a>
+        <a href="data.html">数据中心</a>
+        <a href="about.html">方法说明</a>
+      </nav>
+      <div class="header-actions">
+        <a class="header-link" href="login.html">会员登录</a>
+        <a class="header-cta" href="members.html">进入第二层</a>
+        <button class="header-ghost" id="logout-button" type="button" hidden>退出登录</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="article-hero">
+        <div class="article-hero-copy">
+          <p class="eyebrow">数据来源</p>
+          <h1>分析站必须把真实数据来源讲清楚</h1>
+          <p class="hero-text">
+            这一页说明当前站点已经用到的数据来源，以及后续适合接入的官方或 API 数据来源，让数据底座更透明。
+          </p>
+        </div>
+        <aside class="article-side-card">
+          <span class="record-label">当前策略</span>
+          <ul>
+            <li>先用真实历史样本打底</li>
+            <li>再逐步补更多接口和更新链路</li>
+            <li>保持公开层的可验证性</li>
+          </ul>
+        </aside>
+      </section>
+      <section class="section article-list" id="source-cards"></section>
+      <section class="section faq-list">
+        <article class="faq-item">
+          <h2>为什么要单独做数据来源页？</h2>
+          <p>因为专业站点不能只给结果，还要让访问者知道数据是从哪里来的，覆盖了什么，适合做什么。</p>
+        </article>
+        <article class="faq-item">
+          <h2>当前还缺什么？</h2>
+          <p>当前已经有历史底座，后续还可以继续补更自动化的同步、更多比赛与球员层接口，以及更细粒度的数据更新。</p>
+        </article>
+      </section>
+    </main>
+
+    <footer class="mini-footer">
+      <a href="data.html">数据中心</a>
+      <a href="about.html">方法说明</a>
+      <a href="faq.html">常见问题</a>
+      <a href="privacy.html">隐私政策</a>
+      <a href="terms.html">服务条款</a>
+    </footer>
+  </div>
+  <script src="data-sources.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

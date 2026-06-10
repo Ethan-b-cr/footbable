@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>会员中心 | World Cup Edge</title>
+  <meta name="description" content="进入 World Cup Edge 第二层会员中心，查看内容结构、更新节奏与会员入口。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell article-shell">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="World Cup Edge 首页">
+        <span class="brand-mark">W</span>
+        <span class="brand-copy">
+          <strong>World Cup Edge</strong>
+          <span>世界杯数据分析站</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="index.html#matches">公开分析</a>
+        <a href="teams.html">球队</a>
+        <a href="players.html">球员</a>
+        <a href="data.html">数据中心</a>
+        <a href="sources.html">数据来源</a>
+      </nav>
+      <div class="header-actions">
+        <a class="header-link" href="login.html">会员登录</a>
+        <a class="header-cta" href="index.html#contact">咨询入口</a>
+        <button class="header-ghost" id="logout-button" type="button" hidden>退出登录</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="article-hero">
+        <div class="article-hero-copy">
+          <p class="eyebrow">第二层内容</p>
+          <h1>第一层负责建立认知，第二层负责交付更深内容</h1>
+          <p class="hero-text">
+            会员中心不应该像促销页，而应该像内容承接页。这里主要解释第二层会交付什么、适合谁看、内容如何更新。
+          </p>
+        </div>
+        <aside class="article-side-card">
+          <span class="record-label">当前开通方式</span>
+          <ul>
+            <li>先咨询确认需求</li>
+            <li>再按内容层级开通</li>
+            <li>后续可接支付与自动开通流程</li>
+          </ul>
+          <div class="member-status-card">
+            <strong id="member-status-title">当前未登录</strong>
+            <p id="member-status-text">登录后可直接进入会员内容入口和深度文章。</p>
+          </div>
+          <div class="member-status-card" id="member-email-card" hidden>
+            <strong>当前会员邮箱</strong>
+            <p id="member-email-text">未登录</p>
+          </div>
+          <a class="button button-primary" id="member-primary-action" href="index.html#contact">立即咨询开通</a>
+        </aside>
+      </section>
+
+      <section class="section membership-grid">
+        <article class="tier-card tier-basic">
+          <span class="tier-label">基础层</span>
+          <h3>适合持续看每日公开延伸</h3>
+          <ul>
+            <li>每日精选延伸内容</li>
+            <li>焦点战摘要版</li>
+            <li>基础复盘与更新提醒</li>
+          </ul>
+        </article>
+        <article class="tier-card tier-pro">
+          <span class="tier-label">专业层</span>
+          <h3>适合看完整推演和修正</h3>
+          <ul>
+            <li>完整深度内容</li>
+            <li>模型与样本支撑</li>
+            <li>临场变量修正</li>
+            <li>持续内容更新</li>
+          </ul>
+        </article>
+        <article class="tier-card tier-single">
+          <span class="tier-label">单场层</span>
+          <h3>适合只关注焦点比赛</h3>
+          <ul>
+            <li>单场完整拆解</li>
+            <li>赛前补充更新</li>
+            <li>更聚焦的深度内容</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="section article-list">
+        <article class="article-card">
+          <span class="article-meta">更新节奏</span>
+          <h3>日常精选 + 焦点战加深</h3>
+          <p>第二层不会把所有比赛都做成同一深度，而是把高关注比赛做得更完整。</p>
+        </article>
+        <article class="article-card">
+          <span class="article-meta">内容结构</span>
+          <h3>从公开判断到完整推演</h3>
+          <p>公开层负责吸引与建立信任，第二层负责把完整逻辑和更细内容交付出来。</p>
+        </article>
+        <article class="article-card">
+          <span class="article-meta">下一步扩展</span>
+          <h3>后续可接支付与权限</h3>
+          <p>当前结构已经适合继续接账号、支付、订单和自动解锁流程。</p>
+        </article>
+      </section>
+
+      <section class="section member-library">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">会员内容入口</p>
+            <h2>登录后可直接进入的内容入口</h2>
+          </div>
+          <p>这里先提供站内会员浏览体验，后续可继续接真实权限系统。</p>
+        </div>
+        <div class="article-list" id="member-library-list"></div>
+      </section>
+    </main>
+
+    <footer class="mini-footer">
+      <a href="about.html">方法说明</a>
+      <a href="data.html">数据中心</a>
+      <a href="sources.html">数据来源</a>
+      <a href="faq.html">常见问题</a>
+      <a href="privacy.html">隐私政策</a>
+      <a href="terms.html">服务条款</a>
+    </footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

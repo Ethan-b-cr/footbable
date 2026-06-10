@@ -1,0 +1,367 @@
+[
+  {
+    "name": "Didier Deschamps",
+    "role": "manager",
+    "appearances": 14
+  },
+  {
+    "name": "Zlatko Dalić",
+    "role": "manager",
+    "appearances": 14
+  },
+  {
+    "name": "Gareth Southgate",
+    "role": "manager",
+    "appearances": 12
+  },
+  {
+    "name": "Roberto Martínez Montoliú",
+    "role": "manager",
+    "appearances": 10
+  },
+  {
+    "name": "Adenor Leonardo Bacchi",
+    "role": "manager",
+    "appearances": 9
+  },
+  {
+    "name": "Fernando Manuel Fernandes da Costa Santos",
+    "role": "manager",
+    "appearances": 9
+  },
+  {
+    "name": "Mário Jorge Lobo Zagallo",
+    "role": "manager",
+    "appearances": 7
+  },
+  {
+    "name": "Aliou Cissé",
+    "role": "manager",
+    "appearances": 7
+  },
+  {
+    "name": "Lionel Sebastián Scaloni",
+    "role": "manager",
+    "appearances": 7
+  },
+  {
+    "name": "Carlos Manuel Brito Leal Queiróz",
+    "role": "manager",
+    "appearances": 6
+  },
+  {
+    "name": "Hervé Renard",
+    "role": "manager",
+    "appearances": 6
+  },
+  {
+    "name": "Rinus Michels",
+    "role": "manager",
+    "appearances": 5
+  },
+  {
+    "name": "Jan Olof Andersson",
+    "role": "manager",
+    "appearances": 5
+  },
+  {
+    "name": "Óscar Washington Tabárez Silva",
+    "role": "manager",
+    "appearances": 5
+  },
+  {
+    "name": "Stanislav Cherchesov",
+    "role": "manager",
+    "appearances": 5
+  },
+  {
+    "name": "Louis van Gaal",
+    "role": "manager",
+    "appearances": 5
+  },
+  {
+    "name": "Carlos Salvador Bilardo",
+    "role": "manager",
+    "appearances": 4
+  },
+  {
+    "name": "Akira Nishino",
+    "role": "manager",
+    "appearances": 4
+  },
+  {
+    "name": "Vladimir Petković",
+    "role": "manager",
+    "appearances": 4
+  },
+  {
+    "name": "Juan Carlos Osorio Arbeláez",
+    "role": "manager",
+    "appearances": 4
+  },
+  {
+    "name": "Fernando Ruiz Hierro",
+    "role": "manager",
+    "appearances": 4
+  },
+  {
+    "name": "Jorge Luis Sampaoli Moya",
+    "role": "manager",
+    "appearances": 4
+  },
+  {
+    "name": "José Néstor Pekerman",
+    "role": "manager",
+    "appearances": 4
+  },
+  {
+    "name": "Åge Fridtjof Hareide",
+    "role": "manager",
+    "appearances": 4
+  },
+  {
+    "name": "Walid Regragui",
+    "role": "manager",
+    "appearances": 4
+  },
+  {
+    "name": "Hajime Moriyasu",
+    "role": "manager",
+    "appearances": 4
+  },
+  {
+    "name": "Luis Enrique Martínez García",
+    "role": "manager",
+    "appearances": 4
+  },
+  {
+    "name": "Gregg Berhalter",
+    "role": "manager",
+    "appearances": 4
+  },
+  {
+    "name": "Murat Yakin",
+    "role": "manager",
+    "appearances": 4
+  },
+  {
+    "name": "Czesław Michniewicz",
+    "role": "manager",
+    "appearances": 4
+  },
+  {
+    "name": "Graham James Arnold",
+    "role": "manager",
+    "appearances": 4
+  },
+  {
+    "name": "Paulo Jorge Gomes Bento",
+    "role": "manager",
+    "appearances": 4
+  },
+  {
+    "name": "Hernán Darío Gómez Jaramillo",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Adam Nawałka",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Mladen Krstajić",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Tae-Yong Shin",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Joachim Löw",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Juan Antonio Pizzi Torroja",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Ricardo Alberto Gareca Nardi",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Nabil Maâloul",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Heimir Hallgrímsson",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Héctor Raúl Cúper",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Óscar Antonio Ramírez Hernández",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Gernot Rohr",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Lambertus van Marwijk",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "John Herdman",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Gustavo Julio Alfaro",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Robert Page",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Jalel Kadri",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Rigobert Song Bahanag",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Otto Addo",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Félix Sánchez Bas",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Kasper Hjulmand",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Hans-Dieter Flick",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Gerardo Daniel Martino",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Luis Fernando Suárez Guzman",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Dragan Stojković",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Diego Martín Alonso López",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Hoalid Regragui",
+    "role": "manager",
+    "appearances": 3
+  },
+  {
+    "name": "Georg Buschner",
+    "role": "manager",
+    "appearances": 2
+  },
+  {
+    "name": "Helmut Schön",
+    "role": "manager",
+    "appearances": 2
+  },
+  {
+    "name": "Alfred Ernest Ramsey",
+    "role": "manager",
+    "appearances": 1
+  },
+  {
+    "name": "Waldyr Pereira",
+    "role": "manager",
+    "appearances": 1
+  },
+  {
+    "name": "Angelo Niculescu",
+    "role": "manager",
+    "appearances": 1
+  },
+  {
+    "name": "Ferruccio Valcareggi",
+    "role": "manager",
+    "appearances": 1
+  },
+  {
+    "name": "Juan Eduardo Hohberg",
+    "role": "manager",
+    "appearances": 1
+  },
+  {
+    "name": "Jozef Marko",
+    "role": "manager",
+    "appearances": 1
+  },
+  {
+    "name": "Vladislao Wenceslao Cap",
+    "role": "manager",
+    "appearances": 1
+  },
+  {
+    "name": "Guy Thys",
+    "role": "manager",
+    "appearances": 1
+  },
+  {
+    "name": "Franz Beckenbauer",
+    "role": "manager",
+    "appearances": 1
+  },
+  {
+    "name": "Bobby Robson",
+    "role": "manager",
+    "appearances": 1
+  },
+  {
+    "name": "Sebastião Barroso Lazaroni",
+    "role": "manager",
+    "appearances": 1
+  },
+  {
+    "name": "Telê Santana da Silva",
+    "role": "manager",
+    "appearances": 1
+  }
+]

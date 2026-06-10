@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数据中心 | World Cup Edge</title>
+  <meta name="description" content="查看 World Cup Edge 的本地世界杯数据快照、球队样本、球员样本和数据状态。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell article-shell">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="World Cup Edge 首页">
+        <span class="brand-mark">W</span>
+        <span class="brand-copy">
+          <strong>World Cup Edge</strong>
+          <span>世界杯数据分析站</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="index.html#matches">公开分析</a>
+        <a href="teams.html">球队</a>
+        <a href="players.html">球员</a>
+        <a href="sources.html">数据来源</a>
+        <a href="about.html">方法说明</a>
+      </nav>
+      <div class="header-actions">
+        <a class="header-link" href="login.html">会员登录</a>
+        <a class="header-cta" href="members.html">进入第二层</a>
+        <button class="header-ghost" id="logout-button" type="button" hidden>退出登录</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="article-hero article-hero-visual">
+        <div class="article-hero-copy">
+          <p class="eyebrow">数据中心</p>
+          <h1>先把真实数据底座搭稳，分析网站才像真的站</h1>
+          <p class="hero-text">
+            这里展示世界杯历史比赛、球队样本和球员样本的本地快照，用来支撑首页、球队页、球员页和后续第二层内容。
+          </p>
+        </div>
+        <aside class="article-side-card">
+          <img
+            class="hero-side-image"
+            src="https://upload.wikimedia.org/wikipedia/commons/0/05/Argentina_campeon_del_mundo_2022.jpg"
+            alt="世界杯冠军庆祝画面"
+          >
+        </aside>
+      </section>
+
+      <section class="section article-list" id="data-summary-cards"></section>
+
+      <section class="section">
+        <div class="faq-item">
+          <h2>当前数据状态</h2>
+          <p id="data-status-text">如果已生成本地快照，这里会显示最近更新时间和当前可用数据范围。</p>
+        </div>
+      </section>
+
+      <section class="section data-grid">
+        <div class="faq-item">
+          <h2>球队汇总 Top 10</h2>
+          <div id="team-summary-table" class="table-shell"></div>
+        </div>
+        <div class="faq-item">
+          <h2>最新比赛记录</h2>
+          <div id="latest-matches-table" class="table-shell"></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="faq-item">
+          <h2>球员出场 Top 15</h2>
+          <div id="player-summary-table" class="table-shell"></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="faq-item">
+          <h2>球员进攻样本 Top 10</h2>
+          <div id="scorer-summary-table" class="table-shell"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="mini-footer">
+      <a href="index.html">返回首页</a>
+      <a href="sources.html">数据来源</a>
+      <a href="about.html">方法说明</a>
+      <a href="faq.html">常见问题</a>
+    </footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

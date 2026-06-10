@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>会员登录 | World Cup Edge</title>
+  <meta name="description" content="登录 World Cup Edge 会员入口，进入会员中心与第二层深度内容。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell article-shell">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="World Cup Edge 首页">
+        <span class="brand-mark">W</span>
+        <span class="brand-copy">
+          <strong>World Cup Edge</strong>
+          <span>世界杯数据分析站</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="index.html#matches">公开分析</a>
+        <a href="teams.html">球队</a>
+        <a href="players.html">球员</a>
+        <a href="data.html">数据中心</a>
+        <a href="members.html">第二层</a>
+      </nav>
+      <div class="header-actions">
+        <a class="header-link" href="login.html">会员登录</a>
+        <a class="header-cta" href="members.html">进入第二层</a>
+        <button class="header-ghost" id="logout-button" type="button" hidden>退出登录</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="login-layout">
+        <div class="login-copy">
+          <p class="eyebrow">会员登录</p>
+          <h1>先进入会员中心，再查看第二层深度内容</h1>
+          <p class="hero-text">
+            当前登录页承担的是会员入口角色。登录后会把状态保存在本地浏览器，用于查看会员中心和深度文章的解锁效果。
+          </p>
+          <div class="login-benefits">
+            <article>
+              <strong>公开层已建立认知</strong>
+              <p>首页、球队页和球员页已经先把真实样本和基础判断展示出来。</p>
+            </article>
+            <article>
+              <strong>第二层继续深挖</strong>
+              <p>会员层重点承接深度内容、完整推演、临场修正和持续更新。</p>
+            </article>
+            <article>
+              <strong>先体验再接真实鉴权</strong>
+              <p>当前可先完成前端登录体验，后续再接入真实账号、验证码或支付体系。</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="login-card">
+          <div class="login-card-head">
+            <span>账号入口</span>
+            <strong>会员登录</strong>
+            <p>输入邮箱和密码后，会直接进入会员中心。</p>
+          </div>
+          <form class="login-form" id="login-form">
+            <label>
+              <span>邮箱地址</span>
+              <input id="login-email" type="email" placeholder="name@example.com" required>
+            </label>
+            <label>
+              <span>登录密码</span>
+              <input id="login-password" type="password" placeholder="请输入密码" required>
+            </label>
+            <div class="login-row">
+              <label class="checkbox-row">
+                <input type="checkbox">
+                <span>记住我</span>
+              </label>
+              <a href="index.html#contact">需要开通会员？</a>
+            </div>
+            <button class="button button-primary" type="submit">登录会员区</button>
+          </form>
+          <div class="status-note">
+            <strong>当前状态</strong>
+            <p id="login-status">当前为前端会员登录体验。登录后会进入会员中心，并在当前浏览器保存登录状态。</p>
+          </div>
+          <div class="login-divider"><span>或</span></div>
+          <div class="login-alt-actions">
+            <a class="button button-secondary" href="members.html">先看第二层说明</a>
+            <a class="button button-secondary" href="index.html#contact">先咨询开通</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="mini-footer">
+      <a href="about.html">方法说明</a>
+      <a href="sources.html">数据来源</a>
+      <a href="faq.html">常见问题</a>
+      <a href="privacy.html">隐私政策</a>
+      <a href="terms.html">服务条款</a>
+    </footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

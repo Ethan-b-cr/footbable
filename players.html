@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>球员分析库 | World Cup Edge</title>
+  <meta name="description" content="查看世界杯球员分析库，基于真实出场、首发、进球、xG 和传球数据展示独立球员页面入口。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell article-shell">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="World Cup Edge 首页">
+        <span class="brand-mark">W</span>
+        <span class="brand-copy">
+          <strong>World Cup Edge</strong>
+          <span>世界杯数据分析站</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="index.html#matches">公开分析</a>
+        <a href="teams.html">球队</a>
+        <a href="players.html">球员</a>
+        <a href="data.html">数据中心</a>
+        <a href="sources.html">数据来源</a>
+      </nav>
+      <div class="header-actions">
+        <a class="header-link" href="login.html">会员登录</a>
+        <a class="header-cta" href="members.html">进入第二层</a>
+        <button class="header-ghost" id="logout-button" type="button" hidden>退出登录</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="article-hero article-hero-visual">
+        <div class="article-hero-copy">
+          <p class="eyebrow">球员分析库</p>
+          <h1>热门球星要抓眼球，真实样本要撑得住专业度</h1>
+          <p class="hero-text">
+            这里先展示球员的真实出场、首发、分钟、进球、xG 和传球成功率，避免空泛描述，让每个球员都能独立进入分析页。
+          </p>
+        </div>
+        <aside class="article-side-card">
+          <img
+            class="hero-side-image"
+            src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Lionel_Messi_20180626.jpg"
+            alt="球星比赛画面"
+          >
+        </aside>
+      </section>
+
+      <section class="section">
+        <div class="filter-bar">
+          <label class="filter-field">
+            <span>搜索球员</span>
+            <input id="player-search-input" type="search" placeholder="输入球员名，例如 Messi">
+          </label>
+        </div>
+      </section>
+
+      <section class="section entity-grid" id="players-page-list"></section>
+    </main>
+
+    <footer class="mini-footer">
+      <a href="index.html">返回首页</a>
+      <a href="teams.html">球队分析库</a>
+      <a href="data.html">数据中心</a>
+      <a href="sources.html">数据来源</a>
+    </footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

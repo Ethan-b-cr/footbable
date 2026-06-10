@@ -1,0 +1,482 @@
+{
+  "updated_at": "2026-06-10T05:52:37.053Z",
+  "match_count": 144,
+  "team_count": 44,
+  "person_count": 73,
+  "player_count": 1732,
+  "top_teams": [
+    {
+      "team": "Brazil",
+      "matches": 18,
+      "goals_for": 35,
+      "goals_against": 16,
+      "wins": 12,
+      "draws": 2,
+      "losses": 4
+    },
+    {
+      "team": "Argentina",
+      "matches": 16,
+      "goals_for": 29,
+      "goals_against": 24,
+      "wins": 9,
+      "draws": 3,
+      "losses": 4
+    },
+    {
+      "team": "England",
+      "matches": 14,
+      "goals_for": 26,
+      "goals_against": 15,
+      "wins": 6,
+      "draws": 2,
+      "losses": 6
+    },
+    {
+      "team": "France",
+      "matches": 14,
+      "goals_for": 30,
+      "goals_against": 14,
+      "wins": 11,
+      "draws": 2,
+      "losses": 1
+    },
+    {
+      "team": "Croatia",
+      "matches": 14,
+      "goals_for": 22,
+      "goals_against": 16,
+      "wins": 6,
+      "draws": 6,
+      "losses": 2
+    },
+    {
+      "team": "Belgium",
+      "matches": 11,
+      "goals_for": 17,
+      "goals_against": 10,
+      "wins": 7,
+      "draws": 1,
+      "losses": 3
+    },
+    {
+      "team": "Netherlands",
+      "matches": 10,
+      "goals_for": 19,
+      "goals_against": 6,
+      "wins": 6,
+      "draws": 3,
+      "losses": 1
+    },
+    {
+      "team": "Morocco",
+      "matches": 10,
+      "goals_for": 8,
+      "goals_against": 9,
+      "wins": 3,
+      "draws": 3,
+      "losses": 4
+    },
+    {
+      "team": "Uruguay",
+      "matches": 9,
+      "goals_for": 10,
+      "goals_against": 8,
+      "wins": 5,
+      "draws": 1,
+      "losses": 3
+    },
+    {
+      "team": "Germany",
+      "matches": 9,
+      "goals_for": 12,
+      "goals_against": 14,
+      "wins": 3,
+      "draws": 1,
+      "losses": 5
+    }
+  ],
+  "top_people": [
+    {
+      "name": "Didier Deschamps",
+      "role": "manager",
+      "appearances": 14
+    },
+    {
+      "name": "Zlatko Dalić",
+      "role": "manager",
+      "appearances": 14
+    },
+    {
+      "name": "Gareth Southgate",
+      "role": "manager",
+      "appearances": 12
+    },
+    {
+      "name": "Roberto Martínez Montoliú",
+      "role": "manager",
+      "appearances": 10
+    },
+    {
+      "name": "Adenor Leonardo Bacchi",
+      "role": "manager",
+      "appearances": 9
+    },
+    {
+      "name": "Fernando Manuel Fernandes da Costa Santos",
+      "role": "manager",
+      "appearances": 9
+    },
+    {
+      "name": "Mário Jorge Lobo Zagallo",
+      "role": "manager",
+      "appearances": 7
+    },
+    {
+      "name": "Aliou Cissé",
+      "role": "manager",
+      "appearances": 7
+    },
+    {
+      "name": "Lionel Sebastián Scaloni",
+      "role": "manager",
+      "appearances": 7
+    },
+    {
+      "name": "Carlos Manuel Brito Leal Queiróz",
+      "role": "manager",
+      "appearances": 6
+    }
+  ],
+  "top_players": [
+    {
+      "player_id": 3009,
+      "player_name": "Kylian Mbappé Lottin",
+      "team_name": "France",
+      "country_name": "France",
+      "appearances": 14,
+      "starts": 12,
+      "minutes_estimate": 1080
+    },
+    {
+      "player_id": 3099,
+      "player_name": "Hugo Lloris",
+      "team_name": "France",
+      "country_name": "France",
+      "appearances": 14,
+      "starts": 12,
+      "minutes_estimate": 1080
+    },
+    {
+      "player_id": 3379,
+      "player_name": "Alphonse Areola",
+      "team_name": "France",
+      "country_name": "France",
+      "appearances": 14,
+      "starts": 0,
+      "minutes_estimate": 0
+    },
+    {
+      "player_id": 3543,
+      "player_name": "Steve Mandanda",
+      "team_name": "France",
+      "country_name": "France",
+      "appearances": 14,
+      "starts": 2,
+      "minutes_estimate": 180
+    },
+    {
+      "player_id": 3604,
+      "player_name": "Olivier Giroud",
+      "team_name": "France",
+      "country_name": "France",
+      "appearances": 14,
+      "starts": 12,
+      "minutes_estimate": 1080
+    },
+    {
+      "player_id": 5476,
+      "player_name": "Benjamin Pavard",
+      "team_name": "France",
+      "country_name": "France",
+      "appearances": 14,
+      "starts": 7,
+      "minutes_estimate": 630
+    },
+    {
+      "player_id": 5477,
+      "player_name": "Ousmane Dembélé",
+      "team_name": "France",
+      "country_name": "France",
+      "appearances": 14,
+      "starts": 8,
+      "minutes_estimate": 720
+    },
+    {
+      "player_id": 5485,
+      "player_name": "Raphaël Varane",
+      "team_name": "France",
+      "country_name": "France",
+      "appearances": 14,
+      "starts": 13,
+      "minutes_estimate": 1170
+    },
+    {
+      "player_id": 5487,
+      "player_name": "Antoine Griezmann",
+      "team_name": "France",
+      "country_name": "France",
+      "appearances": 14,
+      "starts": 13,
+      "minutes_estimate": 1170
+    },
+    {
+      "player_id": 3471,
+      "player_name": "Dejan Lovren",
+      "team_name": "Croatia",
+      "country_name": "Croatia",
+      "appearances": 14,
+      "starts": 12,
+      "minutes_estimate": 1080
+    },
+    {
+      "player_id": 5456,
+      "player_name": "Mateo Kovačić",
+      "team_name": "Croatia",
+      "country_name": "Croatia",
+      "appearances": 14,
+      "starts": 8,
+      "minutes_estimate": 720
+    },
+    {
+      "player_id": 5460,
+      "player_name": "Andrej Kramarić",
+      "team_name": "Croatia",
+      "country_name": "Croatia",
+      "appearances": 14,
+      "starts": 10,
+      "minutes_estimate": 900
+    },
+    {
+      "player_id": 5463,
+      "player_name": "Luka Modrić",
+      "team_name": "Croatia",
+      "country_name": "Croatia",
+      "appearances": 14,
+      "starts": 14,
+      "minutes_estimate": 1260
+    },
+    {
+      "player_id": 5469,
+      "player_name": "Marcelo Brozović",
+      "team_name": "Croatia",
+      "country_name": "Croatia",
+      "appearances": 14,
+      "starts": 10,
+      "minutes_estimate": 900
+    },
+    {
+      "player_id": 5474,
+      "player_name": "Ivan Perišić",
+      "team_name": "Croatia",
+      "country_name": "Croatia",
+      "appearances": 14,
+      "starts": 14,
+      "minutes_estimate": 1260
+    }
+  ],
+  "top_scorers": [
+    {
+      "player_id": 3009,
+      "player_name": "Kylian Mbappé Lottin",
+      "team_name": "France",
+      "country_name": "France",
+      "appearances": 14,
+      "starts": 12,
+      "minutes_estimate": 1080
+    },
+    {
+      "player_id": 3099,
+      "player_name": "Hugo Lloris",
+      "team_name": "France",
+      "country_name": "France",
+      "appearances": 14,
+      "starts": 12,
+      "minutes_estimate": 1080
+    },
+    {
+      "player_id": 3379,
+      "player_name": "Alphonse Areola",
+      "team_name": "France",
+      "country_name": "France",
+      "appearances": 14,
+      "starts": 0,
+      "minutes_estimate": 0
+    },
+    {
+      "player_id": 3543,
+      "player_name": "Steve Mandanda",
+      "team_name": "France",
+      "country_name": "France",
+      "appearances": 14,
+      "starts": 2,
+      "minutes_estimate": 180
+    },
+    {
+      "player_id": 3604,
+      "player_name": "Olivier Giroud",
+      "team_name": "France",
+      "country_name": "France",
+      "appearances": 14,
+      "starts": 12,
+      "minutes_estimate": 1080
+    },
+    {
+      "player_id": 5476,
+      "player_name": "Benjamin Pavard",
+      "team_name": "France",
+      "country_name": "France",
+      "appearances": 14,
+      "starts": 7,
+      "minutes_estimate": 630
+    },
+    {
+      "player_id": 5477,
+      "player_name": "Ousmane Dembélé",
+      "team_name": "France",
+      "country_name": "France",
+      "appearances": 14,
+      "starts": 8,
+      "minutes_estimate": 720
+    },
+    {
+      "player_id": 5485,
+      "player_name": "Raphaël Varane",
+      "team_name": "France",
+      "country_name": "France",
+      "appearances": 14,
+      "starts": 13,
+      "minutes_estimate": 1170
+    },
+    {
+      "player_id": 5487,
+      "player_name": "Antoine Griezmann",
+      "team_name": "France",
+      "country_name": "France",
+      "appearances": 14,
+      "starts": 13,
+      "minutes_estimate": 1170
+    },
+    {
+      "player_id": 3471,
+      "player_name": "Dejan Lovren",
+      "team_name": "Croatia",
+      "country_name": "Croatia",
+      "appearances": 14,
+      "starts": 12,
+      "minutes_estimate": 1080
+    }
+  ],
+  "latest_matches": [
+    {
+      "season": "2022",
+      "match_id": 3857262,
+      "home_team": "South Korea",
+      "away_team": "Portugal",
+      "home_score": 2,
+      "away_score": 1,
+      "match_date": "2022-12-02",
+      "stage": "Group Stage"
+    },
+    {
+      "season": "2022",
+      "match_id": 3857279,
+      "home_team": "France",
+      "away_team": "Australia",
+      "home_score": 4,
+      "away_score": 1,
+      "match_date": "2022-11-22",
+      "stage": "Group Stage"
+    },
+    {
+      "season": "2022",
+      "match_id": 3857280,
+      "home_team": "Cameroon",
+      "away_team": "Brazil",
+      "home_score": 1,
+      "away_score": 0,
+      "match_date": "2022-12-02",
+      "stage": "Group Stage"
+    },
+    {
+      "season": "2022",
+      "match_id": 3857281,
+      "home_team": "Croatia",
+      "away_team": "Canada",
+      "home_score": 4,
+      "away_score": 1,
+      "match_date": "2022-11-27",
+      "stage": "Group Stage"
+    },
+    {
+      "season": "2022",
+      "match_id": 3857291,
+      "home_team": "Spain",
+      "away_team": "Costa Rica",
+      "home_score": 7,
+      "away_score": 0,
+      "match_date": "2022-11-23",
+      "stage": "Group Stage"
+    },
+    {
+      "season": "2022",
+      "match_id": 3857293,
+      "home_team": "Ghana",
+      "away_team": "Uruguay",
+      "home_score": 0,
+      "away_score": 2,
+      "match_date": "2022-12-02",
+      "stage": "Group Stage"
+    },
+    {
+      "season": "2022",
+      "match_id": 3857299,
+      "home_team": "South Korea",
+      "away_team": "Ghana",
+      "home_score": 2,
+      "away_score": 3,
+      "match_date": "2022-11-28",
+      "stage": "Group Stage"
+    },
+    {
+      "season": "2022",
+      "match_id": 3857300,
+      "home_team": "Argentina",
+      "away_team": "Saudi Arabia",
+      "home_score": 1,
+      "away_score": 2,
+      "match_date": "2022-11-22",
+      "stage": "Group Stage"
+    },
+    {
+      "season": "2022",
+      "match_id": 3857286,
+      "home_team": "Qatar",
+      "away_team": "Ecuador",
+      "home_score": 0,
+      "away_score": 2,
+      "match_date": "2022-11-20",
+      "stage": "Group Stage"
+    },
+    {
+      "season": "2022",
+      "match_id": 3857283,
+      "home_team": "Belgium",
+      "away_team": "Morocco",
+      "home_score": 0,
+      "away_score": 2,
+      "match_date": "2022-11-27",
+      "stage": "Group Stage"
+    }
+  ]
+}
