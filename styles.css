@@ -179,10 +179,8 @@ a {
 }
 
 .hero {
-  display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: 28px;
-  padding: 58px 0 44px;
+  display: block;
+  padding: 40px 0 28px;
 }
 
 .eyebrow {
@@ -197,7 +195,7 @@ a {
 .hero h1 {
   margin: 0;
   max-width: 100%;
-  font-size: clamp(3rem, 5.2vw, 4.95rem);
+  font-size: clamp(2.8rem, 4.8vw, 4.45rem);
   line-height: 0.94;
   letter-spacing: -0.04em;
   text-wrap: balance;
@@ -234,13 +232,13 @@ a {
 .hero-text {
   max-width: 560px;
   font-size: 1.02rem;
-  margin: 18px 0 0;
+  margin: 14px 0 0;
 }
 
 .hero-actions {
   display: flex;
   gap: 14px;
-  margin: 24px 0 30px;
+  margin: 20px 0 24px;
 }
 
 .button {
@@ -488,14 +486,14 @@ a {
 .hero-metrics {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  gap: 12px;
   padding: 0;
   margin: 0;
   list-style: none;
 }
 
 .hero-metrics li {
-  padding: 15px 16px;
+  padding: 12px 14px;
   border-radius: var(--radius-md);
   background: rgba(255, 251, 246, 0.7);
   border: 1px solid var(--line);
@@ -517,53 +515,16 @@ a {
 
 .hero-metrics span {
   display: block;
-  margin-top: 8px;
+  margin-top: 6px;
   color: var(--muted);
-  line-height: 1.55;
-  font-size: 0.92rem;
+  line-height: 1.45;
+  font-size: 0.88rem;
 }
 
 .hero-sell-points strong {
-  font-size: 1.15rem;
+  font-size: 1.05rem;
 }
 
-.hero-panel {
-  padding: 18px;
-  border-radius: var(--radius-xl);
-}
-
-.hero-stage {
-  display: grid;
-  gap: 14px;
-  background:
-    radial-gradient(circle at top right, rgba(198, 74, 36, 0.16), transparent 34%),
-    linear-gradient(180deg, rgba(255, 249, 240, 0.84), rgba(246, 233, 216, 0.92));
-}
-
-.hero-stage-main {
-  position: relative;
-  overflow: hidden;
-  min-height: 500px;
-  border-radius: var(--radius-xl);
-}
-
-.hero-stage-main img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.hero-stage-overlay {
-  position: absolute;
-  inset: auto 0 0 0;
-  padding: 26px;
-  background: linear-gradient(180deg, transparent 12%, rgba(16, 11, 8, 0.92) 100%);
-  color: #fff7ef;
-}
-
-.hero-stage-overlay span,
-.hero-stage-card span,
 .footer-stage-overlay span {
   display: block;
   margin-bottom: 8px;
@@ -573,8 +534,6 @@ a {
   color: rgba(255, 245, 232, 0.76);
 }
 
-.hero-stage-overlay strong,
-.hero-stage-card strong,
 .footer-stage-overlay strong {
   display: block;
   font-family: "Barlow Condensed", sans-serif;
@@ -582,44 +541,123 @@ a {
   line-height: 0.92;
 }
 
-.hero-stage-button {
-  margin-top: 16px;
-  width: fit-content;
-  box-shadow: 0 14px 28px rgba(198, 74, 36, 0.24);
-}
-
-.hero-stage-grid {
+.hero-match-stage {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-top: 20px;
 }
 
-.hero-stage-card {
-  overflow: hidden;
-  border-radius: var(--radius-lg);
-  background: rgba(255, 252, 246, 0.92);
+.hero-match-main,
+.hero-match-rail-card {
+  backdrop-filter: blur(16px);
+  background: rgba(255, 250, 242, 0.76);
   border: 1px solid var(--line);
   box-shadow: var(--shadow);
 }
 
-.hero-stage-card img {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
+.hero-match-main {
+  padding: 20px 24px;
+  border-radius: var(--radius-xl);
+  display: grid;
+  gap: 16px;
+  background:
+    linear-gradient(135deg, rgba(255, 250, 242, 0.92), rgba(247, 235, 220, 0.8)),
+    url("assets/images/argentina-champion.jpg") center/cover;
+}
+
+.hero-match-main-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+}
+
+.hero-match-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(25, 93, 74, 0.12);
+  color: var(--success);
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.hero-match-main-body strong {
   display: block;
+  margin: 0 0 10px;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: clamp(2.2rem, 3.8vw, 3.15rem);
+  line-height: 0.94;
+  max-width: 12ch;
 }
 
-.hero-stage-card div {
-  padding: 16px;
+.hero-match-main-body p {
+  margin: 0;
+  max-width: 62ch;
+  color: #3b3129;
+  line-height: 1.6;
 }
 
-.hero-stage-card span {
+.hero-match-main-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.hero-match-main-tags span {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(184, 61, 30, 0.09);
   color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 700;
 }
 
-.hero-stage-card strong {
+.hero-match-rail {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.hero-match-rail-card {
+  display: grid;
+  gap: 8px;
+  min-height: 132px;
+  padding: 18px;
+  border-radius: var(--radius-lg);
+  align-content: start;
+  transition: transform 0.22s ease, background-color 0.22s ease;
+}
+
+.hero-match-rail-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 249, 240, 0.92);
+}
+
+.hero-match-rail-card span {
+  color: var(--accent);
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.hero-match-rail-card strong {
+  display: block;
   color: var(--ink);
-  font-size: 1.35rem;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 2rem;
+  line-height: 0.95;
+}
+
+.hero-match-rail-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
 }
 
 .panel-label {
@@ -706,6 +744,11 @@ a {
   align-items: end;
   gap: 22px;
   margin-bottom: 20px;
+}
+
+.section-heading-compact {
+  display: block;
+  margin-bottom: 22px;
 }
 
 .section-heading h2 {
@@ -989,8 +1032,9 @@ a {
 
 .data-pulse-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
+  align-items: stretch;
 }
 
 .entity-card {
@@ -1425,6 +1469,9 @@ a {
   padding: 24px;
   background: linear-gradient(180deg, transparent 10%, rgba(16, 11, 8, 0.92) 100%);
   color: #fff8ef;
+  display: grid;
+  align-content: end;
+  min-height: 50%;
 }
 
 .pulse-media-copy span {
@@ -1445,7 +1492,7 @@ a {
 
 .pulse-media-copy p {
   margin: 12px 0 0;
-  max-width: 330px;
+  max-width: 32ch;
   color: rgba(255, 244, 232, 0.82);
   line-height: 1.55;
 }
@@ -2604,7 +2651,7 @@ a {
   .match-grid,
   .live-match-grid,
   .conversion-tiles,
-  .hero-stage-grid,
+  .hero-match-stage,
   .hero-strip,
   .membership-grid,
   .pricing-grid,
@@ -2690,6 +2737,10 @@ a {
     padding-top: 34px;
   }
 
+  .hero-match-main-body strong {
+    font-size: 2.4rem;
+  }
+
   .hero-actions {
     flex-direction: column;
   }
@@ -2735,10 +2786,6 @@ a {
 
   .entity-media {
     height: 280px;
-  }
-
-  .hero-stage-main {
-    min-height: 360px;
   }
 
   .match-card h2 {

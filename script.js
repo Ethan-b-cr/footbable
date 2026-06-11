@@ -418,17 +418,46 @@ function renderLiveSchedule() {
   const homeMeta = qs("#live-schedule-meta");
   const homeGrid = qs("#live-match-grid");
   const homeFooter = qs("#live-schedule-footer");
+  const heroMatchTitle = qs("#hero-match-title");
+  const heroMatchCopy = qs("#hero-match-copy");
+  const heroMatchTags = qs("#hero-match-tags");
+  const heroMatchRail = qs("#hero-match-rail");
   const publicGrid = qs("#public-live-match-grid");
   const memberHero = qs("#member-live-schedule-hero");
   const memberMeta = qs("#member-live-schedule-meta");
   const memberGrid = qs("#member-live-match-grid");
+
+  if (heroMatchTitle && heroMatchCopy && heroMatchTags && heroMatchRail) {
+    const featuredMatches = payload.matches.slice(0, 3);
+    const featured = featuredMatches[0];
+    heroMatchTitle.textContent = `${featured.homeTeam} vs ${featured.awayTeam}`;
+    heroMatchCopy.textContent = `${featured.kickoffCN} 开球，当前状态 ${featured.statusText || "Scheduled"}。首页同步展示世界杯比赛进程、球队对位和公开分析入口。`;
+    heroMatchTags.innerHTML = [
+      `开幕战 ${opening?.homeTeam || ""} vs ${opening?.awayTeam || ""}`,
+      `第二场 ${second?.homeTeam || ""} vs ${second?.awayTeam || ""}`,
+      `重点边 ${featured.insight?.edgeTeam || featured.homeTeam}`,
+    ]
+      .map((item) => `<span>${item}</span>`)
+      .join("");
+    heroMatchRail.innerHTML = featuredMatches
+      .map(
+        (match) => `
+          <a class="hero-match-rail-card" href="${getMatchDetailHref(match)}">
+            <span>Match ${String(match.matchNumber).padStart(2, "0")}</span>
+            <strong>${match.homeTeam} vs ${match.awayTeam}</strong>
+            <p>${match.kickoffCN} · ${match.statusText || "Scheduled"}</p>
+          </a>
+        `
+      )
+      .join("");
+  }
 
   if (homeHero && homeGrid && homeFooter) {
     homeHero.innerHTML = `
       <div class="live-schedule-copy">
         <span class="article-meta">2026 美加墨世界杯</span>
         <h3>第一场 ${opening?.homeTeam || ""} vs ${opening?.awayTeam || ""}</h3>
-        <p>第二场 ${second?.homeTeam || ""} vs ${second?.awayTeam || ""}。今日重点场次已同步到站内，点击比赛即可进入单场页查看赛程、对位和核心判断。</p>
+        <p>第二场 ${second?.homeTeam || ""} vs ${second?.awayTeam || ""}。今日比赛与球队对位已经同步到站内，点击比赛即可进入单场页查看公开分析。</p>
       </div>
       <div class="live-schedule-meta">
         <span>更新 ${new Date(payload.updatedAt).toLocaleString("zh-CN", { hour12: false })}</span>
@@ -582,7 +611,7 @@ function renderSnapshotCards() {
         <div class="pulse-media-copy">
           <span>头号球星</span>
           <h2>${leadScorer.player_name}</h2>
-          <p>${leadScorer.team_name}，进球和 xG 都够硬。</p>
+          <p>${leadScorer.team_name}，进球效率、射门质量与关键回合参与度都处于高位。</p>
           <div class="stat-chip-row">
             <span>${leadScorer.goals || 0} 球</span>
             <span>${formatNumber(leadScorer.xg || 0, 2)} xG</span>
@@ -609,6 +638,28 @@ function renderSnapshotCards() {
             <span>${latestFinal.home_score}-${latestFinal.away_score}</span>
           </div>
           <a class="article-link" href="data.html">查看数据</a>
+        </div>
+      </article>
+    `;
+  }
+
+  const teamSpotlight = qs("#homepage-team-spotlight");
+  const featuredTeam = pickFeaturedTeams(state.teams)[1] || pickFeaturedTeams(state.teams)[0];
+  if (teamSpotlight && featuredTeam) {
+    const teamModel = buildTeamModel(featuredTeam);
+    teamSpotlight.innerHTML = `
+      <article class="pulse-media-card">
+        <img src="${getTeamBackdrop(featuredTeam.team)}" alt="${featuredTeam.team} 球队画面" loading="lazy">
+        <div class="pulse-media-copy">
+          <span>焦点球队</span>
+          <h2>${featuredTeam.team}</h2>
+          <p>${featuredTeam.team} 的强弱边、推进质量与代表性比赛样本已经整理到球队页。</p>
+          <div class="stat-chip-row">
+            <span>${featuredTeam.matches} 场</span>
+            <span>${teamModel?.xgForRate || "0.00"} xG</span>
+            <span>${featuredTeam.wins || 0} 胜</span>
+          </div>
+          <a class="article-link" href="team.html?team=${encodeURIComponent(featuredTeam.team)}">查看球队</a>
         </div>
       </article>
     `;
@@ -1514,7 +1565,7 @@ function renderMatchArticlePage() {
     focus: [
       `${favoredTeam} 当前更像数据边所在的一侧`,
       favoredLead ? `${favoredLead.player_name} 是需要盯住的第一关键人` : "核心前场处理质量是第一观察点",
-      "先看开场节奏，再决定这场比赛有没有继续深入的价值",
+      "先看开场节奏，再判断比赛走势会不会提前分层",
     ],
     highlights: [match.kickoffCN, statusText, `数据边 ${favoredTeam}`, match.city || "World Cup 2026"],
     heroImage,
@@ -1532,7 +1583,7 @@ function renderMatchArticlePage() {
     {
       label: "01 / 比赛底图",
       heading: `${match.homeTeam} vs ${match.awayTeam} 的公开观察`,
-      body: `${match.kickoffCN} 开球，当前状态 ${statusText}，比赛地点 ${match.venue || "世界杯赛场"}${match.city ? `，${match.city}` : ""}。公开层先把最稳定的判断摆出来：${insight.edgeTeam || favoredTeam} 在历史世界杯样本里更像先手一边，先看开场压制、推进速度和高质量射门能不能落地。`,
+      body: `${match.kickoffCN} 开球，当前状态 ${statusText}，比赛地点 ${match.venue || "世界杯赛场"}${match.city ? `，${match.city}` : ""}。公开层先给出比赛底图：${insight.edgeTeam || favoredTeam} 在历史世界杯样本里更像先手一边，重点观察开场压制、推进速度和高质量射门能否落地。`,
       stats: [
         { label: "比赛序号", value: `Match ${String(match.matchNumber).padStart(2, "0")}`, text: match.stage || "World Cup 2026" },
         { label: "当前比分", value: scoreText, text: statusText },
@@ -1545,7 +1596,7 @@ function renderMatchArticlePage() {
     },
     {
       label: "02 / 双方底牌",
-      heading: "先把两边的真实数据摊开看",
+      heading: "两边的真实数据先对照展开",
       body: `${insight.primary || `${favoredTeam} 的长期样本更稳。`} ${insight.secondary || "真正先拉开差距的，通常是节奏与机会质量，而不是名气本身。"} ${insight.keyPlayer || ""}`,
       html: `
         <div class="match-team-grid">
@@ -1556,7 +1607,7 @@ function renderMatchArticlePage() {
     },
     {
       label: "03 / 公开判断",
-      heading: "当前最值得盯住的三个观察点",
+      heading: "当前需要重点观察的三个点",
       body: `${favoredTeam} 更像先手的一边，但真正决定这场比赛层级的，还是开场二十分钟的推进效率、边路对位是否被打穿，以及第一脚高质量机会由谁拿到。`,
       html: `
         <div class="match-note-grid">

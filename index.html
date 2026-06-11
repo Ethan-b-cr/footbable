@@ -46,7 +46,7 @@
             <span class="hero-headline-single">人永远赚不到认知以外的钱</span>
           </h1>
           <p class="hero-text">
-            从实时赛程到焦点对位，把最关键的判断先摆在前面。球队档案、球员档案和单场比赛页按比赛日持续更新。
+            基于真实世界杯历史数据与实时赛程，持续更新球队档案、球员档案和单场比赛分析。
           </p>
           <div class="hero-actions">
             <a class="button button-primary" href="#matches">查看今日比赛</a>
@@ -66,62 +66,48 @@
               <span>重点场次会继续补齐名单与节奏变化。</span>
             </li>
           </ul>
-          <div class="hero-strip" id="hero-team-strip"></div>
-        </div>
-
-        <aside class="hero-panel hero-stage">
-          <article class="hero-stage-main hero-stage-highlight">
-            <img
-              src="assets/images/argentina-champion.jpg"
-              alt="阿根廷夺冠时刻"
-            >
-            <div class="hero-stage-overlay">
-              <span>冠军样本</span>
-              <strong>最热的画面，配最硬的数据</strong>
-              <a class="button button-primary hero-stage-button" href="members.html">继续看完整推演</a>
+          <div class="hero-match-stage" id="hero-match-stage">
+            <article class="hero-match-main">
+              <div class="hero-match-main-head">
+                <span class="article-meta">世界杯比赛进程</span>
+                <span class="hero-match-status">实时同步</span>
+              </div>
+              <div class="hero-match-main-body">
+                <strong id="hero-match-title">正在载入今日焦点战</strong>
+                <p id="hero-match-copy">这里展示开幕战、第二场和当前焦点比赛的赛程进程、球队对位与公开分析。</p>
+              </div>
+              <div class="hero-match-main-tags" id="hero-match-tags">
+                <span>开幕战</span>
+                <span>第二场</span>
+                <span>重点对位</span>
+              </div>
+            </article>
+            <div class="hero-match-rail" id="hero-match-rail">
+              <article class="hero-match-rail-card">
+                <span>Match 01</span>
+                <strong>正在载入</strong>
+                <p>开幕战</p>
+              </article>
+              <article class="hero-match-rail-card">
+                <span>Match 02</span>
+                <strong>正在载入</strong>
+                <p>第二场</p>
+              </article>
+              <article class="hero-match-rail-card">
+                <span>Live</span>
+                <strong>正在载入</strong>
+                <p>今日重点场</p>
+              </article>
             </div>
-          </article>
-          <div class="hero-stage-grid">
-            <article class="hero-stage-card">
-              <img
-                src="assets/images/messi.jpg"
-                alt="梅西比赛画面"
-              >
-              <div>
-                <span>头部球星</span>
-                <strong>Messi</strong>
-              </div>
-            </article>
-            <article class="hero-stage-card">
-              <img
-                src="assets/images/mbappe.jpg"
-                alt="姆巴佩比赛画面"
-              >
-              <div>
-                <span>速度终结</span>
-                <strong>Mbappe</strong>
-              </div>
-            </article>
-            <article class="hero-stage-card">
-              <img
-                src="assets/images/ronaldo.jpg"
-                alt="C 罗热门画面"
-              >
-              <div>
-                <span>顶部热度</span>
-                <strong>Ronaldo</strong>
-              </div>
-            </article>
           </div>
-        </aside>
+        </div>
       </section>
 
       <section class="section visual-showcase">
-        <div class="section-heading">
+        <div class="section-heading section-heading-compact">
           <div>
-            <h2>先看今晚最值得点开的两张牌</h2>
+            <h2>焦点球员、冠军样本与热门球队</h2>
           </div>
-          <p>先给你会停下来的那一下。</p>
         </div>
         <div class="data-pulse-grid">
           <div class="faq-item pulse-fallback-card" id="homepage-scorer-spotlight">
@@ -130,7 +116,7 @@
               <div class="pulse-media-copy">
                 <span>头号球星</span>
                 <h2>Mbappe</h2>
-                <p>速度、终结和热度，都足够先占一个入口。</p>
+                <p>速度、终结与持球威胁，足以单独形成比赛走势变量。</p>
                 <div class="stat-chip-row">
                   <span>13 球</span>
                   <span>6.79 xG</span>
@@ -146,7 +132,7 @@
               <div class="pulse-media-copy">
                 <span>冠军样本</span>
                 <h2>Argentina vs France</h2>
-                <p>Final，3 比 3，真正能把人留住的样本本来就该摆在前面。</p>
+                <p>Final，3 比 3，强强对位、临场波动和终局能力都在这一场里完整展开。</p>
                 <div class="stat-chip-row">
                   <span>2022-12-18</span>
                   <span>Final</span>
@@ -156,13 +142,29 @@
               </div>
             </article>
           </div>
+          <div class="faq-item pulse-fallback-card" id="homepage-team-spotlight">
+            <article class="pulse-media-card">
+              <img src="assets/images/brazil-team.png" alt="焦点球队画面" loading="lazy">
+              <div class="pulse-media-copy">
+                <span>焦点球队</span>
+                <h2>Brazil</h2>
+                <p>高压、推进效率与持续制造机会的能力，决定这支球队的上限。</p>
+                <div class="stat-chip-row">
+                  <span>18 场</span>
+                  <span>2.41 xG</span>
+                  <span>12 胜</span>
+                </div>
+                <a class="article-link" href="team.html?team=Brazil">查看球队</a>
+              </div>
+            </article>
+          </div>
         </div>
       </section>
 
       <section class="section conversion-band">
         <article class="conversion-banner">
           <div class="conversion-copy">
-            <h2>今晚重点场，先看公开判断</h2>
+            <h2>今晚重点场公开分析</h2>
             <p>单场页面会持续同步赛程、历史样本、关键对位和比赛日修正，真正影响判断的变量都放在同一条阅读路径里。</p>
             <div class="hero-actions compact-actions">
               <a class="button button-primary" href="members.html">进入完整版本</a>
@@ -190,7 +192,7 @@
         <div class="section-heading">
           <div>
             <p class="eyebrow">今日比赛</p>
-            <h2>每场都能先看，重点场先摆前面</h2>
+            <h2>每场比赛都有公开分析</h2>
           </div>
           <p>点击单场即可查看赛程状态、核心对位和公开判断。</p>
         </div>
@@ -199,7 +201,7 @@
             <div class="live-schedule-copy">
               <span class="article-meta">2026 美加墨世界杯</span>
               <h3>实时赛程正在载入</h3>
-              <p>先把第一场、第二场和今天最重要的比赛摆出来。</p>
+              <p>这里会同步展示第一场、第二场和当日焦点比赛。</p>
             </div>
             <div class="live-schedule-meta" id="live-schedule-meta">
               <span>官方赛程</span>
@@ -222,7 +224,7 @@
             </article>
           </div>
           <div class="live-schedule-footer" id="live-schedule-footer">
-            <span>赛程与单场入口持续更新</span>
+            <span>赛程与单场页面持续更新</span>
             <a class="article-link" href="data.html">查看全部比赛</a>
           </div>
         </div>
@@ -232,8 +234,8 @@
               <span class="time-badge">样本 01</span>
               <span class="access access-free">比赛节奏</span>
             </div>
-            <h3>节奏先看</h3>
-            <p>先把强弱、压制和机会质量看明白。</p>
+            <h3>节奏判断</h3>
+            <p>公开层先展示强弱差、压制感和机会质量。</p>
             <ul>
               <li>看强弱差</li>
               <li>看机会质量</li>
@@ -245,8 +247,8 @@
               <span class="time-badge">样本 02</span>
               <span class="access access-free">球队档案</span>
             </div>
-            <h3>球队先看</h3>
-            <p>热门球队直接给你真实样本，不绕。</p>
+            <h3>球队样本</h3>
+            <p>公开层展示真实样本、比赛表现与效率指标。</p>
             <ul>
               <li>胜率与净胜球</li>
               <li>射门与射正</li>
@@ -258,8 +260,8 @@
               <span class="time-badge">样本 03</span>
               <span class="access access-free">球星档案</span>
             </div>
-            <h3>球星先看</h3>
-            <p>最热的名字，先给最直接的效率样本。</p>
+            <h3>球星样本</h3>
+            <p>头部球员优先展示进球效率、参与度和关键比赛表现。</p>
             <ul>
               <li>看角色</li>
               <li>看终结</li>
@@ -273,9 +275,9 @@
         <div class="section-heading">
           <div>
             <p class="eyebrow">焦点球队</p>
-            <h2>先看站内热度最高的球队样本</h2>
+            <h2>热门球队样本与强强对位</h2>
           </div>
-          <p>从冠军队、热门队到强强对位，先把最值得点开的摆出来。</p>
+          <p>从冠军队、热门队到强强对位，首页展示 3 支可免费查看的球队分析。</p>
         </div>
         <div class="entity-grid" id="team-library-list"></div>
         <div class="section-actions">
@@ -289,13 +291,13 @@
             <p class="eyebrow">焦点球员</p>
             <h2>头部球星与关键球员集中展开</h2>
           </div>
-          <p>先看最热的名字，再进入球员全库继续查看。</p>
+          <p>首页展示 3 名可免费查看的球员分析，其余内容进入完整版本查看。</p>
         </div>
         <div class="spotlight-banner reverse">
           <div class="spotlight-copy">
             <span>热门球星</span>
-            <strong>Messi、Mbappe、C 罗，本来就该站在最前面</strong>
-            <p>先把会被反复点开的名字推到第一排。</p>
+            <strong>Messi、Mbappe、C 罗</strong>
+            <p>头部球星、效率数据和代表性比赛，会在这里继续集中展开。</p>
           </div>
           <img
             src="assets/images/ronaldo.jpg"
