@@ -1,5 +1,5 @@
 const animatedSections = document.querySelectorAll(
-  ".section, .hero-copy, .hero-panel, .site-footer, .faq-item, .home-pulse-slot"
+  ".hero-copy, .hero-panel, .site-footer"
 );
 
 if ("IntersectionObserver" in window) {
@@ -34,13 +34,13 @@ const teamArtwork = {
 const teamBackdropArtwork = {
   Argentina: "assets/images/argentina-champion.jpg",
   France: "assets/images/argentina-champion.jpg",
-  Brazil: "assets/images/world-cup-trophy.jpg",
+  Brazil: "assets/images/argentina-champion.jpg",
   England: "assets/images/argentina-champion.jpg",
-  Croatia: "assets/images/world-cup-trophy.jpg",
+  Croatia: "assets/images/argentina-champion.jpg",
   Morocco: "assets/images/argentina-champion.jpg",
-  Netherlands: "assets/images/world-cup-trophy.jpg",
-  Portugal: "assets/images/world-cup-trophy.jpg",
-  Belgium: "assets/images/world-cup-trophy.jpg",
+  Netherlands: "assets/images/argentina-champion.jpg",
+  Portugal: "assets/images/argentina-champion.jpg",
+  Belgium: "assets/images/argentina-champion.jpg",
   Spain: "assets/images/argentina-champion.jpg",
 };
 
@@ -431,8 +431,8 @@ const buildTeamCard = (team, locked = false) => {
   const shotRate = perMatch(team.shots || 0, team.matches, 1);
   const xgRate = perMatch(team.xg_for || 0, team.matches, 2);
   const href = locked ? "members.html" : `team.html?team=${encodeURIComponent(team.team)}`;
-  const linkText = locked ? "会员可查看" : "进入球队页面";
-  const badgeText = locked ? "会员球队档案" : "球队分析 / 历史样本";
+  const linkText = locked ? "继续往下看" : "进入球队页面";
+  const badgeText = locked ? "继续展开" : "球队分析";
   return `
     <article class="entity-card team-card ${locked ? "locked-card" : ""}">
       <div class="entity-media team-stage-media">
@@ -442,7 +442,7 @@ const buildTeamCard = (team, locked = false) => {
       <div class="entity-body">
         <span class="article-meta">${badgeText}</span>
         <h3>${team.team}</h3>
-        <p>样本 ${team.matches} 场，胜率 ${winRate}，场均射门 ${shotRate}，场均 xG ${xgRate}。</p>
+        <p>${team.matches} 场样本，胜率 ${winRate}，场均射门 ${shotRate}，场均 xG ${xgRate}。</p>
         <div class="entity-tags">
           <span>${team.goals_for} 进球</span>
           <span>${team.goals_against} 失球</span>
@@ -459,8 +459,8 @@ const buildPlayerCard = (player, locked = false) => {
   const passRate =
     player.passes > 0 ? formatPercent((player.completed_passes / player.passes) * 100) : "0.0%";
   const href = locked ? "members.html" : `player.html?id=${player.player_id}`;
-  const linkText = locked ? "会员可查看" : "进入球员页面";
-  const badgeText = locked ? "会员球员档案" : "球员分析 / 历史样本";
+  const linkText = locked ? "继续往下看" : "进入球员页面";
+  const badgeText = locked ? "继续展开" : "球员分析";
   return `
     <article class="entity-card ${locked ? "locked-card" : ""}">
       <div class="entity-media">
@@ -469,7 +469,7 @@ const buildPlayerCard = (player, locked = false) => {
       <div class="entity-body">
         <span class="article-meta">${badgeText}</span>
         <h3>${player.player_name}</h3>
-        <p>${player.team_name}，出场 ${player.appearances}，进球 ${player.goals || 0}，xG ${formatNumber(
+        <p>${player.team_name}，${player.appearances} 次出场，${player.goals || 0} 球，xG ${formatNumber(
     player.xg || 0,
     2
   )}。</p>
@@ -555,9 +555,9 @@ const renderSnapshot = (snapshot) => {
         <p>${snapshot.match_count} 场比赛，${snapshot.team_count} 支球队，${snapshot.player_count} 名球员。</p>
       </article>
       <article class="insight-card muted">
-        <span>开通后可看</span>
-        <strong>焦点战完整版</strong>
-        <p>首发变化、阵容修正、完整球队档案和完整球员档案。</p>
+        <span>继续展开</span>
+        <strong>临场修正与完整库</strong>
+        <p>重点比赛、完整球队档案和完整球员档案继续往下展开。</p>
       </article>
     `;
   }
@@ -606,7 +606,7 @@ const renderSnapshot = (snapshot) => {
       <div class="spotlight-stat-card">
         <p class="eyebrow">头部球星快照</p>
         <h3>${leadScorer.player_name}</h3>
-        <p>${leadScorer.team_name} 的进攻样本目前最值得优先露出。这个区块让数据中心更像真实分析后台，而不只是表格。</p>
+        <p>${leadScorer.team_name} 的终结样本已经足够直接，进球、射正和 xG 一眼就能读出来。</p>
         <div class="stat-chip-row">
           <span>${leadScorer.goals || 0} 球</span>
           <span>${leadScorer.shots_on_target || 0} 次射正</span>
@@ -622,7 +622,7 @@ const renderSnapshot = (snapshot) => {
       <div class="spotlight-stat-card">
         <p class="eyebrow">冠军阶段样本</p>
         <h3>${latestFinal.home_team} ${latestFinal.home_score}-${latestFinal.away_score} ${latestFinal.away_team}</h3>
-        <p>${latestFinal.season} 年的 ${latestFinal.stage} 已进入快照头部样本，后续还可以继续补更细的事件拆解和球员层解释。</p>
+        <p>${latestFinal.season} 年 ${latestFinal.stage} 的关键比分、阶段和对阵关系已经直接落进快照。</p>
         <div class="stat-chip-row">
           <span>${latestFinal.match_date}</span>
           <span>${latestFinal.stage}</span>
