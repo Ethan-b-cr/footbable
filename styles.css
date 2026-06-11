@@ -1281,6 +1281,44 @@ a {
   margin-top: 26px;
 }
 
+.compact-library-hero {
+  padding-bottom: 8px;
+}
+
+.compact-library-hero .article-side-card {
+  padding: 18px;
+}
+
+.compact-library-hero .hero-side-image {
+  min-height: 320px;
+  height: 320px;
+}
+
+.compact-detail-hero {
+  padding-bottom: 8px;
+}
+
+.compact-detail-copy {
+  padding: 8px 0 0;
+}
+
+.compact-detail-copy .hero-text {
+  max-width: 760px;
+}
+
+.compact-detail-hero .article-side-card {
+  padding: 18px;
+}
+
+.compact-detail-hero .hero-side-image {
+  min-height: 280px;
+  height: 280px;
+}
+
+.compact-sidebar {
+  gap: 14px;
+}
+
 .hero-side-image {
   width: 100%;
   min-height: 100%;

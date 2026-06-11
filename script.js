@@ -940,8 +940,8 @@ Promise.all([
     renderSnapshot(snapshot);
     renderTeamCards(featuredTeams.slice(0, 6), teamLibraryList, FREE_TEAM_LIMIT);
     renderPlayerCards(featuredPlayers.slice(0, 6), playerLibraryList, FREE_PLAYER_LIMIT);
-    renderTeamCards(teams.slice(0, 24), teamsPageList);
-    renderPlayerCards(visiblePlayers.slice(0, 24), playersPageList);
+    renderTeamCards(featuredTeams.slice(0, 24), teamsPageList, FREE_TEAM_LIMIT);
+    renderPlayerCards(featuredPlayers.slice(0, 24), playersPageList, FREE_PLAYER_LIMIT);
 
     if (heroTeamStrip) {
       heroTeamStrip.innerHTML = featuredTeams
@@ -974,18 +974,18 @@ Promise.all([
     if (teamSearchInput && teamsPageList) {
       teamSearchInput.addEventListener("input", () => {
         const keyword = teamSearchInput.value.trim().toLowerCase();
-        const filtered = teams.filter((team) => team.team.toLowerCase().includes(keyword));
-        renderTeamCards(filtered.slice(0, 24), teamsPageList);
+        const filtered = featuredTeams.filter((team) => team.team.toLowerCase().includes(keyword));
+        renderTeamCards(filtered.slice(0, 24), teamsPageList, FREE_TEAM_LIMIT);
       });
     }
 
     if (playerSearchInput && playersPageList) {
       playerSearchInput.addEventListener("input", () => {
         const keyword = normalizeName(playerSearchInput.value.trim()).toLowerCase();
-        const filtered = visiblePlayers.filter((player) =>
+        const filtered = featuredPlayers.filter((player) =>
           normalizeName(player.player_name).toLowerCase().includes(keyword)
         );
-        renderPlayerCards(filtered.slice(0, 24), playersPageList);
+        renderPlayerCards(filtered.slice(0, 24), playersPageList, FREE_PLAYER_LIMIT);
       });
     }
 

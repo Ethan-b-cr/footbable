@@ -35,13 +35,17 @@
     </header>
 
     <main>
-      <section class="article-hero article-hero-visual">
-        <div class="article-hero-copy">
+      <section class="article-hero article-hero-visual compact-library-hero">
+        <div class="article-hero-copy conversion-hero-copy">
           <p class="eyebrow">球员分析库</p>
           <h1>热门球星、关键射手和核心组织者，都在这里集中展开</h1>
           <p class="hero-text">
             出场、首发、进球、xG、传球与射门样本会在这里集中整理。首页只放 3 名免费样本，其余继续解锁。
           </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="members.html">继续看完整内容</a>
+            <a class="button button-secondary" href="index.html#players">回首页样本</a>
+          </div>
         </div>
         <aside class="article-side-card">
           <img
@@ -53,10 +57,24 @@
       </section>
 
       <section class="section">
-        <div class="article-card">
-          <span class="article-meta">完整球员库</span>
-          <h3>免费先看 3 名，剩余球星继续往下看</h3>
-          <p>首页已放出 3 名高热球星，完整球员库、搜索和全部球员页面在完整内容里继续展开。</p>
+        <div class="filter-bar">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">先看样本</p>
+              <h2>免费放 3 名，其余继续锁定预览</h2>
+            </div>
+            <p>你可以先翻、先搜、先看头部球星，但完整球员库继续放在后面。</p>
+          </div>
+          <div class="filter-field">
+            <span>搜索球员</span>
+            <input id="player-search-input" type="text" placeholder="例如：Messi / Mbappe / Ronaldo">
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="entity-grid" id="players-page-list"></div>
+        <div class="section-actions">
           <a class="button button-primary" href="members.html">继续看完整内容</a>
         </div>
       </section>
