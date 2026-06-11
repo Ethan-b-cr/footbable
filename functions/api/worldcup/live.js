@@ -1,6 +1,6 @@
 import liveScheduleUtils from "../../../live-schedule-utils.js";
 
-const { buildMatchInsight, normalizeScoreboardEvents } = liveScheduleUtils;
+const { buildMatchInsight, buildScorePrediction, normalizeScoreboardEvents } = liveScheduleUtils;
 
 const SCOREBOARD_URL =
   "https://site.api.espn.com/apis/site/v2/sports/soccer/fifa.world/scoreboard?limit=200&dates=20260611-20260719";
@@ -55,10 +55,12 @@ export async function onRequestGet(context) {
 
     const matches = normalizeScoreboardEvents(scoreboard.events || []).map((match) => {
       const insight = buildMatchInsight(match, teams, players);
+      const prediction = buildScorePrediction(match, teams);
       return {
         ...match,
         kickoffCN: formatDateCN(match.date),
         insight,
+        prediction,
       };
     });
 

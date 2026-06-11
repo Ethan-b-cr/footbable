@@ -7,6 +7,8 @@ const state = {
   liveSchedule: null,
 };
 
+const LIVE_REFRESH_INTERVAL_MS = 60000;
+
 function readMemberSession() {
   const raw = window.localStorage.getItem("worldCupEdgeMember");
   if (!raw) return null;
@@ -237,6 +239,17 @@ function getMatchDetailHref(match) {
   return `article.html?match=${encodeURIComponent(match.eventId)}`;
 }
 
+function buildPredictionMarkup(prediction, compact = false) {
+  if (!prediction?.scoreline) return "";
+  return `
+    <div class="prediction-box ${compact ? "prediction-box-compact" : ""}">
+      <span>比分预测</span>
+      <strong>${prediction.scoreline}</strong>
+      <p>${prediction.summary}${prediction.confidenceLabel ? ` · 置信 ${prediction.confidenceLabel}` : ""}</p>
+    </div>
+  `;
+}
+
 function isFreeTeam(teamName, teams = state.teams) {
   return (
     isMember() ||
@@ -364,6 +377,7 @@ function buildEntityCard(teamOrPlayer, options) {
 
 function buildLiveMatchCard(match, index) {
   const insight = match.insight || {};
+  const prediction = match.prediction || null;
   const scoreText = match.statusState === "pre" ? "VS" : `${match.homeScore}-${match.awayScore}`;
   const statusText = match.minuteText || match.statusText || "Scheduled";
   const ctaText = isMember() ? "进入完整比赛页" : "进入比赛页";
@@ -395,6 +409,7 @@ function buildLiveMatchCard(match, index) {
           <p>${insight.secondary || "历史样本和实时状态会一起修正判断。"}</p>
           <p>${insight.keyPlayer || ""}</p>
         </div>
+        ${buildPredictionMarkup(prediction, true)}
         <div class="live-footer-row">
           <span class="live-chip">重点边：${insight.edgeTeam || match.homeTeam}</span>
           <a class="article-link" href="${getMatchDetailHref(match)}">${ctaText}</a>
@@ -431,11 +446,11 @@ function renderLiveSchedule() {
     const featuredMatches = payload.matches.slice(0, 3);
     const featured = featuredMatches[0];
     heroMatchTitle.textContent = `${featured.homeTeam} vs ${featured.awayTeam}`;
-    heroMatchCopy.textContent = `${featured.kickoffCN} 开球，当前状态 ${featured.statusText || "Scheduled"}。首页同步展示世界杯比赛进程、球队对位和公开分析入口。`;
+    heroMatchCopy.textContent = `${featured.kickoffCN} 开球，当前状态 ${featured.statusText || "Scheduled"}。首页同步展示世界杯比赛进程、球队对位、比分预测和公开分析。`;
     heroMatchTags.innerHTML = [
       `开幕战 ${opening?.homeTeam || ""} vs ${opening?.awayTeam || ""}`,
       `第二场 ${second?.homeTeam || ""} vs ${second?.awayTeam || ""}`,
-      `重点边 ${featured.insight?.edgeTeam || featured.homeTeam}`,
+      `预测 ${featured.prediction?.scoreline || "待更新"}`,
     ]
       .map((item) => `<span>${item}</span>`)
       .join("");
@@ -445,7 +460,7 @@ function renderLiveSchedule() {
           <a class="hero-match-rail-card" href="${getMatchDetailHref(match)}">
             <span>Match ${String(match.matchNumber).padStart(2, "0")}</span>
             <strong>${match.homeTeam} vs ${match.awayTeam}</strong>
-            <p>${match.kickoffCN} · ${match.statusText || "Scheduled"}</p>
+            <p>${match.kickoffCN} · ${match.statusText || "Scheduled"} · 预测 ${match.prediction?.scoreline || "待更新"}</p>
           </a>
         `
       )
@@ -457,7 +472,7 @@ function renderLiveSchedule() {
       <div class="live-schedule-copy">
         <span class="article-meta">2026 美加墨世界杯</span>
         <h3>第一场 ${opening?.homeTeam || ""} vs ${opening?.awayTeam || ""}</h3>
-        <p>第二场 ${second?.homeTeam || ""} vs ${second?.awayTeam || ""}。今日比赛与球队对位已经同步到站内，点击比赛即可进入单场页查看公开分析。</p>
+        <p>第二场 ${second?.homeTeam || ""} vs ${second?.awayTeam || ""}。今日比赛、球队对位与比分预测已经同步到站内，点击比赛即可进入单场页查看公开分析。</p>
       </div>
       <div class="live-schedule-meta">
         <span>更新 ${new Date(payload.updatedAt).toLocaleString("zh-CN", { hour12: false })}</span>
@@ -1537,6 +1552,7 @@ function renderMatchArticlePage() {
   }
 
   const insight = match.insight || {};
+  const prediction = match.prediction || null;
   const homeTeam = findTeamSummary(match.homeTeam);
   const awayTeam = findTeamSummary(match.awayTeam);
   const homePlayers = getTopPlayersByTeam(match.homeTeam, 3);
@@ -1560,23 +1576,23 @@ function renderMatchArticlePage() {
   setArticleChrome({
     eyebrow: "公开分析 / 单场详情",
     title: `${match.homeTeam} vs ${match.awayTeam}`,
-    description: "每场比赛都会先给出赛程、公开判断和关键对位，完整版本继续补齐节奏分支、关键球员和赛前修正。",
+    description: "每场比赛都会先给出赛程、比分预测、公开判断和关键对位，完整版本继续补齐节奏分支、关键球员和赛前修正。",
     meta: [`Match ${String(match.matchNumber).padStart(2, "0")}`, match.stage || "World Cup 2026", match.kickoffCN, match.venue || "世界杯赛场"],
     focus: [
       `${favoredTeam} 当前更像数据边所在的一侧`,
       favoredLead ? `${favoredLead.player_name} 是需要盯住的第一关键人` : "核心前场处理质量是第一观察点",
-      "先看开场节奏，再判断比赛走势会不会提前分层",
+      prediction?.scoreline ? `当前预测比分 ${prediction.scoreline}` : "先看开场节奏，再判断比赛走势会不会提前分层",
     ],
-    highlights: [match.kickoffCN, statusText, `数据边 ${favoredTeam}`, match.city || "World Cup 2026"],
+    highlights: [match.kickoffCN, statusText, `预测 ${prediction?.scoreline || "待更新"}`, match.city || "World Cup 2026"],
     heroImage,
     heroImageAlt: `${match.homeTeam} vs ${match.awayTeam}`,
     visualKicker: isMember() ? "完整版本" : "比赛页",
     visualTitle: `${match.homeTeam} vs ${match.awayTeam}`,
     visualText: isMember()
-      ? "当前账号可直接查看这场比赛的完整推演、历史对照和赛前修正。"
-      : "这一页会持续同步赛程、对位、历史样本和核心判断。",
+      ? "当前账号可直接查看这场比赛的完整推演、历史对照、比分预测与赛前修正。"
+      : "这一页会持续同步赛程、比分预测、对位、历史样本和核心判断。",
     sidebarTitle: isMember() ? "完整目录" : "本页目录",
-    sidebarItems: isMember() ? ["节奏分支", "关键球员", "历史对照"] : ["公开判断", "真实样本", "关键变量"],
+    sidebarItems: isMember() ? ["比分预测", "节奏分支", "历史对照"] : ["比分预测", "公开判断", "关键变量"],
   });
 
   const sections = [
@@ -1588,11 +1604,35 @@ function renderMatchArticlePage() {
         { label: "比赛序号", value: `Match ${String(match.matchNumber).padStart(2, "0")}`, text: match.stage || "World Cup 2026" },
         { label: "当前比分", value: scoreText, text: statusText },
         {
+          label: "预测比分",
+          value: prediction?.scoreline || "待更新",
+          text: prediction?.confidenceLabel ? `置信 ${prediction.confidenceLabel}` : "实时修正中",
+        },
+        {
           label: "数据边",
           value: insight.edgeTeam || favoredTeam,
           text: `模型边差 ${Math.abs((homeModel?.edgeScore || 0) - (awayModel?.edgeScore || 0)).toFixed(1)}`,
         },
       ],
+      html: prediction
+        ? `
+          <div class="prediction-panel">
+            ${buildPredictionMarkup(prediction)}
+            <div class="prediction-split">
+              <article>
+                <span>${match.homeTeam}</span>
+                <strong>${prediction.homeGoals}</strong>
+                <p>预期进球 ${prediction.homeExpected}</p>
+              </article>
+              <article>
+                <span>${match.awayTeam}</span>
+                <strong>${prediction.awayGoals}</strong>
+                <p>预期进球 ${prediction.awayExpected}</p>
+              </article>
+            </div>
+          </div>
+        `
+        : "",
     },
     {
       label: "02 / 双方底牌",
@@ -1720,6 +1760,29 @@ async function loadData() {
   state.liveSchedule = liveSchedule?.ok ? liveSchedule : null;
 }
 
+async function refreshLiveScheduleInBackground() {
+  try {
+    const liveSchedule = await fetch("/api/worldcup/live").then((response) => response.ok ? response.json() : null);
+    if (!liveSchedule?.ok) return;
+    state.liveSchedule = liveSchedule;
+    renderLiveSchedule();
+    if (!renderMatchArticlePage()) {
+      renderStaticArticlePage();
+    }
+  } catch {
+    // Keep the last good schedule on screen when refresh fails.
+  }
+}
+
+function startLiveAutoRefresh() {
+  window.setTimeout(() => {
+    refreshLiveScheduleInBackground();
+  }, 12000);
+  window.setInterval(() => {
+    refreshLiveScheduleInBackground();
+  }, LIVE_REFRESH_INTERVAL_MS);
+}
+
 function renderEverything() {
   renderSnapshotCards();
   renderTables();
@@ -1743,6 +1806,7 @@ async function main() {
   setHeaderState();
   await loadData();
   renderEverything();
+  startLiveAutoRefresh();
 }
 
 main().catch(() => {

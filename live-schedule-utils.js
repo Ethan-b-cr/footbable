@@ -83,6 +83,45 @@ function buildEdge(team) {
   return winRate * 100 + xgDiff * 12 + shotPressure * 10;
 }
 
+function clamp(value, min, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function buildScorePrediction(match, teams) {
+  const homeTeam = findTeamSummary(match.homeTeam, teams);
+  const awayTeam = findTeamSummary(match.awayTeam, teams);
+  const homeMatches = Math.max(homeTeam?.matches || 1, 1);
+  const awayMatches = Math.max(awayTeam?.matches || 1, 1);
+  const homeAttack = homeTeam ? (homeTeam.goals_for || 0) / homeMatches : 1.1;
+  const awayAttack = awayTeam ? (awayTeam.goals_for || 0) / awayMatches : 0.95;
+  const homeDefense = homeTeam ? (homeTeam.goals_against || 0) / homeMatches : 1.05;
+  const awayDefense = awayTeam ? (awayTeam.goals_against || 0) / awayMatches : 1.1;
+  const homeEdge = buildEdge(homeTeam);
+  const awayEdge = buildEdge(awayTeam);
+  const edgeGap = Math.abs(homeEdge - awayEdge);
+
+  const homeExpected = clamp(homeAttack * 0.68 + awayDefense * 0.32 + (homeEdge - awayEdge) / 120, 0.4, 3.6);
+  const awayExpected = clamp(awayAttack * 0.68 + homeDefense * 0.32 + (awayEdge - homeEdge) / 120, 0.3, 3.1);
+  const homeGoals = Math.max(0, Math.round(homeExpected));
+  const awayGoals = Math.max(0, Math.round(awayExpected));
+
+  let confidenceLabel = "观察";
+  if (edgeGap >= 24) confidenceLabel = "高";
+  else if (edgeGap >= 10) confidenceLabel = "中";
+
+  const favoredTeam = homeEdge >= awayEdge ? match.homeTeam : match.awayTeam;
+  return {
+    favoredTeam,
+    homeGoals,
+    awayGoals,
+    homeExpected: Number(homeExpected.toFixed(2)),
+    awayExpected: Number(awayExpected.toFixed(2)),
+    scoreline: `${homeGoals}-${awayGoals}`,
+    confidenceLabel,
+    summary: `预测比分 ${match.homeTeam} ${homeGoals}-${awayGoals} ${match.awayTeam}`,
+  };
+}
+
 function buildMatchInsight(match, teams, players) {
   const homeTeam = findTeamSummary(match.homeTeam, teams);
   const awayTeam = findTeamSummary(match.awayTeam, teams);
@@ -118,6 +157,7 @@ const exported = {
   TEAM_ALIASES,
   normalizeScoreboardEvents,
   buildMatchInsight,
+  buildScorePrediction,
   findTeamSummary,
   canonicalTeamName,
 };

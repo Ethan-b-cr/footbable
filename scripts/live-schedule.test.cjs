@@ -5,6 +5,7 @@ const {
   normalizeScoreboardEvents,
   buildMatchInsight,
   findTeamSummary,
+  buildScorePrediction,
 } = require("../live-schedule-utils.js");
 
 test("normalizeScoreboardEvents sorts by kickoff and numbers matches", () => {
@@ -162,4 +163,49 @@ test("buildMatchInsight uses historical edge and key player support", () => {
   assert.match(insight.primary, /Mexico/);
   assert.match(insight.secondary, /xG|胜率|射门/);
   assert.match(insight.keyPlayer, /Santiago Gimenez/);
+});
+
+test("buildScorePrediction returns scoreline and confidence from team edges", () => {
+  const teams = [
+    {
+      team: "Mexico",
+      matches: 9,
+      wins: 5,
+      draws: 2,
+      losses: 2,
+      goals_for: 12,
+      goals_against: 8,
+      shots: 102,
+      shots_on_target: 36,
+      xg_for: 11.2,
+      xg_against: 8.9,
+    },
+    {
+      team: "South Africa",
+      matches: 4,
+      wins: 1,
+      draws: 1,
+      losses: 2,
+      goals_for: 4,
+      goals_against: 7,
+      shots: 28,
+      shots_on_target: 10,
+      xg_for: 3.6,
+      xg_against: 6.4,
+    },
+  ];
+
+  const prediction = buildScorePrediction(
+    {
+      homeTeam: "Mexico",
+      awayTeam: "South Africa",
+    },
+    teams
+  );
+
+  assert.equal(typeof prediction.homeGoals, "number");
+  assert.equal(typeof prediction.awayGoals, "number");
+  assert.match(prediction.scoreline, /^\d+-\d+$/);
+  assert.match(prediction.summary, /预测比分/);
+  assert.match(prediction.confidenceLabel, /高|中|观察/);
 });

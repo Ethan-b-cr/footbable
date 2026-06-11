@@ -432,6 +432,53 @@ a {
   gap: 10px;
 }
 
+.prediction-box,
+.prediction-panel {
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 246, 234, 0.16);
+  background: rgba(18, 14, 11, 0.42);
+  padding: 14px 16px;
+}
+
+.prediction-box span,
+.prediction-split article span {
+  display: block;
+  margin-bottom: 6px;
+  color: rgba(255, 220, 194, 0.86);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.prediction-box strong,
+.prediction-split article strong {
+  display: block;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 2rem;
+  line-height: 0.95;
+  color: #fff7ee;
+}
+
+.prediction-box p,
+.prediction-split article p {
+  margin: 8px 0 0;
+  color: rgba(255, 239, 225, 0.82);
+  line-height: 1.5;
+}
+
+.prediction-box-compact {
+  padding: 12px 14px;
+}
+
+.prediction-box-compact strong {
+  font-size: 1.65rem;
+}
+
+.prediction-box-compact p {
+  font-size: 0.92rem;
+}
+
 .live-schedule-footer {
   display: flex;
   align-items: center;
@@ -2027,6 +2074,46 @@ a {
   margin: 0;
   color: var(--muted);
   line-height: 1.78;
+}
+
+.prediction-panel {
+  margin-top: 18px;
+  border-color: var(--line);
+  background: rgba(255, 250, 242, 0.72);
+}
+
+.prediction-panel .prediction-box {
+  border: 1px solid var(--line);
+  background: rgba(255, 252, 247, 0.88);
+}
+
+.prediction-panel .prediction-box span,
+.prediction-panel .prediction-split article span {
+  color: var(--accent);
+}
+
+.prediction-panel .prediction-box strong,
+.prediction-panel .prediction-split article strong {
+  color: var(--ink);
+}
+
+.prediction-panel .prediction-box p,
+.prediction-panel .prediction-split article p {
+  color: var(--muted);
+}
+
+.prediction-split {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.prediction-split article {
+  padding: 16px;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.56);
+  border: 1px solid var(--line);
 }
 
 .article-stat-grid {
