@@ -522,8 +522,16 @@ const homepageScorerSpotlight = document.querySelector("#homepage-scorer-spotlig
 const homepageFinalsBoard = document.querySelector("#homepage-finals-board");
 const dataScorerSpotlight = document.querySelector("#data-scorer-spotlight");
 const dataFinalSnapshot = document.querySelector("#data-final-snapshot");
+const liveScheduleHero = document.querySelector("#live-schedule-hero");
+const liveScheduleMeta = document.querySelector("#live-schedule-meta");
+const liveMatchGrid = document.querySelector("#live-match-grid");
+const liveScheduleFooter = document.querySelector("#live-schedule-footer");
+const memberLiveScheduleHero = document.querySelector("#member-live-schedule-hero");
+const memberLiveScheduleMeta = document.querySelector("#member-live-schedule-meta");
+const memberLiveMatchGrid = document.querySelector("#member-live-match-grid");
 const FREE_TEAM_LIMIT = 3;
 const FREE_PLAYER_LIMIT = 3;
+const FREE_MATCH_LIMIT = 3;
 
 const isMemberUnlocked = Boolean(memberSession?.email);
 const isFreeTeam = (teamName, teams) =>
@@ -595,6 +603,172 @@ const buildPlayerCard = (player, locked = false) => {
       </div>
     </article>
   `;
+};
+
+const liveCardArtwork = [
+  "assets/images/argentina-champion.jpg",
+  "assets/images/messi.jpg",
+  "assets/images/mbappe.jpg",
+  "assets/images/ronaldo.jpg",
+];
+
+const getLiveCardArtwork = (index) => liveCardArtwork[index % liveCardArtwork.length];
+
+const buildLiveMatchCard = (match, index, locked = false) => {
+  const insight = match.insight || {};
+  const scoreText =
+    match.statusState === "pre"
+      ? "VS"
+      : `${match.homeScore}-${match.awayScore}`;
+  const statusText = match.minuteText || match.statusText || "Scheduled";
+  const href = locked ? "members.html" : `article.html?slug=lineup-and-odds`;
+  return `
+    <article class="live-match-card ${locked ? "locked-live-card" : ""}" style="--card-cover:url('${getLiveCardArtwork(index)}')">
+      <div class="card-top">
+        <span class="time-badge">Match ${String(match.matchNumber).padStart(2, "0")}</span>
+        <span class="access access-free">${statusText}</span>
+      </div>
+      <div class="live-card-body">
+        <div>
+          <strong>${match.kickoffCN}</strong>
+          <h4>${match.homeTeam} vs ${match.awayTeam}</h4>
+          <p>${match.venue || "世界杯场馆"}${match.city ? ` · ${match.city}` : ""}</p>
+        </div>
+        <div class="live-card-score">
+          <div class="live-team-stack">
+            <span>主队</span>
+            <strong>${match.homeTeam}</strong>
+          </div>
+          <strong>${scoreText}</strong>
+          <div class="live-team-stack">
+            <span>客队</span>
+            <strong>${match.awayTeam}</strong>
+          </div>
+        </div>
+        <div class="live-insight-copy">
+          <p>${insight.primary || "先看前 20 分钟的压制和机会质量。"}</p>
+          <p>${insight.secondary || "历史样本和实时状态会一起修正。"}</p>
+          <p>${insight.keyPlayer || ""}</p>
+        </div>
+        <div class="live-footer-row">
+          <span class="live-chip">重点边：${insight.edgeTeam || match.homeTeam}</span>
+          <a class="article-link" href="${href}">${locked ? "解锁后续赛程" : "继续看这场分析"}</a>
+        </div>
+      </div>
+    </article>
+  `;
+};
+
+const renderLiveSchedule = (payload) => {
+  if (!payload?.matches?.length) return;
+
+  const opening = payload.openingMatch;
+  const second = payload.secondMatch;
+
+  if (liveMatchGrid && liveScheduleHero && liveScheduleFooter) {
+    liveScheduleHero.innerHTML = `
+      <div class="live-schedule-copy">
+        <span class="article-meta">2026 美加墨世界杯</span>
+        <h3>第一场 ${opening?.homeTeam || ""} vs ${opening?.awayTeam || ""}</h3>
+        <p>第二场 ${second?.homeTeam || ""} vs ${second?.awayTeam || ""}。首页先放 3 场免费可看，其余赛程和持续修正进入会员区。</p>
+      </div>
+      <div class="live-schedule-meta">
+        <span>更新 ${new Date(payload.updatedAt).toLocaleString("zh-CN", { hour12: false })}</span>
+        <span>总赛程 ${payload.matchCount} 场</span>
+        <span>实时状态 + 历史样本</span>
+      </div>
+    `;
+
+    liveMatchGrid.innerHTML = payload.matches
+      .slice(0, 6)
+      .map((match, index) => buildLiveMatchCard(match, index, index >= FREE_MATCH_LIMIT && !isMemberUnlocked))
+      .join("");
+
+    liveScheduleFooter.innerHTML = `
+      <span>免费先看 ${FREE_MATCH_LIMIT} 场，剩余 ${payload.lockedCount || 0} 场继续放在会员区</span>
+      <a class="article-link" href="members.html">进入完整赛程</a>
+    `;
+
+    if (liveScheduleMeta) {
+      liveScheduleMeta.innerHTML = `
+        <span>开幕战 ${opening?.kickoffCN || ""}</span>
+        <span>第二场 ${second?.kickoffCN || ""}</span>
+        <span>第一阶段已接入</span>
+      `;
+    }
+  }
+
+  if (memberLiveScheduleHero && memberLiveMatchGrid) {
+    memberLiveScheduleHero.innerHTML = `
+      <div class="live-schedule-copy">
+        <span class="article-meta">会员赛程</span>
+        <h3>完整 104 场世界杯赛程</h3>
+        <p>从开幕战到决赛，状态、比分、重点边和关键球员会持续往里补。</p>
+      </div>
+      <div class="live-schedule-meta">
+        <span>首场 ${opening?.homeTeam || ""} vs ${opening?.awayTeam || ""}</span>
+        <span>次场 ${second?.homeTeam || ""} vs ${second?.awayTeam || ""}</span>
+        <span>总数 ${payload.matchCount} 场</span>
+      </div>
+    `;
+
+    memberLiveMatchGrid.innerHTML = payload.matches
+      .map((match, index) => buildLiveMatchCard(match, index, false))
+      .join("");
+
+    if (memberLiveScheduleMeta) {
+      memberLiveScheduleMeta.innerHTML = `
+        <span>更新 ${new Date(payload.updatedAt).toLocaleString("zh-CN", { hour12: false })}</span>
+        <span>已接入 ${payload.matches.length} 场</span>
+        <span>后续会继续扩展</span>
+      `;
+    }
+  }
+};
+
+const renderLiveScheduleFallback = () => {
+  if (liveScheduleHero && liveMatchGrid && liveScheduleFooter) {
+    liveScheduleHero.innerHTML = `
+      <div class="live-schedule-copy">
+        <span class="article-meta">2026 美加墨世界杯</span>
+        <h3>实时赛程暂时不可用</h3>
+        <p>站内保留了赛程入口，接口恢复后会继续展示第一场、第二场和当日重点比赛。</p>
+      </div>
+      <div class="live-schedule-meta">
+        <span>实时源暂不可用</span>
+        <span>保留会员入口</span>
+      </div>
+    `;
+    liveMatchGrid.innerHTML = `
+      <article class="live-match-card loading-card" style="--card-cover:url('assets/images/argentina-champion.jpg')">
+        <span class="time-badge">Live</span>
+        <strong>稍后刷新</strong>
+      </article>
+    `;
+    liveScheduleFooter.innerHTML = `
+      <span>实时接口恢复后会继续更新</span>
+      <a class="article-link" href="members.html">查看会员内容</a>
+    `;
+  }
+
+  if (memberLiveScheduleHero && memberLiveMatchGrid) {
+    memberLiveScheduleHero.innerHTML = `
+      <div class="live-schedule-copy">
+        <span class="article-meta">会员赛程</span>
+        <h3>完整赛程暂时不可用</h3>
+        <p>接口恢复后会继续补全所有比赛和对应判断。</p>
+      </div>
+      <div class="live-schedule-meta">
+        <span>等待恢复</span>
+      </div>
+    `;
+    memberLiveMatchGrid.innerHTML = `
+      <article class="live-match-card loading-card" style="--card-cover:url('assets/images/argentina-champion.jpg')">
+        <span class="time-badge">Live</span>
+        <strong>稍后刷新</strong>
+      </article>
+    `;
+  }
 };
 
 const renderTeamCards = (teams, target, freeLimit = teams.length) => {
@@ -886,6 +1060,7 @@ const renderSnapshot = (snapshot) => {
 };
 
 const renderDataError = () => {
+  renderLiveScheduleFallback();
   if (dataSummaryCards) {
     dataSummaryCards.innerHTML = `
       <article class="article-card">
@@ -1080,8 +1255,11 @@ Promise.all([
   fetch("data/summary/worldcup_team_summary.json").then((response) => response.json()),
   fetch("data/summary/worldcup_player_summary.json").then((response) => response.json()),
   fetch("data/summary/worldcup_matches.json").then((response) => response.json()),
+  fetch("/api/worldcup/live")
+    .then((response) => response.json())
+    .catch(() => null),
 ])
-  .then(([snapshot, teams, players, matches]) => {
+  .then(([snapshot, teams, players, matches, liveSchedule]) => {
     const sortedPlayers = [...players].sort(byGoals);
     const visiblePlayers = sortedPlayers.filter((player) => player.appearances >= 3);
 
@@ -1089,6 +1267,11 @@ Promise.all([
     const featuredPlayers = pickFeaturedPlayers(visiblePlayers);
 
     renderSnapshot(snapshot);
+    if (liveSchedule?.ok) {
+      renderLiveSchedule(liveSchedule);
+    } else {
+      renderLiveScheduleFallback();
+    }
     renderTeamCards(featuredTeams.slice(0, 6), teamLibraryList, FREE_TEAM_LIMIT);
     renderPlayerCards(featuredPlayers.slice(0, 6), playerLibraryList, FREE_PLAYER_LIMIT);
     renderTeamCards(featuredTeams.slice(0, 24), teamsPageList, FREE_TEAM_LIMIT);

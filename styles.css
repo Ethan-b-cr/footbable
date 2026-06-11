@@ -258,6 +258,203 @@ a {
   background: rgba(255, 250, 242, 0.6);
 }
 
+.live-schedule-shell {
+  display: grid;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.live-schedule-hero,
+.live-match-card {
+  backdrop-filter: blur(16px);
+  background: linear-gradient(135deg, rgba(255, 250, 242, 0.9), rgba(255, 243, 230, 0.72));
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.live-schedule-hero {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: end;
+  border-radius: var(--radius-xl);
+  padding: 22px 24px;
+  background:
+    linear-gradient(120deg, rgba(24, 18, 13, 0.92), rgba(77, 36, 17, 0.86)),
+    url("assets/images/argentina-champion.jpg") center/cover;
+  color: #fff7ee;
+}
+
+.live-schedule-copy h3 {
+  margin: 8px 0 10px;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.live-schedule-copy p {
+  margin: 0;
+  max-width: 34rem;
+  color: rgba(255, 247, 238, 0.84);
+}
+
+.live-schedule-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.live-schedule-meta span,
+.live-chip,
+.live-schedule-footer span {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(255, 247, 238, 0.12);
+  border: 1px solid rgba(255, 247, 238, 0.18);
+  color: inherit;
+  font-size: 0.9rem;
+}
+
+.live-match-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.live-match-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 360px;
+  padding: 18px;
+  border-radius: var(--radius-lg);
+}
+
+.live-match-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(14, 11, 9, 0.08), rgba(14, 11, 9, 0.68)),
+    var(--card-cover, url("assets/images/argentina-champion.jpg")) center/cover;
+  z-index: 0;
+}
+
+.live-match-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.live-match-card .card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.live-match-card .access {
+  color: #fff7ee;
+  background: rgba(255, 247, 238, 0.12);
+}
+
+.live-match-card strong {
+  display: block;
+  margin: 0 0 6px;
+  color: #fffaf2;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.9rem;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+.live-match-card h4 {
+  margin: 0;
+  color: #fffaf2;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 2.1rem;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.live-match-card p {
+  margin: 10px 0 0;
+  color: rgba(255, 247, 238, 0.86);
+  line-height: 1.7;
+}
+
+.live-card-body {
+  display: grid;
+  gap: 14px;
+}
+
+.live-card-score {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: "Barlow Condensed", sans-serif;
+}
+
+.live-card-score strong {
+  margin: 0;
+  font-size: clamp(2.5rem, 5vw, 3.6rem);
+}
+
+.live-team-stack {
+  display: grid;
+  gap: 6px;
+}
+
+.live-team-stack span {
+  color: rgba(255, 247, 238, 0.74);
+  font-size: 0.9rem;
+}
+
+.live-insight-copy {
+  display: grid;
+  gap: 10px;
+}
+
+.live-insight-copy p {
+  margin: 0;
+}
+
+.live-footer-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.live-schedule-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.locked-live-card::after {
+  content: "会员可见";
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(23, 18, 13, 0.76);
+  color: #fffaf2;
+  font-size: 0.82rem;
+  z-index: 2;
+}
+
+.loading-card {
+  display: grid;
+  place-content: center;
+  text-align: center;
+}
+
 .payment-action-row {
   display: flex;
   flex-wrap: wrap;
@@ -2229,6 +2426,7 @@ a {
 
   .hero-metrics,
   .match-grid,
+  .live-match-grid,
   .conversion-tiles,
   .hero-stage-grid,
   .hero-strip,
@@ -2261,6 +2459,16 @@ a {
 
   .site-footer {
     grid-template-columns: 1fr;
+  }
+
+  .live-schedule-hero,
+  .live-schedule-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .live-schedule-meta {
+    justify-content: flex-start;
   }
 }
 
@@ -2323,6 +2531,19 @@ a {
   .hero-metrics,
   .mini-grid {
     grid-template-columns: 1fr;
+  }
+
+  .live-match-card {
+    min-height: 320px;
+  }
+
+  .live-match-card h4 {
+    font-size: 1.8rem;
+  }
+
+  .live-card-score {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .entity-media {
