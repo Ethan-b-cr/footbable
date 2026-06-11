@@ -3,15 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>开通会员 | World Cup Edge</title>
-  <meta name="description" content="通过支付宝或微信支付开通 World Cup Edge 会员。">
+  <title>立即开通 | World Cup Edge</title>
+  <meta name="description" content="通过支付宝或微信支付开通 World Cup Edge，解锁完整比赛内容与完整资料库。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap"
     rel="stylesheet"
   >
-  <script src="site-config.js"></script>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -28,46 +27,51 @@
         <a href="index.html#matches">公开分析</a>
         <a href="teams.html">球队</a>
         <a href="players.html">球员</a>
-        <a href="members.html">会员中心</a>
-        <a href="data.html">数据中心</a>
+        <a href="members.html">完整内容</a>
       </nav>
       <div class="header-actions">
         <a class="header-link" href="login.html">会员登录</a>
-        <a class="header-cta" href="members.html">返回会员中心</a>
+        <a class="header-cta" href="members.html">返回完整内容</a>
       </div>
     </header>
 
     <main>
       <section class="article-hero">
-        <div class="article-hero-copy">
-          <p class="eyebrow">国内支付</p>
-          <h1>先把开通路径做顺，再把支付和权限彻底打通</h1>
-          <p class="hero-text">
-            第一版只接国内支付。网页端优先支付宝网页支付，微信端优先扫码支付。补齐商户参数后，这一页就可以直接联调正式收款。
-          </p>
+        <div class="article-hero-copy conversion-hero-copy">
+          <p class="eyebrow">立即开通</p>
+          <h1>选一个方案，直接解锁完整内容</h1>
+          <p class="hero-text">重点比赛完整版、完整球队库、完整球员库和赛前修正，都从这里继续展开。</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#quarterly">直接看主方案</a>
+            <a class="button button-secondary" href="login.html">已有账号</a>
+          </div>
         </div>
-        <aside class="article-side-card">
-          <span class="record-label">准备事项</span>
+        <aside class="article-side-card member-hero-card">
+          <img class="hero-side-image" src="assets/images/world-cup-trophy.jpg" alt="大力神杯画面">
+          <span class="record-label">支持方式</span>
+          <div class="stat-chip-row">
+            <span>支付宝</span>
+            <span>微信</span>
+            <span>自动开通</span>
+          </div>
           <ul>
-            <li>公开可访问的网站地址</li>
-            <li>一台有公网 IP 的服务器</li>
-            <li>支付宝商家账号</li>
-            <li>微信支付商户号</li>
-            <li>异步通知地址</li>
+            <li>支付宝网页支付</li>
+            <li>微信扫码支付</li>
+            <li>支付完成自动开通</li>
           </ul>
         </aside>
       </section>
 
       <section class="section pricing-grid">
         <article class="pricing-card" id="monthly">
-          <span class="article-meta">基础会员</span>
+          <span class="article-meta">月会员</span>
           <h3>月会员</h3>
           <p class="price-figure">¥39<span>/月</span></p>
-          <p>适合持续跟踪每日公开延伸与焦点战摘要。</p>
+          <p>适合持续跟踪热门比赛和日常更新。</p>
           <ul class="detail-list">
             <li>每日延伸内容</li>
-            <li>基础复盘</li>
-            <li>深度文章权限</li>
+            <li>焦点战补充</li>
+            <li>更多深度文章</li>
           </ul>
           <div class="payment-action-row">
             <button class="button button-primary payment-button" data-provider="alipay" data-plan="monthly" type="button">支付宝开通</button>
@@ -76,14 +80,14 @@
         </article>
 
         <article class="pricing-card featured" id="quarterly">
-          <span class="article-meta">专业会员</span>
+          <span class="article-meta">季会员</span>
           <h3>季会员</h3>
           <p class="price-figure">¥99<span>/季</span></p>
-          <p>适合重点看完整推演、阵容修正和深度文章。</p>
+          <p>适合重点看完整推演、首发修正和完整数据库。</p>
           <ul class="detail-list">
-            <li>完整深度文章</li>
-            <li>临场修正</li>
-            <li>更高频率更新</li>
+            <li>焦点战完整版</li>
+            <li>首发修正</li>
+            <li>完整球队与球员库</li>
           </ul>
           <div class="payment-action-row">
             <button class="button button-primary payment-button" data-provider="alipay" data-plan="quarterly" type="button">支付宝开通</button>
@@ -92,14 +96,14 @@
         </article>
 
         <article class="pricing-card" id="single">
-          <span class="article-meta">单场焦点</span>
+          <span class="article-meta">单场包</span>
           <h3>单场包</h3>
           <p class="price-figure">¥19<span>/场</span></p>
-          <p>适合只买一场重点赛事的完整拆解。</p>
+          <p>适合只买一场重点赛事的完整内容。</p>
           <ul class="detail-list">
             <li>单场完整拆解</li>
-            <li>赛前补充更新</li>
-            <li>赛后复盘摘要</li>
+            <li>赛前追加更新</li>
+            <li>重点变化补充</li>
           </ul>
           <div class="payment-action-row">
             <button class="button button-primary payment-button" data-provider="alipay" data-plan="single" type="button">支付宝开通</button>
@@ -108,41 +112,43 @@
         </article>
       </section>
 
-      <section class="section article-list">
-        <article class="article-card">
-          <span class="article-meta">支付宝</span>
-          <h3>网页直跳支付</h3>
-          <p>最适合 PC 和普通浏览器访问的网站会员开通。接通后点击按钮会直接跳支付宝收银台。</p>
+      <section class="section record-board">
+        <article class="record-card accent-card">
+          <span class="record-label">解锁后可看</span>
+          <h3>焦点战、完整库、持续更新</h3>
+          <p>不是只开一个页面，而是把后面的完整内容直接打开。</p>
+          <div class="record-points">
+            <span>焦点战完整版</span>
+            <span>首发修正</span>
+            <span>完整球队库</span>
+            <span>完整球员库</span>
+          </div>
         </article>
-        <article class="article-card">
-          <span class="article-meta">微信支付</span>
-          <h3>优先走扫码</h3>
-          <p>最适合当前站点的微信支付第一版。后端生成二维码或跳转页，用户微信扫一扫即可支付。</p>
-        </article>
-        <article class="article-card">
-          <span class="article-meta">联调状态</span>
-          <h3>当前为自建后端可接入结构</h3>
-          <p id="payment-mode-copy">当前已切到公开站点 + 自建支付接口模式，不买域名也能先联调。</p>
+        <article class="record-card">
+          <span class="record-label">支付说明</span>
+          <h3>支付宝 + 微信</h3>
+          <p id="payment-mode-copy">网页端优先支付宝，手机端可直接走微信。</p>
+          <ul>
+            <li>支付宝网页支付</li>
+            <li>微信扫码支付</li>
+            <li>支付成功自动开通</li>
+          </ul>
         </article>
       </section>
 
-      <section class="section article-list">
-        <article class="article-card">
-          <span class="article-meta">无域名方案</span>
-          <h3>前台继续公开，支付后端单独部署</h3>
-          <p>内容继续用公开站点展示，支付接口部署到服务器公网 IP，后续再把正式商户参数接上去。</p>
-        </article>
-        <article class="article-card">
-          <span class="article-meta">切换方式</span>
-          <h3>拿到服务器 IP 后可直接切</h3>
-          <p>后续只要用带 `payApi` 参数的地址打开本页一次，就会自动记住新的支付接口地址，不需要重新改代码。</p>
-        </article>
+      <section class="section spotlight-banner reverse">
+        <div class="spotlight-copy">
+          <span>直接解锁</span>
+          <strong>球队档案、球星档案、焦点战完整版，一次打开</strong>
+          <p>免费界面只放最热的样本，开通后直接接上完整内容。</p>
+        </div>
+        <img src="assets/images/argentina-champion.jpg" alt="冠军庆祝与焦点比赛画面">
       </section>
     </main>
 
     <footer class="mini-footer">
-      <a href="members.html">会员中心</a>
-      <a href="about.html">方法说明</a>
+      <a href="members.html">完整内容</a>
+      <a href="login.html">会员登录</a>
       <a href="terms.html">服务条款</a>
     </footer>
   </div>

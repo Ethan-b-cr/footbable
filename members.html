@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>会员中心 | World Cup Edge</title>
-  <meta name="description" content="进入 World Cup Edge 会员中心，查看会员方案、国内支付方式和深度内容。">
+  <title>完整内容 | World Cup Edge</title>
+  <meta name="description" content="查看 World Cup Edge 的完整比赛内容、球队库、球员库与国内支付方式。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -27,111 +27,126 @@
         <a href="index.html#matches">公开分析</a>
         <a href="teams.html">球队</a>
         <a href="players.html">球员</a>
-        <a href="data.html">数据中心</a>
-        <a href="sources.html">数据来源</a>
+        <a href="pay.html">开通</a>
       </nav>
       <div class="header-actions">
         <a class="header-link" href="login.html">会员登录</a>
-        <a class="header-cta" href="pay.html">立即开通</a>
+        <a class="header-cta" href="pay.html">立即解锁</a>
         <button class="header-ghost" id="logout-button" type="button" hidden>退出登录</button>
       </div>
     </header>
 
     <main>
       <section class="article-hero">
-        <div class="article-hero-copy">
-          <p class="eyebrow">会员中心</p>
-          <h1>阵容修正、深度文章和完整档案，都在会员区</h1>
-          <p class="hero-text">
-            这里集中展示会员方案、国内支付方式、已解锁内容和深度文章。
-          </p>
+        <div class="article-hero-copy conversion-hero-copy">
+          <p class="eyebrow">完整内容</p>
+          <h1>继续往下，才是完整版本</h1>
+          <p class="hero-text">焦点战完整版、首发修正、完整球队库、完整球员库，都从这里继续展开。</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="pay.html">立即解锁</a>
+            <a class="button button-secondary" href="login.html">会员登录</a>
+          </div>
         </div>
-        <aside class="article-side-card">
-          <span class="record-label">当前开通方式</span>
-          <ul>
-            <li>支付宝网页支付</li>
-            <li>微信扫码支付</li>
-            <li>支付成功后自动开通会员权限</li>
-          </ul>
+        <aside class="article-side-card member-hero-card">
+          <img class="hero-side-image" src="assets/images/argentina-champion.jpg" alt="冠军庆祝画面">
+          <div class="stat-chip-row">
+            <span>3 队免费</span>
+            <span>3 星免费</span>
+            <span>其余解锁</span>
+          </div>
           <div class="member-status-card">
-            <strong id="member-status-title">当前未登录</strong>
-            <p id="member-status-text">登录后可直接查看会员深度文章和完整档案。</p>
+            <strong id="member-status-title">完整内容未解锁</strong>
+            <p id="member-status-text">登录或开通后，直接进入完整内容。</p>
           </div>
           <div class="member-status-card" id="member-email-card" hidden>
-            <strong>当前会员邮箱</strong>
+            <strong>当前账号</strong>
             <p id="member-email-text">未登录</p>
           </div>
-          <a class="button button-primary" id="member-primary-action" href="pay.html">立即开通会员</a>
+          <a class="button button-primary" id="member-primary-action" href="pay.html">立即解锁</a>
         </aside>
       </section>
 
       <section class="section membership-grid">
         <article class="tier-card tier-basic">
-          <span class="tier-label">基础会员</span>
-          <h3>适合持续看每日公开延伸</h3>
+          <span class="tier-label">月会员</span>
+          <h3>适合持续追更</h3>
           <ul>
-            <li>每日精选延伸内容</li>
-            <li>焦点战摘要版</li>
-            <li>基础复盘与更新提醒</li>
+            <li>每日精选延伸</li>
+            <li>焦点战补充</li>
+            <li>持续更新提醒</li>
           </ul>
-          <a class="article-link" href="pay.html#monthly">查看开通方式</a>
+          <a class="article-link" href="pay.html#monthly">立即开通</a>
         </article>
         <article class="tier-card tier-pro">
-          <span class="tier-label">专业会员</span>
-          <h3>适合看完整推演和修正</h3>
+          <span class="tier-label">季会员</span>
+          <h3>适合看完整版</h3>
           <ul>
-            <li>完整深度内容</li>
-            <li>模型与样本支撑</li>
-            <li>临场变量修正</li>
-            <li>持续内容更新</li>
+            <li>焦点战完整版</li>
+            <li>首发与轮换修正</li>
+            <li>完整球队档案</li>
+            <li>完整球员档案</li>
           </ul>
-          <a class="article-link" href="pay.html#quarterly">查看开通方式</a>
+          <a class="article-link" href="pay.html#quarterly">立即开通</a>
         </article>
         <article class="tier-card tier-single">
-          <span class="tier-label">单场焦点</span>
-          <h3>适合只关注焦点比赛</h3>
+          <span class="tier-label">单场包</span>
+          <h3>适合只看重头戏</h3>
           <ul>
             <li>单场完整拆解</li>
-            <li>赛前补充更新</li>
-            <li>更聚焦的深度内容</li>
+            <li>赛前追加更新</li>
+            <li>更聚焦的重点内容</li>
           </ul>
-          <a class="article-link" href="pay.html#single">查看开通方式</a>
+          <a class="article-link" href="pay.html#single">立即开通</a>
         </article>
       </section>
 
-      <section class="section article-list">
-        <article class="article-card">
-          <span class="article-meta">更新节奏</span>
-          <h3>日常精选 + 焦点战加深</h3>
-          <p>高关注比赛会持续补齐完整版本，阵容变化和赛前更新也会跟进补充。</p>
+      <section class="section spotlight-banner">
+        <div class="spotlight-copy">
+          <span>完整版本</span>
+          <strong>不只看热闹，直接把后面的重头内容打开</strong>
+          <p>球队、球员、焦点战和赛前修正放在同一条浏览路径里，打开后直接往下看。</p>
+        </div>
+        <img src="assets/images/world-cup-trophy.jpg" alt="大力神杯与庆祝时刻">
+      </section>
+
+      <section class="section record-board">
+        <article class="record-card accent-card">
+          <span class="record-label">开通后直接解锁</span>
+          <h3>焦点战、完整库、赛前修正</h3>
+          <p>不是只看一段摘要，而是直接进入完整内容。</p>
+          <div class="record-points">
+            <span>焦点战完整版</span>
+            <span>首发修正</span>
+            <span>完整球队库</span>
+            <span>完整球员库</span>
+          </div>
         </article>
-        <article class="article-card">
-          <span class="article-meta">支付方式</span>
-          <h3>支付宝 + 微信支付</h3>
-          <p>第一版只对接国内支付。网页端优先支付宝，微信侧优先扫码支付。</p>
-        </article>
-        <article class="article-card">
-          <span class="article-meta">开通后可看</span>
-          <h3>焦点战深度文章 + 完整球队库 + 完整球员库</h3>
-          <p>会员开通后可直接查看焦点战深度文章、完整球队档案、完整球员档案和后续赛前更新。</p>
+        <article class="record-card">
+          <span class="record-label">支付方式</span>
+          <h3>支付宝 + 微信</h3>
+          <p>直接开通，不绕路。网页端优先支付宝，手机端可直接走微信。</p>
+          <ul>
+            <li>支付宝网页支付</li>
+            <li>微信扫码支付</li>
+            <li>支付成功后自动开通</li>
+          </ul>
         </article>
       </section>
 
       <section class="section member-library">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">会员内容</p>
-            <h2>登录后可直接查看的深度内容</h2>
+            <p class="eyebrow">已解锁内容</p>
+            <h2>登录后直接进入深度内容</h2>
           </div>
-          <p>已开通会员可直接从这里进入深度文章与完整数据库内容。</p>
+          <p>开通后，后续内容会直接接上，不再停在免费样本。</p>
         </div>
         <div class="article-list" id="member-library-list"></div>
       </section>
     </main>
 
     <footer class="mini-footer">
-      <a href="pay.html">支付页面</a>
-      <a href="about.html">方法说明</a>
+      <a href="pay.html">开通</a>
       <a href="data.html">数据中心</a>
       <a href="sources.html">数据来源</a>
       <a href="terms.html">服务条款</a>

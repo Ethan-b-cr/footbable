@@ -1228,6 +1228,7 @@ a {
   grid-template-columns: 1.2fr 0.8fr;
   gap: 20px;
   padding: 52px 0 22px;
+  align-items: start;
 }
 
 .article-hero-visual {
@@ -1250,6 +1251,34 @@ a {
 .article-main,
 .article-sidebar {
   padding: 24px;
+}
+
+.member-hero-card {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+  align-self: start;
+}
+
+.article-hero-copy {
+  align-self: start;
+  min-height: auto;
+}
+
+.conversion-hero-copy {
+  padding: 14px 0 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.conversion-hero-copy .hero-text {
+  max-width: 620px;
+}
+
+.conversion-hero-copy .hero-actions {
+  margin-top: 26px;
 }
 
 .hero-side-image {
@@ -1537,6 +1566,22 @@ a {
   color: var(--muted);
 }
 
+.login-visual-strip {
+  margin-top: 18px;
+}
+
+.login-visual-strip .spotlight-copy {
+  max-width: 360px;
+}
+
+.member-hero-card .member-status-card {
+  margin-top: 0;
+}
+
+.member-hero-card .button {
+  width: 100%;
+}
+
 .accent-card {
   background: linear-gradient(135deg, rgba(29, 23, 18, 0.96), rgba(184, 61, 30, 0.94));
   color: #fff7ef;
@@ -1634,10 +1679,18 @@ a {
   margin-top: 18px;
 }
 
+.mini-footer {
+  justify-content: center;
+}
+
 .footer-links a,
 .mini-footer a {
   color: rgba(255, 243, 230, 0.72);
   font-size: 0.95rem;
+}
+
+.mini-footer a {
+  padding: 10px 0;
 }
 
 .footer-stage {

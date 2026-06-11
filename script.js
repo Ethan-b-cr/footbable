@@ -1,5 +1,5 @@
 const animatedSections = document.querySelectorAll(
-  ".section, .hero-copy, .hero-panel, .site-footer, .article-hero-copy, .article-side-card, .faq-item, .home-pulse-slot"
+  ".section, .hero-copy, .hero-panel, .site-footer, .faq-item, .home-pulse-slot"
 );
 
 if ("IntersectionObserver" in window) {
@@ -127,7 +127,7 @@ const paymentButtons = document.querySelectorAll(".payment-button");
 const paymentModeCopy = document.querySelector("#payment-mode-copy");
 
 if (paymentModeCopy && window.FOOTBABLE_CONFIG?.paymentMode === "public-self-host") {
-  paymentModeCopy.textContent = `当前已切到公开站点 + 自建支付接口模式。当前支付接口地址：${window.FOOTBABLE_CONFIG.paymentApiBase}`;
+  paymentModeCopy.textContent = "支付宝网页支付与微信扫码支付已就位，支付完成后自动开通完整内容。";
 }
 
 if (paymentButtons.length > 0) {
@@ -167,7 +167,7 @@ const loginStatus = document.querySelector("#login-status");
 
 if (loginForm && loginStatus) {
   if (memberSession?.email) {
-    loginStatus.textContent = `当前已登录：${memberSession.email}，正在进入会员中心。`;
+    loginStatus.textContent = `已识别账号 ${memberSession.email}，正在进入完整内容。`;
     window.setTimeout(() => {
       window.location.href = "members.html";
     }, 700);
@@ -187,7 +187,7 @@ if (loginForm && loginStatus) {
       "worldCupEdgeMember",
       JSON.stringify({ email, loggedInAt: new Date().toISOString() })
     );
-    loginStatus.textContent = `登录成功，正在进入会员中心：${email}`;
+    loginStatus.textContent = `登录成功，正在进入完整内容：${email}`;
     window.location.href = "members.html";
   });
 }
@@ -201,8 +201,8 @@ const memberLibraryList = document.querySelector("#member-library-list");
 
 if (memberStatusTitle && memberStatusText && memberPrimaryAction && memberSession?.email) {
   memberStatusTitle.textContent = "当前已登录";
-  memberStatusText.textContent = `当前浏览器已保存会员状态：${memberSession.email}`;
-  memberPrimaryAction.textContent = "继续查看会员深度内容";
+  memberStatusText.textContent = `已为 ${memberSession.email} 解锁完整内容。`;
+  memberPrimaryAction.textContent = "继续查看完整内容";
   memberPrimaryAction.href = "article.html?slug=lineup-and-odds";
   if (memberEmailCard && memberEmailText) {
     memberEmailCard.hidden = false;
@@ -275,7 +275,7 @@ if (articleMain && window.worldCupArticles) {
       ? canViewFullArticle
         ? "查看完整会员内容"
         : "登录后查看完整内容"
-      : "进入会员中心";
+      : "查看完整内容";
     articleSideAction.href = requiresMember && !canViewFullArticle ? "login.html" : "members.html";
   }
 
@@ -343,7 +343,7 @@ if (articleMain && window.worldCupArticles) {
       renderedLockedList.innerHTML = `
         <li>登录后解锁完整文章</li>
         <li>查看最终建议与信心分级</li>
-        <li>进入会员中心查看更多深度内容</li>
+        <li>继续查看更多深度内容</li>
       `;
     }
     if (renderedLockedPrimary) {
@@ -367,7 +367,7 @@ if (lockedDescription && lockedList && memberUnlocked && lockedActions && member
   lockedList.hidden = true;
   memberUnlocked.hidden = false;
   lockedActions.innerHTML = `
-    <a class="button button-primary" href="members.html">返回会员中心</a>
+    <a class="button button-primary" href="members.html">返回完整内容</a>
     <button class="button button-secondary" type="button" id="locked-logout-button">退出当前会员</button>
   `;
   document.querySelector("#locked-logout-button")?.addEventListener("click", () => {
