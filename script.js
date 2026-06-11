@@ -31,6 +31,19 @@ const teamArtwork = {
   Spain: "assets/images/france-team.png",
 };
 
+const teamBackdropArtwork = {
+  Argentina: "assets/images/argentina-champion.jpg",
+  France: "assets/images/argentina-champion.jpg",
+  Brazil: "assets/images/world-cup-trophy.jpg",
+  England: "assets/images/argentina-champion.jpg",
+  Croatia: "assets/images/world-cup-trophy.jpg",
+  Morocco: "assets/images/argentina-champion.jpg",
+  Netherlands: "assets/images/world-cup-trophy.jpg",
+  Portugal: "assets/images/world-cup-trophy.jpg",
+  Belgium: "assets/images/world-cup-trophy.jpg",
+  Spain: "assets/images/argentina-champion.jpg",
+};
+
 const playerArtwork = {
   "Lionel Andres Messi Cuccittini": "assets/images/messi.jpg",
   "Kylian Mbappe Lottin": "assets/images/mbappe.jpg",
@@ -46,7 +59,7 @@ const playerArtwork = {
 };
 
 const fallbackArtwork = {
-  team: "assets/images/world-cup-trophy.jpg",
+  team: "assets/images/argentina-champion.jpg",
   player: "assets/images/mbappe.jpg",
 };
 
@@ -273,8 +286,8 @@ if (articleMain && window.worldCupArticles) {
   if (articleSideAction) {
     articleSideAction.textContent = requiresMember
       ? canViewFullArticle
-        ? "查看完整会员内容"
-        : "登录后查看完整内容"
+        ? "继续查看后半段"
+        : "登录后继续展开"
       : "查看完整内容";
     articleSideAction.href = requiresMember && !canViewFullArticle ? "login.html" : "members.html";
   }
@@ -336,22 +349,22 @@ if (articleMain && window.worldCupArticles) {
   if (requiresMember && !canViewFullArticle) {
     if (renderedLockedDescription) {
       renderedLockedDescription.textContent =
-        "这篇内容属于会员深度文章。登录后可继续查看完整结论、阵容修正和后续延伸。";
+        "前半段已经展开框架，后半段继续落到阵容修正、临场排序和最终结论。";
     }
     if (renderedLockedList) {
       renderedLockedList.hidden = false;
       renderedLockedList.innerHTML = `
-        <li>登录后解锁完整文章</li>
-        <li>查看最终建议与信心分级</li>
-        <li>继续查看更多深度内容</li>
+        <li>继续看到后半段推演</li>
+        <li>补齐最终修正顺序</li>
+        <li>查看临场结论落点</li>
       `;
     }
     if (renderedLockedPrimary) {
-      renderedLockedPrimary.textContent = "登录查看完整内容";
+      renderedLockedPrimary.textContent = "登录后继续展开";
       renderedLockedPrimary.href = "login.html";
     }
     if (renderedLockedSecondary) {
-      renderedLockedSecondary.textContent = "查看会员方案";
+      renderedLockedSecondary.textContent = "查看完整内容";
       renderedLockedSecondary.href = "members.html";
     }
   }
@@ -363,7 +376,7 @@ const memberUnlocked = document.querySelector("#member-unlocked");
 const lockedActions = document.querySelector(".locked-actions");
 
 if (lockedDescription && lockedList && memberUnlocked && lockedActions && memberSession?.email) {
-  lockedDescription.textContent = `已对当前登录会员开放完整深度内容：${memberSession.email}`;
+  lockedDescription.textContent = `后半段内容已对当前登录账号开放：${memberSession.email}`;
   lockedList.hidden = true;
   memberUnlocked.hidden = false;
   lockedActions.innerHTML = `
@@ -412,7 +425,8 @@ const isFreePlayer = (playerId, players) =>
     .some((player) => String(player.player_id) === String(playerId));
 
 const buildTeamCard = (team, locked = false) => {
-  const teamImage = teamArtwork[team.team] || fallbackArtwork.team;
+  const crestImage = teamArtwork[team.team] || "assets/images/argentina-team.png";
+  const backdropImage = teamBackdropArtwork[team.team] || fallbackArtwork.team;
   const winRate = formatPercent((team.wins / team.matches) * 100);
   const shotRate = perMatch(team.shots || 0, team.matches, 1);
   const xgRate = perMatch(team.xg_for || 0, team.matches, 2);
@@ -420,9 +434,10 @@ const buildTeamCard = (team, locked = false) => {
   const linkText = locked ? "会员可查看" : "进入球队页面";
   const badgeText = locked ? "会员球队档案" : "球队分析 / 历史样本";
   return `
-    <article class="entity-card ${locked ? "locked-card" : ""}">
-      <div class="entity-media">
-        <img src="${teamImage}" alt="${team.team} 球队画面" loading="lazy">
+    <article class="entity-card team-card ${locked ? "locked-card" : ""}">
+      <div class="entity-media team-stage-media">
+        <img class="team-stage-photo" src="${backdropImage}" alt="${team.team} 球队画面" loading="lazy">
+        <img class="team-badge-image" src="${crestImage}" alt="" loading="lazy" aria-hidden="true">
       </div>
       <div class="entity-body">
         <span class="article-meta">${badgeText}</span>
@@ -784,6 +799,7 @@ const teamHeroImage = document.querySelector("#team-hero-image");
 const teamComparisonTable = document.querySelector("#team-comparison-table");
 const teamEfficiencyBox = document.querySelector("#team-efficiency-box");
 const teamStyleBox = document.querySelector("#team-style-box");
+const teamHeroHighlights = document.querySelector("#team-hero-highlights");
 const playerTitle = document.querySelector("#player-title");
 const playerSummaryText = document.querySelector("#player-summary-text");
 const playerStatList = document.querySelector("#player-stat-list");
@@ -793,6 +809,7 @@ const playerContextBox = document.querySelector("#player-context-box");
 const playerHeroImage = document.querySelector("#player-hero-image");
 const playerEfficiencyBox = document.querySelector("#player-efficiency-box");
 const playerRoleBox = document.querySelector("#player-role-box");
+const playerHeroHighlights = document.querySelector("#player-hero-highlights");
 
 const buildTeamNarrative = (team) => {
   const winRate = formatPercent((team.wins / team.matches) * 100);
@@ -921,6 +938,27 @@ const buildPlayerRoleTags = (player) => {
   return `<div class="stat-chip-row">${tags.map((tag) => `<span>${tag}</span>`).join("")}</div>`;
 };
 
+const buildTeamHeroHighlights = (team) => {
+  const winRate = formatPercent((team.wins / team.matches) * 100);
+  return [
+    `${team.matches} 场样本`,
+    `胜率 ${winRate}`,
+    `${team.goals_for} 进球`,
+    `${formatNumber(team.xg_for || 0, 2)} xG`,
+  ];
+};
+
+const buildPlayerHeroHighlights = (player) => {
+  const shotAccuracy =
+    player.shots > 0 ? formatPercent(((player.shots_on_target || 0) / player.shots) * 100) : "0.0%";
+  return [
+    `${player.appearances} 次出场`,
+    `${player.goals || 0} 进球`,
+    `${formatNumber(player.xg || 0, 2)} xG`,
+    `射正率 ${shotAccuracy}`,
+  ];
+};
+
 Promise.all([
   fetch("data/snapshot.json").then((response) => {
     if (!response.ok) throw new Error("snapshot unavailable");
@@ -1012,8 +1050,13 @@ Promise.all([
       teamTitle.textContent = `${team.team} 球队分析页`;
       teamSummaryText.textContent = `${team.team} 在当前世界杯历史样本中共 ${team.matches} 场，进球 ${team.goals_for}，失球 ${team.goals_against}。这里会集中展示这支球队的样本、效率和比赛轮廓。`;
       if (teamHeroImage) {
-        teamHeroImage.src = teamArtwork[team.team] || fallbackArtwork.team;
+        teamHeroImage.src = teamBackdropArtwork[team.team] || fallbackArtwork.team;
         teamHeroImage.alt = `${team.team} 球队画面`;
+      }
+      if (teamHeroHighlights) {
+        teamHeroHighlights.innerHTML = buildTeamHeroHighlights(team)
+          .map((item) => `<span>${item}</span>`)
+          .join("");
       }
 
       teamStatList.innerHTML = `
@@ -1152,6 +1195,11 @@ Promise.all([
       if (playerHeroImage) {
         playerHeroImage.src = getPlayerImage(player.player_name);
         playerHeroImage.alt = `${player.player_name} 球员画面`;
+      }
+      if (playerHeroHighlights) {
+        playerHeroHighlights.innerHTML = buildPlayerHeroHighlights(player)
+          .map((item) => `<span>${item}</span>`)
+          .join("");
       }
 
       playerStatList.innerHTML = `
