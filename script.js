@@ -526,12 +526,12 @@ const liveScheduleHero = document.querySelector("#live-schedule-hero");
 const liveScheduleMeta = document.querySelector("#live-schedule-meta");
 const liveMatchGrid = document.querySelector("#live-match-grid");
 const liveScheduleFooter = document.querySelector("#live-schedule-footer");
+const publicLiveMatchGrid = document.querySelector("#public-live-match-grid");
 const memberLiveScheduleHero = document.querySelector("#member-live-schedule-hero");
 const memberLiveScheduleMeta = document.querySelector("#member-live-schedule-meta");
 const memberLiveMatchGrid = document.querySelector("#member-live-match-grid");
 const FREE_TEAM_LIMIT = 3;
 const FREE_PLAYER_LIMIT = 3;
-const FREE_MATCH_LIMIT = 3;
 
 const isMemberUnlocked = Boolean(memberSession?.email);
 const isFreeTeam = (teamName, teams) =>
@@ -614,16 +614,17 @@ const liveCardArtwork = [
 
 const getLiveCardArtwork = (index) => liveCardArtwork[index % liveCardArtwork.length];
 
-const buildLiveMatchCard = (match, index, locked = false) => {
+const buildLiveMatchCard = (match, index, memberOnlyDeepDive = true) => {
   const insight = match.insight || {};
   const scoreText =
     match.statusState === "pre"
       ? "VS"
       : `${match.homeScore}-${match.awayScore}`;
   const statusText = match.minuteText || match.statusText || "Scheduled";
-  const href = locked ? "members.html" : `article.html?slug=lineup-and-odds`;
+  const href = isMemberUnlocked ? `article.html?slug=lineup-and-odds` : "members.html";
+  const deepDiveText = isMemberUnlocked ? "进入深入分析" : "深入分析需开会员";
   return `
-    <article class="live-match-card ${locked ? "locked-live-card" : ""}" style="--card-cover:url('${getLiveCardArtwork(index)}')">
+    <article class="live-match-card" style="--card-cover:url('${getLiveCardArtwork(index)}')">
       <div class="card-top">
         <span class="time-badge">Match ${String(match.matchNumber).padStart(2, "0")}</span>
         <span class="access access-free">${statusText}</span>
@@ -652,7 +653,7 @@ const buildLiveMatchCard = (match, index, locked = false) => {
         </div>
         <div class="live-footer-row">
           <span class="live-chip">重点边：${insight.edgeTeam || match.homeTeam}</span>
-          <a class="article-link" href="${href}">${locked ? "解锁后续赛程" : "继续看这场分析"}</a>
+          ${memberOnlyDeepDive ? `<a class="article-link" href="${href}">${deepDiveText}</a>` : ""}
         </div>
       </div>
     </article>
@@ -670,7 +671,7 @@ const renderLiveSchedule = (payload) => {
       <div class="live-schedule-copy">
         <span class="article-meta">2026 美加墨世界杯</span>
         <h3>第一场 ${opening?.homeTeam || ""} vs ${opening?.awayTeam || ""}</h3>
-        <p>第二场 ${second?.homeTeam || ""} vs ${second?.awayTeam || ""}。首页先放 3 场免费可看，其余赛程和持续修正进入会员区。</p>
+        <p>第二场 ${second?.homeTeam || ""} vs ${second?.awayTeam || ""}。现在每场比赛都能先看浅分析，深入分析、细分场景和更强结论再进入会员区。</p>
       </div>
       <div class="live-schedule-meta">
         <span>更新 ${new Date(payload.updatedAt).toLocaleString("zh-CN", { hour12: false })}</span>
@@ -681,12 +682,12 @@ const renderLiveSchedule = (payload) => {
 
     liveMatchGrid.innerHTML = payload.matches
       .slice(0, 6)
-      .map((match, index) => buildLiveMatchCard(match, index, index >= FREE_MATCH_LIMIT && !isMemberUnlocked))
+      .map((match, index) => buildLiveMatchCard(match, index, true))
       .join("");
 
     liveScheduleFooter.innerHTML = `
-      <span>免费先看 ${FREE_MATCH_LIMIT} 场，剩余 ${payload.lockedCount || 0} 场继续放在会员区</span>
-      <a class="article-link" href="members.html">进入完整赛程</a>
+      <span>每场都能先看粗分析，深入分析、临场修正和更完整结论继续进入会员区</span>
+      <a class="article-link" href="members.html">查看所有比赛的深入分析</a>
     `;
 
     if (liveScheduleMeta) {
@@ -702,8 +703,8 @@ const renderLiveSchedule = (payload) => {
     memberLiveScheduleHero.innerHTML = `
       <div class="live-schedule-copy">
         <span class="article-meta">会员赛程</span>
-        <h3>完整 104 场世界杯赛程</h3>
-        <p>从开幕战到决赛，状态、比分、重点边和关键球员会持续往里补。</p>
+        <h3>完整赛程 + 深入分析区</h3>
+        <p>从开幕战到决赛，状态、比分、重点边之外，深入分析、临场修正和细分结论都继续往里补。</p>
       </div>
       <div class="live-schedule-meta">
         <span>首场 ${opening?.homeTeam || ""} vs ${opening?.awayTeam || ""}</span>
@@ -713,7 +714,7 @@ const renderLiveSchedule = (payload) => {
     `;
 
     memberLiveMatchGrid.innerHTML = payload.matches
-      .map((match, index) => buildLiveMatchCard(match, index, false))
+      .map((match, index) => buildLiveMatchCard(match, index, true))
       .join("");
 
     if (memberLiveScheduleMeta) {
@@ -723,6 +724,12 @@ const renderLiveSchedule = (payload) => {
         <span>后续会继续扩展</span>
       `;
     }
+  }
+
+  if (publicLiveMatchGrid) {
+    publicLiveMatchGrid.innerHTML = payload.matches
+      .map((match, index) => buildLiveMatchCard(match, index, true))
+      .join("");
   }
 };
 
@@ -766,6 +773,15 @@ const renderLiveScheduleFallback = () => {
       <article class="live-match-card loading-card" style="--card-cover:url('assets/images/argentina-champion.jpg')">
         <span class="time-badge">Live</span>
         <strong>稍后刷新</strong>
+      </article>
+    `;
+  }
+
+  if (publicLiveMatchGrid) {
+    publicLiveMatchGrid.innerHTML = `
+      <article class="live-match-card loading-card" style="--card-cover:url('assets/images/argentina-champion.jpg')">
+        <span class="time-badge">Live</span>
+        <strong>比赛流稍后刷新</strong>
       </article>
     `;
   }
