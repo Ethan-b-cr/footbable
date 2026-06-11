@@ -69,8 +69,8 @@ export async function onRequestGet(context) {
       matchCount: matches.length,
       openingMatch: matches[0] || null,
       secondMatch: matches[1] || null,
-      matches: matches.slice(0, 36),
-      lockedCount: Math.max(matches.length - 3, 0),
+      matches,
+      lockedCount: matches.length,
     };
 
     return new Response(JSON.stringify(payload), {

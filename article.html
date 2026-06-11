@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>文章详情 | World Cup Edge</title>
+  <title>比赛详情 | World Cup Edge</title>
   <meta
     name="description"
-    content="查看 World Cup Edge 的公开分析和会员深度文章详情页。"
+    content="查看 World Cup Edge 的公开比赛分析、单场详情与会员深度内容。"
   >
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -43,18 +43,23 @@
     <main>
       <section class="article-hero compact-detail-hero">
         <div class="article-hero-copy conversion-hero-copy compact-detail-copy">
-          <p class="eyebrow" id="article-eyebrow">公开分析 / 文章详情</p>
-          <h1 id="article-title">文章加载中</h1>
-          <p class="hero-text" id="article-description">这里会展示文章摘要、关键数据和会员内容提示。</p>
+          <p class="eyebrow" id="article-eyebrow">公开分析 / 比赛详情</p>
+          <h1 id="article-title">内容加载中</h1>
+          <p class="hero-text" id="article-description">这里会展示比赛赛程、关键变量、公开判断与完整比赛页入口。</p>
           <div class="article-meta-row" id="article-meta-row"></div>
+          <div class="hero-highlights" id="article-hero-highlights"></div>
         </div>
-        <aside class="article-side-card">
-          <span class="record-label">本页关注重点</span>
-          <ul id="article-focus-list"></ul>
-          <a class="button button-primary" id="article-side-action" href="members.html">继续看完整版</a>
-          <div class="source-box">
-            <span>数据来源</span>
-            <div class="source-chip-list" id="article-source-list"></div>
+        <aside class="article-side-card detail-visual-card">
+          <img
+            class="hero-side-image"
+            id="article-hero-image"
+            src="assets/images/argentina-champion.jpg"
+            alt="世界杯比赛视觉图"
+          >
+          <div class="detail-visual-overlay">
+            <span id="article-visual-kicker">比赛观察</span>
+            <strong id="article-visual-title">真实赛程 + 数据判断</strong>
+            <p id="article-visual-text">赛程、对位和关键变量会在这一页持续同步。</p>
           </div>
         </aside>
       </section>
@@ -64,29 +69,29 @@
           <div class="article-block locked-block">
             <div class="locked-header">
               <div>
-                <p class="eyebrow">后续内容</p>
-                <h2>后半段推演与临场修正</h2>
+                <p class="eyebrow">完整版本</p>
+                <h2>比赛全景与赛前修正</h2>
               </div>
-              <span class="pill">继续展开</span>
+              <span class="pill">继续阅读</span>
             </div>
-            <p id="locked-description">前半段已经给出判断框架，后半段继续落到临场名单、修正顺序和最终结论。</p>
+            <p id="locked-description">当前页会先给出比赛框架，完整版本继续补齐名单变化、节奏分支与最终落点。</p>
             <ul id="locked-list" hidden></ul>
             <div class="member-unlocked" id="member-unlocked" hidden>
               <div class="unlocked-grid">
                 <article>
                   <span>完整内容</span>
                   <strong>已解锁</strong>
-                  <p>登录后可继续查看更深层部分。</p>
+                  <p>当前账号可以继续查看更深层的拆解与临场修正。</p>
                 </article>
                 <article>
                   <span>阅读范围</span>
-                  <strong>完整文章</strong>
-                  <p>可直接查看完整推演、修正与延伸内容。</p>
+                  <strong>完整单场</strong>
+                  <p>可直接查看完整推演、分支判断与后续补充内容。</p>
                 </article>
                 <article>
                   <span>后续更新</span>
                   <strong>持续同步</strong>
-                  <p>后续赛前更新和焦点战补充会继续加入。</p>
+                  <p>赛前补充、重点变化和焦点战修正会继续往里加。</p>
                 </article>
               </div>
             </div>
@@ -99,11 +104,19 @@
 
         <aside class="article-sidebar compact-sidebar">
           <div class="feature-box">
-            <span>继续展开</span>
+            <span>本页关注重点</span>
+            <ul id="article-focus-list"></ul>
+          </div>
+          <div class="feature-box">
+            <span>数据来源</span>
+            <div class="source-chip-list" id="article-source-list"></div>
+          </div>
+          <div class="feature-box" id="article-sidebar-box">
+            <span>本页目录</span>
             <ul>
-              <li>临场修正</li>
-              <li>后半段推演</li>
-              <li>最终结论</li>
+              <li>关键名单</li>
+              <li>对位节奏</li>
+              <li>历史对照</li>
             </ul>
           </div>
         </aside>
