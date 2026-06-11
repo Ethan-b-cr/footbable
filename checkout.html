@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>结账中 | World Cup Edge</title>
+  <meta name="description" content="World Cup Edge 支付承接页。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell article-shell">
+    <header class="site-header">
+      <a class="brand" href="index.html" aria-label="World Cup Edge 首页">
+        <span class="brand-mark">W</span>
+        <span class="brand-copy">
+          <strong>World Cup Edge</strong>
+          <span>世界杯数据分析站</span>
+        </span>
+      </a>
+      <nav class="site-nav" aria-label="主导航">
+        <a href="index.html#matches">公开分析</a>
+        <a href="teams.html">球队</a>
+        <a href="players.html">球员</a>
+        <a href="pay.html">开通</a>
+      </nav>
+      <div class="header-actions">
+        <a class="header-link" href="login.html">会员登录</a>
+        <a class="header-cta" href="pay.html">返回方案</a>
+      </div>
+    </header>
+
+    <main id="checkout-flow">
+      <section class="article-hero article-hero-visual">
+        <div class="article-hero-copy conversion-hero-copy">
+          <h1 id="checkout-heading">正在进入支付通道</h1>
+          <p class="hero-text" id="checkout-lead">我们正在为你切到对应的支付方式。</p>
+          <div class="hero-actions">
+            <a class="button button-primary" id="checkout-primary-action" href="pay.html">返回方案页</a>
+            <a class="button button-secondary" id="checkout-secondary-action" href="members.html">查看完整内容</a>
+          </div>
+          <div class="status-note checkout-status-card">
+            <strong id="checkout-status-title">订单信息</strong>
+            <p id="checkout-status-text">正在读取方案与支付方式。</p>
+          </div>
+          <div class="article-meta-row" id="checkout-meta-row"></div>
+        </div>
+        <aside class="article-side-card checkout-side-card">
+          <div class="checkout-visual-shell">
+            <article class="checkout-hero-panel">
+              <img class="hero-side-image checkout-hero-image" src="assets/images/argentina-champion.jpg" alt="冠军庆祝画面">
+              <div class="checkout-hero-overlay">
+                <strong id="checkout-provider-pill">支付通道</strong>
+                <span id="checkout-plan-pill">方案读取中</span>
+              </div>
+            </article>
+            <div class="checkout-fallback-grid">
+              <article>
+                <strong>焦点战</strong>
+                <span>完整版</span>
+              </article>
+              <article>
+                <strong>球队库</strong>
+                <span>完整展开</span>
+              </article>
+              <article>
+                <strong>球员库</strong>
+                <span>完整展开</span>
+              </article>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="mini-footer">
+      <a href="pay.html">返回方案</a>
+      <a href="members.html">完整内容</a>
+      <a href="terms.html">服务条款</a>
+    </footer>
+  </div>
+  <script src="site-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

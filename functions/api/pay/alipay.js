@@ -4,35 +4,60 @@ const planConfig = {
   single: { name: "单场焦点包", amount: "19.00" },
 };
 
+function buildCheckoutUrl(origin, provider, plan, config, mode) {
+  const checkoutUrl = new URL("/checkout.html", origin);
+  checkoutUrl.searchParams.set("provider", provider);
+  checkoutUrl.searchParams.set("plan", plan);
+  checkoutUrl.searchParams.set("amount", config.amount);
+  checkoutUrl.searchParams.set("title", config.name);
+  checkoutUrl.searchParams.set("mode", mode);
+  return checkoutUrl.toString();
+}
+
 export async function onRequestGet(context) {
   const { request, env } = context;
   const url = new URL(request.url);
   const plan = url.searchParams.get("plan") || "monthly";
   const config = planConfig[plan] || planConfig.monthly;
+  const orderId = `ALI-${Date.now()}`;
 
   if (!env.ALIPAY_APP_ID || !env.ALIPAY_GATEWAY) {
     return new Response(
       JSON.stringify({
         ok: false,
         provider: "alipay",
-        message: "支付宝参数未配置。请在 Cloudflare Pages 环境变量中补齐 ALIPAY_APP_ID、ALIPAY_GATEWAY 等参数。",
+        mode: "manual",
+        orderId,
         plan,
         config,
+        checkoutUrl: buildCheckoutUrl(url.origin, "alipay", plan, config, "manual"),
+        message: "支付宝参数还没有补齐，当前先由站内结账页承接。",
+        successUrl: `${url.origin}/pay-success.html?orderId=${orderId}`,
+        failedUrl: `${url.origin}/pay-failed.html?orderId=${orderId}`,
       }),
-      { status: 501, headers: { "content-type": "application/json; charset=UTF-8" } }
+      {
+        status: 200,
+        headers: { "content-type": "application/json; charset=UTF-8" },
+      }
     );
   }
 
   return new Response(
     JSON.stringify({
-      ok: false,
+      ok: true,
       provider: "alipay",
-      message: "支付宝正式下单逻辑待接入。当前结构已预留，可直接替换为真实签名与下单代码。",
+      mode: "gateway-ready",
+      orderId,
       plan,
       config,
-      successUrl: `${url.origin}/pay-success.html`,
-      failedUrl: `${url.origin}/pay-failed.html`,
+      checkoutUrl: buildCheckoutUrl(url.origin, "alipay", plan, config, "gateway"),
+      message: "支付宝环境变量已识别。把真实签名与下单逻辑接入这里后，即可切到正式支付。",
+      successUrl: `${url.origin}/pay-success.html?orderId=${orderId}`,
+      failedUrl: `${url.origin}/pay-failed.html?orderId=${orderId}`,
     }),
-    { status: 501, headers: { "content-type": "application/json; charset=UTF-8" } }
+    {
+      status: 200,
+      headers: { "content-type": "application/json; charset=UTF-8" },
+    }
   );
 }

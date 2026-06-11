@@ -38,27 +38,35 @@
     <main>
       <section class="article-hero">
         <div class="article-hero-copy conversion-hero-copy">
-          <p class="eyebrow">立即开通</p>
           <h1>选一个方案，直接解锁完整内容</h1>
-          <p class="hero-text">重点比赛完整版、完整球队库、完整球员库和赛前修正，都从这里继续展开。</p>
+          <p class="hero-text">重点比赛完整版、完整球队库、完整球员库和赛前修正，开通后直接展开。</p>
           <div class="hero-actions">
             <a class="button button-primary" href="#quarterly">直接看主方案</a>
             <a class="button button-secondary" href="login.html">已有账号</a>
           </div>
         </div>
-        <aside class="article-side-card member-hero-card">
-          <img class="hero-side-image" src="assets/images/argentina-champion.jpg" alt="冠军庆祝画面">
-          <span class="record-label">支持方式</span>
-          <div class="stat-chip-row">
-            <span>支付宝</span>
-            <span>微信</span>
-            <span>自动开通</span>
+        <aside class="article-side-card payment-hero-card">
+          <article class="payment-hero-main">
+            <img class="hero-side-image payment-hero-image" src="assets/images/argentina-champion.jpg" alt="夺冠庆祝画面">
+            <div class="payment-hero-overlay">
+              <strong>开通后直接进入完整版</strong>
+              <span>焦点战、球队库、球员库一次展开</span>
+            </div>
+          </article>
+          <div class="payment-hero-mini-grid">
+            <article>
+              <strong>支付宝</strong>
+              <span>网页开通</span>
+            </article>
+            <article>
+              <strong>微信</strong>
+              <span>扫码开通</span>
+            </article>
+            <article>
+              <strong>自动开通</strong>
+              <span>支付后直达</span>
+            </article>
           </div>
-          <ul>
-            <li>支付宝网页支付</li>
-            <li>微信扫码支付</li>
-            <li>支付完成自动开通</li>
-          </ul>
         </aside>
       </section>
 
@@ -74,8 +82,8 @@
             <li>更多深度文章</li>
           </ul>
           <div class="payment-action-row">
-            <button class="button button-primary payment-button" data-provider="alipay" data-plan="monthly" type="button">支付宝开通</button>
-            <button class="button button-secondary payment-button" data-provider="wechat" data-plan="monthly" type="button">微信扫码开通</button>
+            <a class="button button-primary" href="checkout.html?provider=alipay&plan=monthly">支付宝开通</a>
+            <a class="button button-secondary" href="checkout.html?provider=wechat&plan=monthly">微信扫码开通</a>
           </div>
         </article>
 
@@ -90,8 +98,8 @@
             <li>完整球队与球员库</li>
           </ul>
           <div class="payment-action-row">
-            <button class="button button-primary payment-button" data-provider="alipay" data-plan="quarterly" type="button">支付宝开通</button>
-            <button class="button button-secondary payment-button" data-provider="wechat" data-plan="quarterly" type="button">微信扫码开通</button>
+            <a class="button button-primary" href="checkout.html?provider=alipay&plan=quarterly">支付宝开通</a>
+            <a class="button button-secondary" href="checkout.html?provider=wechat&plan=quarterly">微信扫码开通</a>
           </div>
         </article>
 
@@ -106,8 +114,8 @@
             <li>重点变化补充</li>
           </ul>
           <div class="payment-action-row">
-            <button class="button button-primary payment-button" data-provider="alipay" data-plan="single" type="button">支付宝开通</button>
-            <button class="button button-secondary payment-button" data-provider="wechat" data-plan="single" type="button">微信扫码开通</button>
+            <a class="button button-primary" href="checkout.html?provider=alipay&plan=single">支付宝开通</a>
+            <a class="button button-secondary" href="checkout.html?provider=wechat&plan=single">微信扫码开通</a>
           </div>
         </article>
       </section>
@@ -152,6 +160,7 @@
       <a href="terms.html">服务条款</a>
     </footer>
   </div>
+  <script src="site-config.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

@@ -11,7 +11,7 @@
 - 动态文章详情页
 - 登录页与会员中心页
 - 无域名场景下可单独部署到服务器公网 IP 的支付后端骨架
-- FAQ / 方法说明 / 隐私政策 / 服务条款 / 404 / 提交成功页
+- 分析原则 / 隐私政策 / 服务条款 / 404 / 提交成功页 / 站内结账页
 - 本地历史数据抓取与快照脚本
 
 ## 当前公开地址
@@ -52,6 +52,7 @@ window.FOOTBABLE_CONFIG = {
 - `login.html`：会员登录页
 - `thanks.html`：咨询提交成功页
 - `pay.html`：国内支付入口页
+- `checkout.html`：站内支付承接页
 - `pay-success.html`：支付成功页
 - `pay-failed.html`：支付失败页
 - `sources.html`：数据来源页
@@ -72,9 +73,9 @@ window.FOOTBABLE_CONFIG = {
 - `data-sources.js`：数据来源配置
 - `script.js`：前端渲染与交互逻辑
 - `styles.css`：全站样式
-- `functions/api/pay/alipay.js`：支付宝支付占位接口
-- `functions/api/pay/wechat.js`：微信支付占位接口
-- `functions/api/pay/notify.js`：支付异步通知占位接口
+- `functions/api/pay/alipay.js`：支付宝支付入口，未配置时跳站内结账页
+- `functions/api/pay/wechat.js`：微信支付入口，未配置时跳站内结账页
+- `functions/api/pay/notify.js`：支付异步通知预留接口
 - `site-config.js`：前端支付接口地址配置
 - `server/server.js`：自建支付后端骨架
 
@@ -207,7 +208,7 @@ npm start
 
 第一版目标：
 
-- 先让前端不再依赖 Cloudflare Functions
+- 先让前端支付点击流不再落到报错 JSON
 - 先把支付接口稳定地挂到服务器公网 IP
 - 后续直接在这台服务器上接正式支付宝 / 微信支付
 

@@ -140,7 +140,7 @@ const paymentButtons = document.querySelectorAll(".payment-button");
 const paymentModeCopy = document.querySelector("#payment-mode-copy");
 
 if (paymentModeCopy && window.FOOTBABLE_CONFIG?.paymentMode === "public-self-host") {
-  paymentModeCopy.textContent = "支付宝网页支付与微信扫码支付已就位，支付完成后自动开通完整内容。";
+  paymentModeCopy.textContent = "支付宝网页开通，微信扫码开通，都会先进入站内结账页。";
 }
 
 if (paymentButtons.length > 0) {
@@ -152,10 +152,123 @@ if (paymentButtons.length > 0) {
       const plan = button.dataset.plan;
 
       if (!provider || !plan) return;
-
-      window.location.href = `${paymentApiBase}/api/pay/${provider}?plan=${encodeURIComponent(plan)}`;
+      const nextUrl = new URL("checkout.html", window.location.href);
+      nextUrl.searchParams.set("provider", provider);
+      nextUrl.searchParams.set("plan", plan);
+      nextUrl.searchParams.set("payApi", paymentApiBase);
+      window.location.href = nextUrl.toString();
     });
   });
+}
+
+const checkoutHeading = document.querySelector("#checkout-heading");
+const checkoutLead = document.querySelector("#checkout-lead");
+const checkoutPrimaryAction = document.querySelector("#checkout-primary-action");
+const checkoutSecondaryAction = document.querySelector("#checkout-secondary-action");
+const checkoutStatusTitle = document.querySelector("#checkout-status-title");
+const checkoutStatusText = document.querySelector("#checkout-status-text");
+const checkoutMetaRow = document.querySelector("#checkout-meta-row");
+const checkoutProviderPill = document.querySelector("#checkout-provider-pill");
+const checkoutPlanPill = document.querySelector("#checkout-plan-pill");
+
+if (
+  checkoutHeading &&
+  checkoutLead &&
+  checkoutPrimaryAction &&
+  checkoutSecondaryAction &&
+  checkoutStatusTitle &&
+  checkoutStatusText &&
+  checkoutMetaRow &&
+  checkoutProviderPill &&
+  checkoutPlanPill
+) {
+  const params = new URLSearchParams(window.location.search);
+  const provider = params.get("provider") || "alipay";
+  const plan = params.get("plan") || "monthly";
+  const amount = params.get("amount") || "";
+  const title = params.get("title") || "";
+  const mode = params.get("mode") || "";
+  const payApi = params.get("payApi") || window.FOOTBABLE_CONFIG?.paymentApiBase || window.location.origin;
+
+  const providerLabel = provider === "wechat" ? "微信" : "支付宝";
+  const planLabelMap = {
+    monthly: "月会员",
+    quarterly: "季会员",
+    single: "单场包",
+  };
+  const planLabel = planLabelMap[plan] || "会员方案";
+  const displayTitle = title || planLabel;
+  const amountLabel = amount ? `¥${amount}` : "待确认";
+
+  checkoutProviderPill.textContent = providerLabel;
+  checkoutPlanPill.textContent = `${displayTitle} · ${amountLabel}`;
+  checkoutHeading.textContent = `${providerLabel}开通页`;
+  checkoutLead.textContent = "正在读取当前支付通道状态。";
+  checkoutStatusTitle.textContent = "当前状态";
+  checkoutStatusText.textContent = "正在连接支付接口。";
+  checkoutPrimaryAction.textContent = "返回支付方案";
+  checkoutPrimaryAction.href = "pay.html";
+  checkoutSecondaryAction.textContent = "查看完整内容";
+  checkoutSecondaryAction.href = "members.html";
+
+  checkoutMetaRow.innerHTML = `
+    <span>${providerLabel}</span>
+    <span>${planLabel}</span>
+    <span>${amountLabel}</span>
+  `;
+
+  const apiBase = String(payApi).replace(/\/$/, "");
+  fetch(`${apiBase}/api/pay/${provider}?plan=${encodeURIComponent(plan)}`)
+    .then(async (response) => {
+      const contentType = response.headers.get("content-type") || "";
+
+      if (response.redirected && response.url && !response.url.includes("checkout.html")) {
+        window.location.href = response.url;
+        return null;
+      }
+
+      if (contentType.includes("application/json")) {
+        return response.json();
+      }
+
+      return null;
+    })
+    .then((payload) => {
+      if (!payload) {
+        checkoutLead.textContent = "当前站点已把你带到站内结账页，不会再直接跳到接口报错。";
+        checkoutStatusText.textContent = "支付承接页已就位，接口未返回正式结果时会停留在这里。";
+        return;
+      }
+
+      const resolvedMode = payload.mode || mode || "manual";
+      const resolvedAmount =
+        payload.config?.amount ||
+        (payload.config?.amountFen ? (payload.config.amountFen / 100).toFixed(2) : amount);
+      const resolvedTitle = payload.config?.name || displayTitle;
+      const resolvedAmountLabel = resolvedAmount ? `¥${resolvedAmount}` : amountLabel;
+
+      checkoutPlanPill.textContent = `${resolvedTitle} · ${resolvedAmountLabel}`;
+      checkoutMetaRow.innerHTML = `
+        <span>${providerLabel}</span>
+        <span>${planLabel}</span>
+        <span>${resolvedAmountLabel}</span>
+      `;
+
+      if (resolvedMode === "gateway-ready") {
+        checkoutHeading.textContent = `${providerLabel}支付通道已就绪`;
+        checkoutLead.textContent = "当前环境已经识别到支付参数，接入正式签名与下单逻辑后，这里会直接跳转到真实支付。";
+        checkoutStatusText.textContent = payload.message || "已识别支付参数，现阶段保留为联调入口。";
+        return;
+      }
+
+      checkoutHeading.textContent = `${providerLabel}开通页`;
+      checkoutLead.textContent = "当前站点已把你带到站内结账页，不会再直接跳到接口报错。";
+      checkoutStatusText.textContent = payload.message || "支付承接页已就位，接下来只差商户参数与正式回调。";
+    })
+    .catch(() => {
+      checkoutLead.textContent = "当前站点已把你带到站内结账页，不会再直接跳到接口报错。";
+      checkoutStatusText.textContent = "支付承接页已就位，接口未返回正式结果时会停留在这里。";
+    });
 }
 
 const contactForm = document.querySelector("#contact-form");
