@@ -958,6 +958,41 @@ a {
   margin: 0 0 18px;
 }
 
+.library-preview-strip,
+.payment-value-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.library-preview-strip article,
+.payment-value-grid .record-card {
+  min-height: 100%;
+}
+
+.library-preview-strip article {
+  padding: 18px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 250, 242, 0.72);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.library-preview-strip strong {
+  display: block;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.55rem;
+  line-height: 0.95;
+}
+
+.library-preview-strip span {
+  display: block;
+  margin-top: 10px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 .hero-strip-card {
   padding: 16px 14px;
   border-radius: var(--radius-md);
@@ -1919,6 +1954,26 @@ a {
   font-size: 0.88rem;
 }
 
+.payment-hero-note {
+  padding: 16px 18px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 248, 236, 0.82);
+  border: 1px solid rgba(184, 61, 30, 0.14);
+}
+
+.payment-hero-note strong {
+  display: block;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.5rem;
+  line-height: 0.95;
+}
+
+.payment-hero-note p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
 .checkout-status-card {
   margin-top: 4px;
 }
@@ -2452,6 +2507,18 @@ a {
   gap: 14px;
 }
 
+.pricing-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(184, 61, 30, 0.09);
+  color: var(--accent);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
 .pricing-card .button {
   margin-top: 6px;
 }
@@ -2747,6 +2814,8 @@ a {
   .membership-grid,
   .pricing-grid,
   .review-grid,
+  .library-preview-strip,
+  .payment-value-grid,
   .record-board,
   .contact-panel,
   .article-list,

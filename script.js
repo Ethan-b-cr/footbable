@@ -990,9 +990,17 @@ function renderSourcesPage() {
 
 function renderPaymentPage() {
   const paymentModeCopy = qs("#payment-mode-copy");
+  const primaryButtons = qsa(".pricing-card .button.button-primary");
+  const secondaryButtons = qsa(".pricing-card .button.button-secondary");
   if (paymentModeCopy && window.FOOTBABLE_CONFIG?.paymentMode === "public-self-host") {
     paymentModeCopy.textContent = "网页端优先支付宝，手机端可直接走微信，支付成功后进入站内承接页。";
   }
+  primaryButtons.forEach((button) => {
+    button.textContent = "支付宝开通";
+  });
+  secondaryButtons.forEach((button) => {
+    button.textContent = "微信扫码开通";
+  });
 }
 
 function renderCheckoutPage() {
