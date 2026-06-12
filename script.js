@@ -520,6 +520,7 @@ function renderLiveSchedule() {
         }
       )
       .join("");
+    updateHeroCinematic(featured);
   }
 
   if (homeHero && homeGrid && homeFooter) {
@@ -1260,6 +1261,45 @@ function buildArticleSignalCards(match, phase, predictionView, favoredTeam) {
   `;
 }
 
+function updateHeroCinematic(featuredMatch) {
+  const cinematicImage = qs("#hero-cinematic-image");
+  const cinematicKicker = qs("#hero-cinematic-kicker");
+  const cinematicTitle = qs("#hero-cinematic-title");
+  const cinematicText = qs("#hero-cinematic-text");
+  const playerImage = qs("#hero-cinematic-player-image");
+  const playerLabel = qs("#hero-cinematic-player-label");
+  const teamImage = qs("#hero-cinematic-team-image");
+  const teamLabel = qs("#hero-cinematic-team-label");
+  if (!cinematicImage || !cinematicKicker || !cinematicTitle || !cinematicText || !playerImage || !playerLabel || !teamImage || !teamLabel) return;
+
+  if (!featuredMatch) return;
+
+  const phase = predictionUtils.buildMatchPhaseViewModel
+    ? predictionUtils.buildMatchPhaseViewModel(featuredMatch)
+    : buildPhaseFallback(featuredMatch);
+  const focusedTeam = findTeamSummary(featuredMatch.homeTeam) || findTeamSummary(featuredMatch.awayTeam);
+  const focusedPlayer =
+    getTopPlayersByTeam(featuredMatch.homeTeam, 1)[0] ||
+    getTopPlayersByTeam(featuredMatch.awayTeam, 1)[0];
+  const visualTeam = focusedTeam?.team || featuredMatch.homeTeam;
+
+  cinematicImage.src = getTeamBackdrop(visualTeam);
+  cinematicImage.alt = `${featuredMatch.homeTeam} vs ${featuredMatch.awayTeam}`;
+  cinematicKicker.textContent = phase.label;
+  cinematicTitle.textContent = `${featuredMatch.homeTeam} vs ${featuredMatch.awayTeam}`;
+  cinematicText.textContent = `${featuredMatch.kickoffCN} 开球，先看谁能把比赛推进到自己的节奏区。`;
+
+  if (focusedPlayer) {
+    playerImage.src = getPlayerImage(focusedPlayer.player_name);
+    playerImage.alt = focusedPlayer.player_name;
+    playerLabel.textContent = focusedPlayer.player_name;
+  }
+
+  teamImage.src = getTeamImage(visualTeam);
+  teamImage.alt = visualTeam;
+  teamLabel.textContent = visualTeam;
+}
+
 function renderTeamPage() {
   const title = qs("#team-title");
   const summary = qs("#team-summary-text");
@@ -1475,6 +1515,8 @@ function setArticleChrome(config) {
   const visualTitle = qs("#article-visual-title");
   const visualText = qs("#article-visual-text");
   const sidebarBox = qs("#article-sidebar-box");
+  const primaryAction = qs("#article-primary-action");
+  const secondaryAction = qs("#article-secondary-action");
 
   if (eyebrow) eyebrow.textContent = config.eyebrow;
   if (title) title.textContent = config.title;
@@ -1494,6 +1536,14 @@ function setArticleChrome(config) {
       <span>${config.sidebarTitle || "本页目录"}</span>
       <ul>${(config.sidebarItems || []).map((item) => `<li>${item}</li>`).join("")}</ul>
     `;
+  }
+  if (primaryAction) {
+    primaryAction.textContent = config.primaryActionText || "解锁完整版本";
+    primaryAction.href = config.primaryActionHref || "pay.html";
+  }
+  if (secondaryAction) {
+    secondaryAction.textContent = config.secondaryActionText || "返回今日比赛";
+    secondaryAction.href = config.secondaryActionHref || "index.html#matches";
   }
   document.title = `${config.title} | World Cup Edge`;
 }
@@ -1768,6 +1818,10 @@ function renderMatchArticlePage() {
     visualText: isMember()
       ? "当前账号可直接查看这场比赛的完整推演、比分预测与赛前修正。"
       : "这一页会持续同步赛程、对位、预测入口和核心判断。",
+    primaryActionText: isMember() ? "查看完整推演" : "解锁完整版本",
+    primaryActionHref: isMember() ? getMatchDetailHref(match) : "pay.html",
+    secondaryActionText: isMember() ? "返回今日比赛" : "先看今日比赛",
+    secondaryActionHref: "index.html#matches",
     sidebarTitle: isMember() ? "完整目录" : "本页目录",
     sidebarItems: isMember() ? ["比分预测", "节奏分支", "历史对照"] : ["比分预测", "公开判断", "关键变量"],
   });
