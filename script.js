@@ -1240,6 +1240,26 @@ function buildPlayerMemberNarrative(player, team) {
   `;
 }
 
+function buildArticleSignalCards(match, phase, predictionView, favoredTeam) {
+  return `
+    <article>
+      <span>比赛底图</span>
+      <strong>${favoredTeam}</strong>
+      <p>${phase.label}阶段先看哪一边更像先手，公开区先给你比赛轮廓。</p>
+    </article>
+    <article>
+      <span>比分预测</span>
+      <strong>${getPredictionDisplayLabel(predictionView)}</strong>
+      <p>${predictionView?.locked ? "具体分数继续锁定在会员层。" : "当前公开显示的是最新预测标签。"} </p>
+    </article>
+    <article>
+      <span>完整版本</span>
+      <strong>${match.kickoffCN}</strong>
+      <p>名单变化、节奏分支和最终落点都继续放在下一层更新。</p>
+    </article>
+  `;
+}
+
 function renderTeamPage() {
   const title = qs("#team-title");
   const summary = qs("#team-summary-text");
@@ -1728,6 +1748,7 @@ function renderMatchArticlePage() {
   const homeRecent = getRecentMatchesByTeam(match.homeTeam, 3);
   const awayRecent = getRecentMatchesByTeam(match.awayTeam, 3);
   const stageLabel = localizeMatchStageLabel(match.stage || "", match.statusState);
+  const articleSignalGrid = qs("#article-signal-grid");
 
   setArticleChrome({
     eyebrow: "公开分析 / 单场详情",
@@ -1750,6 +1771,9 @@ function renderMatchArticlePage() {
     sidebarTitle: isMember() ? "完整目录" : "本页目录",
     sidebarItems: isMember() ? ["比分预测", "节奏分支", "历史对照"] : ["比分预测", "公开判断", "关键变量"],
   });
+  if (articleSignalGrid) {
+    articleSignalGrid.innerHTML = buildArticleSignalCards(match, phase, predictionView, favoredTeam);
+  }
 
   const sections = [
     {

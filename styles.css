@@ -818,6 +818,24 @@ a {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.live-command-deck {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin: 18px 0;
+}
+
+.match-command-card {
+  min-height: 100%;
+  background:
+    radial-gradient(circle at top right, rgba(210, 89, 41, 0.12), transparent 42%),
+    linear-gradient(180deg, rgba(255, 252, 247, 0.96), rgba(246, 236, 220, 0.86));
+}
+
+.match-command-card p {
+  line-height: 1.72;
+}
+
 .analysis-card,
 .tier-card,
 .pricing-card {
@@ -1758,6 +1776,10 @@ a {
   line-height: 1.78;
 }
 
+.article-premium-hero .article-hero-copy {
+  align-self: stretch;
+}
+
 .hero-highlights {
   display: flex;
   flex-wrap: wrap;
@@ -2272,6 +2294,21 @@ a {
   gap: 20px;
 }
 
+.article-single-column {
+  display: grid;
+  gap: 18px;
+}
+
+.article-brief-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.article-main-full {
+  width: 100%;
+}
+
 .article-main,
 .article-sidebar {
   display: grid;
@@ -2540,6 +2577,12 @@ a {
 .insight-card {
   padding: 22px;
   border-radius: var(--radius-lg);
+}
+
+.feature-box {
+  background: rgba(255, 250, 242, 0.74);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
 }
 
 .feature-box span,
@@ -3001,7 +3044,9 @@ a {
   .match-history-grid,
   .detail-signal-grid,
   .detail-story-grid,
-  .detail-dual-grid {
+  .detail-dual-grid,
+  .article-brief-strip,
+  .live-command-deck {
     grid-template-columns: 1fr;
   }
 

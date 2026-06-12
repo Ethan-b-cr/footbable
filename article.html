@@ -41,15 +41,32 @@
     </header>
 
     <main>
-      <section class="article-hero compact-detail-hero">
-        <div class="article-hero-copy conversion-hero-copy compact-detail-copy">
+      <section class="article-hero compact-detail-hero premium-detail-hero article-premium-hero">
+        <div class="article-hero-copy conversion-hero-copy compact-detail-copy premium-detail-copy">
           <p class="eyebrow" id="article-eyebrow">公开分析 / 比赛详情</p>
           <h1 id="article-title">内容加载中</h1>
           <p class="hero-text" id="article-description">这里会展示比赛赛程、关键变量、公开判断与完整比赛页入口。</p>
           <div class="article-meta-row" id="article-meta-row"></div>
           <div class="hero-highlights" id="article-hero-highlights"></div>
+          <div class="detail-signal-grid" id="article-signal-grid">
+            <article>
+              <span>比赛底图</span>
+              <strong>正在生成</strong>
+              <p>先看两边比赛轮廓与强弱边。</p>
+            </article>
+            <article>
+              <span>比分预测</span>
+              <strong>会员可见</strong>
+              <p>主界面会保留入口，具体分数继续锁定。</p>
+            </article>
+            <article>
+              <span>完整版本</span>
+              <strong>继续下钻</strong>
+              <p>阵容修正、节奏分支与最终落点都在下一层。</p>
+            </article>
+          </div>
         </div>
-        <aside class="article-side-card detail-visual-card">
+        <aside class="article-side-card detail-visual-card premium-detail-visual">
           <img
             class="hero-side-image"
             id="article-hero-image"
@@ -64,8 +81,27 @@
         </aside>
       </section>
 
-      <section class="section article-layout">
-        <article class="article-main" id="article-main">
+      <section class="section article-single-column">
+        <div class="article-brief-strip">
+          <article class="feature-box">
+            <span>本场速读</span>
+            <ul id="article-focus-list"></ul>
+          </article>
+          <article class="feature-box" id="article-sidebar-box">
+            <span>本页目录</span>
+            <ul>
+              <li>关键名单</li>
+              <li>对位节奏</li>
+              <li>历史对照</li>
+            </ul>
+          </article>
+          <article class="feature-box">
+            <span>数据来源</span>
+            <div class="source-chip-list" id="article-source-list"></div>
+          </article>
+        </div>
+
+        <article class="article-main article-main-full" id="article-main">
           <div class="article-block locked-block">
             <div class="locked-header">
               <div>
@@ -101,25 +137,6 @@
             </div>
           </div>
         </article>
-
-        <aside class="article-sidebar compact-sidebar">
-          <div class="feature-box">
-            <span>本页关注重点</span>
-            <ul id="article-focus-list"></ul>
-          </div>
-          <div class="feature-box">
-            <span>数据来源</span>
-            <div class="source-chip-list" id="article-source-list"></div>
-          </div>
-          <div class="feature-box" id="article-sidebar-box">
-            <span>本页目录</span>
-            <ul>
-              <li>关键名单</li>
-              <li>对位节奏</li>
-              <li>历史对照</li>
-            </ul>
-          </div>
-        </aside>
       </section>
     </main>
 
