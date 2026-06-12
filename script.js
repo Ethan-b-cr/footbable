@@ -1164,6 +1164,82 @@ function buildPlayerRoleTags(player) {
   return `<div class="stat-chip-row">${tags.map((tag) => `<span>${tag}</span>`).join("")}</div>`;
 }
 
+function buildTeamSignalCards(team) {
+  const winRate = (team.wins / Math.max(team.matches, 1)) * 100;
+  const shotsPerMatch = Number(perMatch(team.shots || 0, team.matches, 1));
+  const goalsPerMatch = Number(perMatch(team.goals_for, team.matches, 2));
+  const goalsAgainstPerMatch = Number(perMatch(team.goals_against, team.matches, 2));
+  const publicLabel = goalsPerMatch >= 1.8 ? "前场压制明显" : goalsPerMatch >= 1.2 ? "进攻轮廓稳定" : "更依赖机会质量";
+  const rhythmLabel = shotsPerMatch >= 12 ? "节奏更主动" : "节奏更克制";
+  const memberLabel = winRate >= 60 ? "适合强势场次深挖" : "适合博弈场次深挖";
+  return `
+    <article>
+      <span>公开结论</span>
+      <strong>${publicLabel}</strong>
+      <p>免费区先看这支球队能不能稳定把比赛推到自己熟悉的进攻区域。</p>
+    </article>
+    <article>
+      <span>节奏倾向</span>
+      <strong>${rhythmLabel}</strong>
+      <p>${goalsAgainstPerMatch <= 1 ? "失球压力控制得更稳，比赛形态更容易由自己主导。" : "防线波动会放大比赛起伏，节奏更容易被对手带动。"} </p>
+    </article>
+    <article>
+      <span>会员深读</span>
+      <strong>${memberLabel}</strong>
+      <p>下一层继续拆对位克制、赛段变化和临场名单修正后的方向判断。</p>
+    </article>
+  `;
+}
+
+function buildPlayerSignalCards(player) {
+  const goalRate = player.appearances > 0 ? (player.goals || 0) / player.appearances : 0;
+  const xgPerShot = player.shots > 0 ? (player.xg || 0) / player.shots : 0;
+  const passRate = player.passes > 0 ? (player.completed_passes / player.passes) * 100 : 0;
+  const publicLabel = goalRate >= 0.6 ? "终结价值直接" : goalRate >= 0.3 ? "持续参与进攻" : "更依赖比赛场景";
+  const roleLabel = passRate >= 82 ? "能参与串联" : xgPerShot >= 0.15 ? "偏禁区终结" : "更看体系支持";
+  const memberLabel = player.starts >= Math.max(3, Math.floor((player.appearances || 0) * 0.6)) ? "适合首发场景深挖" : "适合轮换场景深挖";
+  return `
+    <article>
+      <span>公开结论</span>
+      <strong>${publicLabel}</strong>
+      <p>免费区先看他能不能稳定把机会转成直接产出。</p>
+    </article>
+    <article>
+      <span>角色强度</span>
+      <strong>${roleLabel}</strong>
+      <p>结合出手质量、传球参与和首发比重判断他在体系里的真实份量。</p>
+    </article>
+    <article>
+      <span>会员深读</span>
+      <strong>${memberLabel}</strong>
+      <p>下一层继续看对位差异、换人后站位变化和重点场次拆解。</p>
+    </article>
+  `;
+}
+
+function buildTeamMemberNarrative(team) {
+  const shotsPerMatch = Number(perMatch(team.shots || 0, team.matches, 1));
+  const xgPerMatch = Number(perMatch(team.xg_for || 0, team.matches, 2));
+  return `
+    <p>开通后继续看 ${team.team} 在不同强度对手面前的推进落点、边路提速点和领先/落后时的比赛形态。</p>
+    <p>${shotsPerMatch >= 12 ? "这支球队的出手量足够高，深度层更值得拆哪一侧最容易形成连续压制。" : "这支球队更依赖高质量机会，深度层更值得拆哪些时段最容易形成致命一击。"} 当前场均 xG ${xgPerMatch}，会员页会继续按赛段和对位拆开。</p>
+  `;
+}
+
+function buildPlayerMemberNarrative(player, team) {
+  return `
+    <div class="analysis-stack">
+      <p>开通后继续看 ${player.player_name} 在不同对位里的拿球位置、射门场景和与 ${player.team_name} 进攻主轴的连接方式。</p>
+      <p>${player.starts >= Math.max(3, Math.floor((player.appearances || 0) * 0.6)) ? "他的首发比重不低，深度区更适合做赛前名单确认后的精细判断。" : "他的轮换属性更明显，深度区更适合看替补登场后的节奏变化。"}${team ? ` 结合 ${team.team} 的整体样本一起看，判断会更稳。` : ""}</p>
+      <div class="detail-member-pills">
+        <span>对位样本</span>
+        <span>名单影响</span>
+        <span>临场修正</span>
+      </div>
+    </div>
+  `;
+}
+
 function renderTeamPage() {
   const title = qs("#team-title");
   const summary = qs("#team-summary-text");
@@ -1176,6 +1252,10 @@ function renderTeamPage() {
   const efficiencyBox = qs("#team-efficiency-box");
   const styleBox = qs("#team-style-box");
   const heroHighlights = qs("#team-hero-highlights");
+  const signalGrid = qs("#team-signal-grid");
+  const visualTitle = qs("#team-visual-title");
+  const visualText = qs("#team-visual-text");
+  const memberCopy = qs("#team-member-copy");
   if (!title || !summary || !statList || !matchesTable || !analysisBox || !playersTable) return;
 
   const currentTeamName = new URLSearchParams(window.location.search).get("team");
@@ -1211,6 +1291,10 @@ function renderTeamPage() {
       .map((item) => `<span>${item}</span>`)
       .join("");
   }
+  if (signalGrid) signalGrid.innerHTML = buildTeamSignalCards(team);
+  if (visualTitle) visualTitle.textContent = `${team.team} 比赛样本轮廓`;
+  if (visualText) visualText.textContent = `${team.team} 的公开页先给你比赛面貌、效率和代表样本，深度区再继续下钻到对位与节奏切换。`;
+  if (memberCopy) memberCopy.innerHTML = buildTeamMemberNarrative(team);
 
   statList.innerHTML = `
     <li>历史场次：${team.matches}</li>
@@ -1282,6 +1366,9 @@ function renderPlayerPage() {
   const efficiencyBox = qs("#player-efficiency-box");
   const roleBox = qs("#player-role-box");
   const heroHighlights = qs("#player-hero-highlights");
+  const signalGrid = qs("#player-signal-grid");
+  const visualTitle = qs("#player-visual-title");
+  const visualText = qs("#player-visual-text");
   if (!title || !summary || !statList || !analysisBox || !memberBox || !contextBox) return;
 
   const visiblePlayers = [...state.players].filter((player) => player.appearances >= 3);
@@ -1317,6 +1404,9 @@ function renderPlayerPage() {
       .map((item) => `<span>${item}</span>`)
       .join("");
   }
+  if (signalGrid) signalGrid.innerHTML = buildPlayerSignalCards(player);
+  if (visualTitle) visualTitle.textContent = `${player.player_name} 角色样本`;
+  if (visualText) visualText.textContent = `${player.player_name} 的公开页先看直接产出和角色定位，深度区继续拆对位差异、名单变化和重点场次。`;
 
   statList.innerHTML = `
     <li>球队：${player.team_name}</li>
@@ -1335,12 +1425,7 @@ function renderPlayerPage() {
   if (efficiencyBox) efficiencyBox.innerHTML = buildPlayerEfficiency(player);
   if (roleBox) roleBox.innerHTML = buildPlayerRoleTags(player);
 
-  memberBox.innerHTML = `
-    <div class="analysis-stack">
-      <p>完整版本会继续补这名球员在不同对位里的价值、比赛日名单变化后的角色调整，以及更细的事件级解释。</p>
-      <p>重点文章也会同步补齐焦点战背景、阵容变化和赛前更新。</p>
-    </div>
-  `;
+  memberBox.innerHTML = buildPlayerMemberNarrative(player, team);
 
   contextBox.innerHTML = `
     <div class="analysis-stack">

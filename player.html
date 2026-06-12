@@ -34,53 +34,93 @@
     </header>
 
     <main>
-      <section class="article-hero article-hero-visual compact-detail-hero">
-        <div class="article-hero-copy conversion-hero-copy compact-detail-copy">
+      <section class="article-hero article-hero-visual compact-detail-hero premium-detail-hero">
+        <div class="article-hero-copy conversion-hero-copy compact-detail-copy premium-detail-copy">
           <p class="eyebrow">球员详情</p>
           <h1 id="player-title">球员详情加载中</h1>
           <p class="hero-text" id="player-summary-text">这里会展示球员在世界杯历史样本中的出场、效率和角色表现。</p>
           <div class="hero-highlights" id="player-hero-highlights"></div>
+          <div class="detail-signal-grid" id="player-signal-grid">
+            <article>
+              <span>公开结论</span>
+              <strong>数据加载中</strong>
+              <p>先看球员在比赛里的直接产出。</p>
+            </article>
+            <article>
+              <span>角色强度</span>
+              <strong>待生成</strong>
+              <p>先看终结、持球和参与度。</p>
+            </article>
+            <article>
+              <span>会员深读</span>
+              <strong>已锁定</strong>
+              <p>继续下钻到对位和出场场景。</p>
+            </article>
+          </div>
           <div class="hero-actions">
-            <a class="button button-primary" href="members.html">继续看完整内容</a>
+            <a class="button button-primary" href="members.html">查看完整深度</a>
             <a class="button button-secondary" href="players.html">返回球员库</a>
           </div>
         </div>
-        <aside class="article-side-card">
+        <aside class="article-side-card detail-visual-card premium-detail-visual">
           <img id="player-hero-image" class="hero-side-image" src="" alt="球员画面">
+          <div class="detail-visual-overlay">
+            <span>Player Lens</span>
+            <strong id="player-visual-title">关键球员样本</strong>
+            <p id="player-visual-text">免费区先看效率和角色轮廓，会员区再看对位差异、进攻参与链和名单变化。</p>
+          </div>
         </aside>
       </section>
 
-      <section class="section data-grid">
-        <div class="faq-item">
-          <h2>基础统计</h2>
+      <section class="section detail-story-grid">
+        <div class="faq-item detail-brief-card">
+          <div class="detail-section-head">
+            <span>免费可看</span>
+            <h2>基础判断</h2>
+          </div>
+          <div id="player-analysis-box" class="table-shell"></div>
+        </div>
+        <div class="faq-item detail-stat-card">
+          <div class="detail-section-head">
+            <span>样本速览</span>
+            <h2>关键数据</h2>
+          </div>
           <ul id="player-stat-list" class="detail-list">
             <li>数据加载中</li>
           </ul>
         </div>
-        <div class="faq-item">
-          <h2>基础判断</h2>
-          <div id="player-analysis-box" class="table-shell"></div>
-        </div>
       </section>
 
-      <section class="section data-grid">
+      <section class="section detail-dual-grid">
         <div class="faq-item">
-          <h2>效率指标</h2>
+          <div class="detail-section-head">
+            <span>产出效率</span>
+            <h2>效率指标</h2>
+          </div>
           <div id="player-efficiency-box" class="table-shell"></div>
         </div>
         <div class="faq-item">
-          <h2>角色标签</h2>
+          <div class="detail-section-head">
+            <span>角色定位</span>
+            <h2>角色标签</h2>
+          </div>
           <div id="player-role-box" class="table-shell"></div>
         </div>
       </section>
 
-      <section class="section data-grid">
+      <section class="section detail-dual-grid">
         <div class="faq-item">
-          <h2>继续阅读</h2>
+          <div class="detail-section-head">
+            <span>会员区</span>
+            <h2>继续看深度拆解</h2>
+          </div>
           <div id="player-member-box" class="table-shell"></div>
         </div>
         <div class="faq-item">
-          <h2>同队比较</h2>
+          <div class="detail-section-head">
+            <span>参照组</span>
+            <h2>同队比较</h2>
+          </div>
           <div id="player-context-box" class="table-shell"></div>
         </div>
       </section>

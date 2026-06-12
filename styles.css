@@ -1736,12 +1736,26 @@ a {
   padding-bottom: 8px;
 }
 
+.premium-detail-hero {
+  grid-template-columns: minmax(0, 1.18fr) minmax(360px, 0.82fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
 .compact-detail-copy {
   padding: 8px 0 0;
 }
 
+.premium-detail-copy {
+  display: grid;
+  align-content: start;
+  gap: 0;
+}
+
 .compact-detail-copy .hero-text {
   max-width: 760px;
+  font-size: 1.04rem;
+  line-height: 1.78;
 }
 
 .hero-highlights {
@@ -1769,10 +1783,55 @@ a {
   height: 280px;
 }
 
+.premium-detail-visual {
+  min-height: 100%;
+}
+
+.detail-signal-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.detail-signal-grid article {
+  padding: 18px 16px;
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(255, 249, 241, 0.92), rgba(255, 244, 233, 0.78));
+  border: 1px solid rgba(184, 61, 30, 0.12);
+  box-shadow: 0 20px 40px rgba(20, 14, 10, 0.06);
+}
+
+.detail-signal-grid span {
+  display: block;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.detail-signal-grid strong {
+  display: block;
+  margin-top: 10px;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 1.72rem;
+  line-height: 0.95;
+  color: #1a130f;
+}
+
+.detail-signal-grid p {
+  margin: 10px 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 0.92rem;
+}
+
 .detail-visual-card {
   position: relative;
   overflow: hidden;
-  min-height: 280px;
+  min-height: 420px;
 }
 
 .detail-visual-card .hero-side-image {
@@ -1802,7 +1861,7 @@ a {
   display: block;
   margin-top: 8px;
   font-family: "Barlow Condensed", sans-serif;
-  font-size: 2.1rem;
+  font-size: 2.4rem;
   line-height: 0.94;
 }
 
@@ -1810,6 +1869,105 @@ a {
   margin: 10px 0 0;
   color: rgba(255, 242, 230, 0.84);
   line-height: 1.6;
+}
+
+.detail-story-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.14fr) minmax(320px, 0.86fr);
+  gap: 18px;
+  align-items: stretch;
+}
+
+.detail-dual-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  align-items: start;
+}
+
+.detail-section-head {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.detail-section-head span {
+  color: var(--accent);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.detail-section-head h2 {
+  margin: 0;
+}
+
+.detail-brief-card,
+.detail-stat-card {
+  min-height: 100%;
+}
+
+.detail-member-shell {
+  padding-top: 4px;
+}
+
+.detail-member-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+  padding: 28px;
+  background:
+    radial-gradient(circle at left top, rgba(214, 91, 50, 0.16), transparent 42%),
+    linear-gradient(135deg, rgba(24, 18, 13, 0.97), rgba(44, 29, 20, 0.92));
+  border-color: rgba(255, 214, 185, 0.12);
+  color: #fff7ef;
+}
+
+.detail-member-copy {
+  display: grid;
+  gap: 10px;
+  max-width: 760px;
+}
+
+.detail-member-copy span {
+  color: rgba(255, 212, 182, 0.84);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.detail-member-copy h2 {
+  margin: 0;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 3.1rem;
+  line-height: 0.92;
+  color: #fff8ef;
+}
+
+.detail-member-copy p {
+  margin: 0;
+  color: rgba(255, 240, 226, 0.84);
+  line-height: 1.72;
+}
+
+.detail-member-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.detail-member-pills span {
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff4e7;
+  font-size: 0.84rem;
+  letter-spacing: normal;
+  text-transform: none;
 }
 
 .compact-sidebar {
@@ -2840,7 +2998,10 @@ a {
   .checkout-fallback-grid,
   .match-team-grid,
   .match-note-grid,
-  .match-history-grid {
+  .match-history-grid,
+  .detail-signal-grid,
+  .detail-story-grid,
+  .detail-dual-grid {
     grid-template-columns: 1fr;
   }
 
@@ -2939,6 +3100,15 @@ a {
   .hero-metrics,
   .mini-grid {
     grid-template-columns: 1fr;
+  }
+
+  .detail-member-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .detail-member-copy h2 {
+    font-size: 2.3rem;
   }
 
   .live-match-card {
