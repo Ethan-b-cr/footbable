@@ -240,6 +240,15 @@ function getMatchDetailHref(match) {
   return `article.html?match=${encodeURIComponent(match.eventId)}`;
 }
 
+function localizeMatchStageLabel(stage, state) {
+  if (predictionUtils.localizeMatchStage) {
+    return predictionUtils.localizeMatchStage(stage, state);
+  }
+  if (state === "post") return "赛果复盘";
+  if (state === "in") return "实时进程";
+  return stage || "赛前分析";
+}
+
 function buildPhaseFallback(match) {
   if (match?.statusState === "post") {
     return { label: "赛果复盘", badge: "全场结束", summary: "" };
@@ -1475,7 +1484,7 @@ function buildHistoryBoard(title, rows) {
                       ? `${row.home_score ?? row.homeScore}-${row.away_score ?? row.awayScore}`
                       : "vs"
                   } ${row.away_team || row.awayTeam}</strong>
-                      <p>${row.stage || row.statusText || ""}</p>
+                      <p>${localizeMatchStageLabel(row.stage || row.statusText || "", row.statusState || "")}</p>
                     </article>
                   `
                 )
@@ -1500,7 +1509,7 @@ function buildMatchTeamPanel(label, teamName, team, players, favored) {
       <div class="match-team-tag-row">
         <span>${model ? `胜率 ${model.winRate}` : "样本补充中"}</span>
         <span>${model ? `场均射门 ${model.shotRate}` : "实时观察"}</span>
-        <span>${model ? `场均 xG ${model.xgForRate}` : "等待更新"}</span>
+        <span>${model ? `场均 xG ${model.xgForRate}` : "模型补充中"}</span>
       </div>
       <div class="match-team-player-list">
         ${players
@@ -1620,12 +1629,13 @@ function renderMatchArticlePage() {
   const headToHead = getHeadToHead(match.homeTeam, match.awayTeam, 3);
   const homeRecent = getRecentMatchesByTeam(match.homeTeam, 3);
   const awayRecent = getRecentMatchesByTeam(match.awayTeam, 3);
+  const stageLabel = localizeMatchStageLabel(match.stage || "", match.statusState);
 
   setArticleChrome({
     eyebrow: "公开分析 / 单场详情",
     title: `${match.homeTeam} vs ${match.awayTeam}`,
     description: `每场比赛都会先给出${phase.label}、比分预测、公开判断和关键对位，完整版本继续补齐节奏分支、关键球员和赛前修正。`,
-    meta: [`Match ${String(match.matchNumber).padStart(2, "0")}`, match.stage || "World Cup 2026", match.kickoffCN, match.venue || "世界杯赛场"],
+    meta: [`Match ${String(match.matchNumber).padStart(2, "0")}`, stageLabel, match.kickoffCN, match.venue || "世界杯赛场"],
     focus: [
       `${favoredTeam} 当前更像数据边所在的一侧`,
       favoredLead ? `${favoredLead.player_name} 是需要盯住的第一关键人` : "核心前场处理质量是第一观察点",
@@ -1649,7 +1659,7 @@ function renderMatchArticlePage() {
       heading: `${match.homeTeam} vs ${match.awayTeam} 的公开观察`,
       body: `${match.kickoffCN} 开球，当前阶段 ${phase.label}，比赛地点 ${match.venue || "世界杯赛场"}${match.city ? `，${match.city}` : ""}。公开层先给出比赛底图：${insight.edgeTeam || favoredTeam} 在历史世界杯样本里更像先手一边，重点观察开场压制、推进速度和高质量射门能否落地。`,
       stats: [
-        { label: "比赛序号", value: `Match ${String(match.matchNumber).padStart(2, "0")}`, text: match.stage || "World Cup 2026" },
+        { label: "比赛序号", value: `Match ${String(match.matchNumber).padStart(2, "0")}`, text: stageLabel },
         { label: "当前比分", value: scoreText, text: statusText },
         {
           label: "预测比分",

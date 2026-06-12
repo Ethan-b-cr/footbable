@@ -182,6 +182,34 @@ function localizeStatusBadge(statusText, state) {
   return "即将开球";
 }
 
+function localizeMatchStage(stage, state) {
+  const normalized = String(stage || "")
+    .trim()
+    .toLowerCase();
+
+  const localized = {
+    scheduled: "未开赛",
+    "group stage": "小组赛",
+    "round of 16": "八分之一决赛",
+    quarterfinals: "四分之一决赛",
+    quarterfinal: "四分之一决赛",
+    semifinals: "半决赛",
+    semifinal: "半决赛",
+    "third place": "季军赛",
+    final: "决赛",
+    "full time": "赛果复盘",
+    "first half": "实时进程",
+    "second half": "实时进程",
+    halftime: "实时进程",
+  }[normalized];
+
+  if (localized) return localized;
+  if (/[\u4e00-\u9fff]/.test(String(stage || ""))) return String(stage);
+  if (state === "post") return "赛果复盘";
+  if (state === "in") return "实时进程";
+  return "赛前分析";
+}
+
 function buildMatchPhaseViewModel(match) {
   const state = match?.statusState || "";
   const statusText = localizeStatusBadge(match?.statusText || "", state);
@@ -248,6 +276,8 @@ const exported = {
   buildScorePrediction,
   buildPredictionViewModel,
   buildMatchPhaseViewModel,
+  localizeMatchStage,
+  localizeStatusBadge,
   findTeamSummary,
   canonicalTeamName,
 };
