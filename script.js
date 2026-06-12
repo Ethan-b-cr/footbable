@@ -240,6 +240,27 @@ function getMatchDetailHref(match) {
   return `article.html?match=${encodeURIComponent(match.eventId)}`;
 }
 
+function buildPhaseFallback(match) {
+  if (match?.statusState === "post") {
+    return { label: "赛果复盘", badge: "全场结束", summary: "" };
+  }
+  if (match?.statusState === "in") {
+    return { label: "实时进程", badge: match?.minuteText || "比赛进行中", summary: "" };
+  }
+  return { label: "赛前分析", badge: match?.minuteText || "即将开球", summary: "" };
+}
+
+function getPredictionDisplayLabel(view) {
+  if (view?.displayScore) return view.displayScore;
+  return isMember() ? "模型生成中" : "会员可见";
+}
+
+function getPredictionFocusText(view) {
+  if (view?.locked) return "比分预测已生成，开通会员后查看具体分数与置信度";
+  if (view?.displayScore) return `当前预测 ${view.displayScore}`;
+  return "预测模型会随实时赛程与历史样本持续修正";
+}
+
 function buildPredictionMarkup(prediction, compact = false) {
   const view = predictionUtils.buildPredictionViewModel
     ? predictionUtils.buildPredictionViewModel(prediction, isMember())
@@ -382,14 +403,17 @@ function buildEntityCard(teamOrPlayer, options) {
 function buildLiveMatchCard(match, index) {
   const insight = match.insight || {};
   const prediction = match.prediction || null;
+  const phase = predictionUtils.buildMatchPhaseViewModel
+    ? predictionUtils.buildMatchPhaseViewModel(match)
+    : buildPhaseFallback(match);
   const scoreText = match.statusState === "pre" ? "VS" : `${match.homeScore}-${match.awayScore}`;
-  const statusText = match.minuteText || match.statusText || "Scheduled";
+  const statusText = phase.badge;
   const ctaText = isMember() ? "进入完整比赛页" : "进入比赛页";
   return `
     <article class="live-match-card" style="--card-cover:url('${getLiveCardArtwork(index)}')">
       <div class="card-top">
         <span class="time-badge">Match ${String(match.matchNumber).padStart(2, "0")}</span>
-        <span class="access access-free">${statusText}</span>
+        <span class="access access-free">${phase.label}</span>
       </div>
       <div class="live-card-body">
         <div>
@@ -415,7 +439,7 @@ function buildLiveMatchCard(match, index) {
         </div>
         ${buildPredictionMarkup(prediction, true)}
         <div class="live-footer-row">
-          <span class="live-chip">重点边：${insight.edgeTeam || match.homeTeam}</span>
+          <span class="live-chip">${statusText}</span>
           <a class="article-link" href="${getMatchDetailHref(match)}">${ctaText}</a>
         </div>
       </div>
@@ -452,12 +476,15 @@ function renderLiveSchedule() {
     const featuredPrediction = predictionUtils.buildPredictionViewModel
       ? predictionUtils.buildPredictionViewModel(featured.prediction, isMember())
       : null;
+    const featuredPhase = predictionUtils.buildMatchPhaseViewModel
+      ? predictionUtils.buildMatchPhaseViewModel(featured)
+      : buildPhaseFallback(featured);
     heroMatchTitle.textContent = `${featured.homeTeam} vs ${featured.awayTeam}`;
-    heroMatchCopy.textContent = `${featured.kickoffCN} 开球，当前状态 ${featured.statusText || "Scheduled"}。首页同步展示世界杯比赛进程、球队对位、比分预测和公开分析。`;
+    heroMatchCopy.textContent = `${featured.kickoffCN} 开球，当前阶段 ${featuredPhase?.label || "赛前分析"}。首页同步展示世界杯比赛进程、球队对位、比分预测和公开分析。`;
     heroMatchTags.innerHTML = [
       `开幕战 ${opening?.homeTeam || ""} vs ${opening?.awayTeam || ""}`,
       `第二场 ${second?.homeTeam || ""} vs ${second?.awayTeam || ""}`,
-      `预测 ${featuredPrediction?.displayScore || "待更新"}`,
+      `预测 ${getPredictionDisplayLabel(featuredPrediction)}`,
     ]
       .map((item) => `<span>${item}</span>`)
       .join("");
@@ -467,11 +494,14 @@ function renderLiveSchedule() {
           const matchPrediction = predictionUtils.buildPredictionViewModel
             ? predictionUtils.buildPredictionViewModel(match.prediction, isMember())
             : null;
+          const matchPhase = predictionUtils.buildMatchPhaseViewModel
+            ? predictionUtils.buildMatchPhaseViewModel(match)
+            : buildPhaseFallback(match);
           return `
           <a class="hero-match-rail-card" href="${getMatchDetailHref(match)}">
             <span>Match ${String(match.matchNumber).padStart(2, "0")}</span>
             <strong>${match.homeTeam} vs ${match.awayTeam}</strong>
-            <p>${match.kickoffCN} · ${match.statusText || "Scheduled"} · 预测 ${matchPrediction?.displayScore || "待更新"}</p>
+            <p>${match.kickoffCN} · ${matchPhase?.label || "赛前分析"} · 预测 ${getPredictionDisplayLabel(matchPrediction)}</p>
           </a>
         `;
         }
@@ -1568,6 +1598,9 @@ function renderMatchArticlePage() {
   const predictionView = predictionUtils.buildPredictionViewModel
     ? predictionUtils.buildPredictionViewModel(prediction, isMember())
     : null;
+  const phase = predictionUtils.buildMatchPhaseViewModel
+    ? predictionUtils.buildMatchPhaseViewModel(match)
+    : buildPhaseFallback(match);
   const homeTeam = findTeamSummary(match.homeTeam);
   const awayTeam = findTeamSummary(match.awayTeam);
   const homePlayers = getTopPlayersByTeam(match.homeTeam, 3);
@@ -1583,7 +1616,7 @@ function renderMatchArticlePage() {
     getLiveCardArtwork((match.matchNumber || 1) - 1) ||
     (favoredLead && getPlayerImage(favoredLead.player_name));
   const scoreText = match.statusState === "pre" ? "VS" : `${match.homeScore}-${match.awayScore}`;
-  const statusText = match.minuteText || match.statusText || "Scheduled";
+  const statusText = phase.badge;
   const headToHead = getHeadToHead(match.homeTeam, match.awayTeam, 3);
   const homeRecent = getRecentMatchesByTeam(match.homeTeam, 3);
   const awayRecent = getRecentMatchesByTeam(match.awayTeam, 3);
@@ -1591,14 +1624,14 @@ function renderMatchArticlePage() {
   setArticleChrome({
     eyebrow: "公开分析 / 单场详情",
     title: `${match.homeTeam} vs ${match.awayTeam}`,
-    description: "每场比赛都会先给出赛程、比分预测、公开判断和关键对位，完整版本继续补齐节奏分支、关键球员和赛前修正。",
+    description: `每场比赛都会先给出${phase.label}、比分预测、公开判断和关键对位，完整版本继续补齐节奏分支、关键球员和赛前修正。`,
     meta: [`Match ${String(match.matchNumber).padStart(2, "0")}`, match.stage || "World Cup 2026", match.kickoffCN, match.venue || "世界杯赛场"],
     focus: [
       `${favoredTeam} 当前更像数据边所在的一侧`,
       favoredLead ? `${favoredLead.player_name} 是需要盯住的第一关键人` : "核心前场处理质量是第一观察点",
-      predictionView?.displayScore ? `当前预测 ${predictionView.displayScore}` : "先看开场节奏，再判断比赛走势会不会提前分层",
+      getPredictionFocusText(predictionView),
     ],
-    highlights: [match.kickoffCN, statusText, `预测 ${predictionView?.displayScore || "待更新"}`, match.city || "World Cup 2026"],
+    highlights: [match.kickoffCN, phase.label, `预测 ${getPredictionDisplayLabel(predictionView)}`, match.city || "World Cup 2026"],
     heroImage,
     heroImageAlt: `${match.homeTeam} vs ${match.awayTeam}`,
     visualKicker: isMember() ? "完整版本" : "比赛页",
@@ -1614,13 +1647,13 @@ function renderMatchArticlePage() {
     {
       label: "01 / 比赛底图",
       heading: `${match.homeTeam} vs ${match.awayTeam} 的公开观察`,
-      body: `${match.kickoffCN} 开球，当前状态 ${statusText}，比赛地点 ${match.venue || "世界杯赛场"}${match.city ? `，${match.city}` : ""}。公开层先给出比赛底图：${insight.edgeTeam || favoredTeam} 在历史世界杯样本里更像先手一边，重点观察开场压制、推进速度和高质量射门能否落地。`,
+      body: `${match.kickoffCN} 开球，当前阶段 ${phase.label}，比赛地点 ${match.venue || "世界杯赛场"}${match.city ? `，${match.city}` : ""}。公开层先给出比赛底图：${insight.edgeTeam || favoredTeam} 在历史世界杯样本里更像先手一边，重点观察开场压制、推进速度和高质量射门能否落地。`,
       stats: [
         { label: "比赛序号", value: `Match ${String(match.matchNumber).padStart(2, "0")}`, text: match.stage || "World Cup 2026" },
         { label: "当前比分", value: scoreText, text: statusText },
         {
           label: "预测比分",
-          value: predictionView?.displayScore || "待更新",
+          value: getPredictionDisplayLabel(predictionView),
           text: predictionView?.locked ? "开通会员后查看具体预测" : (predictionView?.confidenceLabel ? `置信 ${predictionView.confidenceLabel}` : "实时修正中"),
         },
         {

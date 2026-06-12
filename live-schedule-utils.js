@@ -124,12 +124,15 @@ function buildScorePrediction(match, teams) {
 
 function buildPredictionViewModel(prediction, memberVisible) {
   if (!prediction?.scoreline) {
+    const locked = !memberVisible;
     return {
       title: "比分预测",
-      displayScore: "待更新",
-      summary: "预测模型正在等待实时赛程与历史样本同步。",
+      displayScore: locked ? "会员解锁" : "模型生成中",
+      summary: locked
+        ? "开通会员后查看具体比分预测，模型会随赛程持续修正。"
+        : "预测模型正在结合实时赛程与历史样本生成比分方案。",
       confidenceLabel: "",
-      locked: !memberVisible,
+      locked,
     };
   }
 
@@ -149,6 +152,61 @@ function buildPredictionViewModel(prediction, memberVisible) {
     summary: prediction.summary,
     confidenceLabel: prediction.confidenceLabel || "",
     locked: false,
+  };
+}
+
+function localizeStatusBadge(statusText, state) {
+  const normalized = String(statusText || "")
+    .trim()
+    .toLowerCase();
+
+  const localized = {
+    scheduled: "即将开球",
+    pregame: "即将开球",
+    "in progress": "比赛进行中",
+    halftime: "中场",
+    final: "全场结束",
+    "full time": "全场结束",
+    "end of 90 minutes": "90分钟结束",
+    "after extra time": "加时结束",
+    "after penalties": "点球结束",
+    postponed: "赛程调整",
+    cancelled: "比赛取消",
+    canceled: "比赛取消",
+  }[normalized];
+
+  if (localized) return localized;
+  if (/[\u4e00-\u9fff]/.test(String(statusText || ""))) return String(statusText);
+  if (state === "post") return "全场结束";
+  if (state === "in") return "比赛进行中";
+  return "即将开球";
+}
+
+function buildMatchPhaseViewModel(match) {
+  const state = match?.statusState || "";
+  const statusText = localizeStatusBadge(match?.statusText || "", state);
+  const minuteText = match?.minuteText || "";
+
+  if (state === "post") {
+    return {
+      label: "赛果复盘",
+      badge: statusText,
+      summary: "比赛已经结束，当前页面转入赛果复盘与结果解读。",
+    };
+  }
+
+  if (state === "in") {
+    return {
+      label: "实时进程",
+      badge: minuteText || statusText,
+      summary: "比赛正在进行，页面会持续同步节奏、比分与临场变化。",
+    };
+  }
+
+  return {
+    label: "赛前分析",
+    badge: minuteText || statusText,
+    summary: "比赛尚未开球，当前展示赛前分析、关键对位与预测板块。",
   };
 }
 
@@ -189,6 +247,7 @@ const exported = {
   buildMatchInsight,
   buildScorePrediction,
   buildPredictionViewModel,
+  buildMatchPhaseViewModel,
   findTeamSummary,
   canonicalTeamName,
 };

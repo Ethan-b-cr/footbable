@@ -7,6 +7,7 @@ const {
   findTeamSummary,
   buildScorePrediction,
   buildPredictionViewModel,
+  buildMatchPhaseViewModel,
 } = require("../live-schedule-utils.js");
 
 test("normalizeScoreboardEvents sorts by kickoff and numbers matches", () => {
@@ -226,4 +227,27 @@ test("buildPredictionViewModel hides exact scoreline for public visitors", () =>
   assert.match(publicView.summary, /开通会员|完整版本/);
   assert.equal(memberView.displayScore, "1-1");
   assert.match(memberView.summary, /Mexico 1-1 South Africa/);
+});
+
+test("buildPredictionViewModel uses member lock wording before scoreline is ready", () => {
+  const publicView = buildPredictionViewModel(null, false);
+  const memberView = buildPredictionViewModel(null, true);
+
+  assert.equal(publicView.displayScore, "会员解锁");
+  assert.match(publicView.summary, /开通会员后查看具体比分预测/);
+  assert.equal(memberView.displayScore, "模型生成中");
+  assert.match(memberView.summary, /实时赛程与历史样本/);
+});
+
+test("buildMatchPhaseViewModel maps match states to product-facing labels", () => {
+  const pre = buildMatchPhaseViewModel({ statusState: "pre", statusText: "Scheduled", minuteText: "" });
+  const live = buildMatchPhaseViewModel({ statusState: "in", statusText: "In Progress", minuteText: "61'" });
+  const post = buildMatchPhaseViewModel({ statusState: "post", statusText: "Full Time", minuteText: "" });
+
+  assert.equal(pre.label, "赛前分析");
+  assert.equal(live.label, "实时进程");
+  assert.equal(post.label, "赛果复盘");
+  assert.equal(pre.badge, "即将开球");
+  assert.equal(live.badge, "61'");
+  assert.equal(post.badge, "全场结束");
 });
