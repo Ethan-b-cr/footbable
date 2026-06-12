@@ -493,7 +493,7 @@ function renderLiveSchedule() {
       ? predictionUtils.buildMatchPhaseViewModel(featured)
       : buildPhaseFallback(featured);
     heroMatchTitle.textContent = `${featured.homeTeam} vs ${featured.awayTeam}`;
-    heroMatchCopy.textContent = `${featured.kickoffCN} 开球，当前阶段 ${featuredPhase?.label || "赛前分析"}。首页同步展示世界杯比赛进程、球队对位、比分预测和公开分析。`;
+    heroMatchCopy.textContent = `${featured.kickoffCN} 开球，当前阶段 ${featuredPhase?.label || "赛前分析"}。先看比赛轮廓，具体比分和临场修正继续放在完整版本里。`;
     heroMatchTags.innerHTML = [
       `开幕战 ${opening?.homeTeam || ""} vs ${opening?.awayTeam || ""}`,
       `第二场 ${second?.homeTeam || ""} vs ${second?.awayTeam || ""}`,
@@ -527,7 +527,7 @@ function renderLiveSchedule() {
       <div class="live-schedule-copy">
         <span class="article-meta">2026 美加墨世界杯</span>
         <h3>第一场 ${opening?.homeTeam || ""} vs ${opening?.awayTeam || ""}</h3>
-        <p>第二场 ${second?.homeTeam || ""} vs ${second?.awayTeam || ""}。今日比赛、球队对位与比分预测已经同步到站内，点击比赛即可进入单场页查看公开分析。</p>
+        <p>第二场 ${second?.homeTeam || ""} vs ${second?.awayTeam || ""}。今日比赛已同步到站内，点击单场直接进入公开分析页。</p>
       </div>
       <div class="live-schedule-meta">
         <span>更新 ${new Date(payload.updatedAt).toLocaleString("zh-CN", { hour12: false })}</span>
@@ -537,7 +537,7 @@ function renderLiveSchedule() {
     `;
     homeGrid.innerHTML = payload.matches.slice(0, 6).map((match, index) => buildLiveMatchCard(match, index)).join("");
     homeFooter.innerHTML = `
-      <span>全部比赛持续更新，点击单场即可进入比赛页。</span>
+      <span>全部比赛持续更新，单场入口已全部打开。</span>
       <a class="article-link" href="data.html">查看全部比赛</a>
     `;
     if (homeMeta) {
@@ -1766,8 +1766,8 @@ function renderMatchArticlePage() {
     visualKicker: isMember() ? "完整版本" : "比赛页",
     visualTitle: `${match.homeTeam} vs ${match.awayTeam}`,
     visualText: isMember()
-      ? "当前账号可直接查看这场比赛的完整推演、历史对照、比分预测与赛前修正。"
-      : "这一页会持续同步赛程、比分预测、对位、历史样本和核心判断。",
+      ? "当前账号可直接查看这场比赛的完整推演、比分预测与赛前修正。"
+      : "这一页会持续同步赛程、对位、预测入口和核心判断。",
     sidebarTitle: isMember() ? "完整目录" : "本页目录",
     sidebarItems: isMember() ? ["比分预测", "节奏分支", "历史对照"] : ["比分预测", "公开判断", "关键变量"],
   });
@@ -1913,7 +1913,7 @@ function renderMatchArticlePage() {
     canViewFull: isMember(),
     description: isMember()
       ? `当前账号 ${state.member.email} 已解锁这场比赛的完整推演。`
-      : "当前已开放比赛框架、真实样本和关键观察点。完整版本补齐节奏分支、关键球员和赛前修正。",
+      : "当前已开放比赛框架和关键观察点。完整版本继续补齐节奏分支、关键球员和赛前修正。",
     bullets: ["查看节奏分支推演", "补齐关键球员与结构关系", "进入完整比赛页"],
     primaryText: "会员登录",
     primaryHref: "login.html",
