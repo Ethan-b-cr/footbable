@@ -361,6 +361,7 @@ function buildEntityCard(teamOrPlayer, options) {
     const badgeText = locked ? "完整版本" : "球队分析";
     const linkText = locked ? "查看完整页" : "进入球队页面";
     const winRate = formatPercent((team.wins / Math.max(team.matches, 1)) * 100);
+    const lockHint = locked ? "解锁该球队的完整样本、对照与深度判断" : "";
     return `
       <article class="entity-card ${locked ? "locked-card" : ""}">
         <div class="entity-media team-stage-media">
@@ -376,6 +377,7 @@ function buildEntityCard(teamOrPlayer, options) {
             <span>${team.goals_against} 失球</span>
             <span>${team.shots_on_target || 0} 次射正</span>
           </div>
+          ${locked ? `<div class="entity-lock-copy">${lockHint}</div>` : ""}
           <a class="article-link" href="${href}">${linkText}</a>
         </div>
       </article>
@@ -388,6 +390,7 @@ function buildEntityCard(teamOrPlayer, options) {
   const badgeText = locked ? "完整版本" : "球员分析";
   const linkText = locked ? "查看完整页" : "进入球员页面";
   const passRate = player.passes > 0 ? formatPercent((player.completed_passes / player.passes) * 100) : "0.0%";
+  const lockHint = locked ? "解锁该球员的完整效率、角色和重点比赛样本" : "";
 
   return `
     <article class="entity-card ${locked ? "locked-card" : ""}">
@@ -403,6 +406,7 @@ function buildEntityCard(teamOrPlayer, options) {
           <span>${passRate} 传球成功率</span>
           <span>${player.shots || 0} 次射门</span>
         </div>
+        ${locked ? `<div class="entity-lock-copy">${lockHint}</div>` : ""}
         <a class="article-link" href="${href}">${linkText}</a>
       </div>
     </article>
@@ -935,7 +939,7 @@ function renderMemberPage() {
       statusTitle.textContent = "当前已登录";
       statusText.textContent = `账号 ${state.member.email} 已进入完整版本，可直接查看单场全景页、球队库和球员库。`;
       primaryAction.textContent = "继续查看完整版本";
-      primaryAction.href = "article.html?slug=lineup-and-odds";
+      primaryAction.href = "article.html?match=760415";
       if (emailCard && emailText) {
         emailCard.hidden = false;
         emailText.textContent = state.member.email;
@@ -958,6 +962,7 @@ function renderMemberPage() {
             <span class="article-meta">${article.category}</span>
             <h3>${article.title}</h3>
             <p>${article.summary}</p>
+            ${locked ? `<div class="entity-lock-copy">登录后直接进入完整文章、临场修正和后半段推演。</div>` : ""}
             <div class="library-row">
               <span class="library-badge">${article.requiresMember ? "完整版本" : "公开分析"}</span>
               <a class="article-link" href="${href}">${locked ? "登录后查看" : "进入内容"}</a>
