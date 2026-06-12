@@ -479,6 +479,10 @@ a {
   font-size: 0.92rem;
 }
 
+.prediction-box-locked strong {
+  letter-spacing: 0.02em;
+}
+
 .live-schedule-footer {
   display: flex;
   align-items: center;

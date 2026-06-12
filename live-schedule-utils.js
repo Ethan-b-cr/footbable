@@ -122,6 +122,36 @@ function buildScorePrediction(match, teams) {
   };
 }
 
+function buildPredictionViewModel(prediction, memberVisible) {
+  if (!prediction?.scoreline) {
+    return {
+      title: "比分预测",
+      displayScore: "待更新",
+      summary: "预测模型正在等待实时赛程与历史样本同步。",
+      confidenceLabel: "",
+      locked: !memberVisible,
+    };
+  }
+
+  if (!memberVisible) {
+    return {
+      title: "比分预测",
+      displayScore: "会员可见",
+      summary: "该场比赛的具体预测比分与置信度，开通会员后查看完整版本。",
+      confidenceLabel: "",
+      locked: true,
+    };
+  }
+
+  return {
+    title: "比分预测",
+    displayScore: prediction.scoreline,
+    summary: prediction.summary,
+    confidenceLabel: prediction.confidenceLabel || "",
+    locked: false,
+  };
+}
+
 function buildMatchInsight(match, teams, players) {
   const homeTeam = findTeamSummary(match.homeTeam, teams);
   const awayTeam = findTeamSummary(match.awayTeam, teams);
@@ -158,6 +188,7 @@ const exported = {
   normalizeScoreboardEvents,
   buildMatchInsight,
   buildScorePrediction,
+  buildPredictionViewModel,
   findTeamSummary,
   canonicalTeamName,
 };

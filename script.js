@@ -8,6 +8,7 @@ const state = {
 };
 
 const LIVE_REFRESH_INTERVAL_MS = 60000;
+const predictionUtils = window.LiveScheduleUtils || {};
 
 function readMemberSession() {
   const raw = window.localStorage.getItem("worldCupEdgeMember");
@@ -240,12 +241,15 @@ function getMatchDetailHref(match) {
 }
 
 function buildPredictionMarkup(prediction, compact = false) {
-  if (!prediction?.scoreline) return "";
+  const view = predictionUtils.buildPredictionViewModel
+    ? predictionUtils.buildPredictionViewModel(prediction, isMember())
+    : null;
+  if (!view) return "";
   return `
-    <div class="prediction-box ${compact ? "prediction-box-compact" : ""}">
-      <span>比分预测</span>
-      <strong>${prediction.scoreline}</strong>
-      <p>${prediction.summary}${prediction.confidenceLabel ? ` · 置信 ${prediction.confidenceLabel}` : ""}</p>
+    <div class="prediction-box ${compact ? "prediction-box-compact" : ""} ${view.locked ? "prediction-box-locked" : ""}">
+      <span>${view.title}</span>
+      <strong>${view.displayScore}</strong>
+      <p>${view.summary}${view.confidenceLabel ? ` · 置信 ${view.confidenceLabel}` : ""}</p>
     </div>
   `;
 }
@@ -445,24 +449,32 @@ function renderLiveSchedule() {
   if (heroMatchTitle && heroMatchCopy && heroMatchTags && heroMatchRail) {
     const featuredMatches = payload.matches.slice(0, 3);
     const featured = featuredMatches[0];
+    const featuredPrediction = predictionUtils.buildPredictionViewModel
+      ? predictionUtils.buildPredictionViewModel(featured.prediction, isMember())
+      : null;
     heroMatchTitle.textContent = `${featured.homeTeam} vs ${featured.awayTeam}`;
     heroMatchCopy.textContent = `${featured.kickoffCN} 开球，当前状态 ${featured.statusText || "Scheduled"}。首页同步展示世界杯比赛进程、球队对位、比分预测和公开分析。`;
     heroMatchTags.innerHTML = [
       `开幕战 ${opening?.homeTeam || ""} vs ${opening?.awayTeam || ""}`,
       `第二场 ${second?.homeTeam || ""} vs ${second?.awayTeam || ""}`,
-      `预测 ${featured.prediction?.scoreline || "待更新"}`,
+      `预测 ${featuredPrediction?.displayScore || "待更新"}`,
     ]
       .map((item) => `<span>${item}</span>`)
       .join("");
     heroMatchRail.innerHTML = featuredMatches
       .map(
-        (match) => `
+        (match) => {
+          const matchPrediction = predictionUtils.buildPredictionViewModel
+            ? predictionUtils.buildPredictionViewModel(match.prediction, isMember())
+            : null;
+          return `
           <a class="hero-match-rail-card" href="${getMatchDetailHref(match)}">
             <span>Match ${String(match.matchNumber).padStart(2, "0")}</span>
             <strong>${match.homeTeam} vs ${match.awayTeam}</strong>
-            <p>${match.kickoffCN} · ${match.statusText || "Scheduled"} · 预测 ${match.prediction?.scoreline || "待更新"}</p>
+            <p>${match.kickoffCN} · ${match.statusText || "Scheduled"} · 预测 ${matchPrediction?.displayScore || "待更新"}</p>
           </a>
-        `
+        `;
+        }
       )
       .join("");
   }
@@ -1553,6 +1565,9 @@ function renderMatchArticlePage() {
 
   const insight = match.insight || {};
   const prediction = match.prediction || null;
+  const predictionView = predictionUtils.buildPredictionViewModel
+    ? predictionUtils.buildPredictionViewModel(prediction, isMember())
+    : null;
   const homeTeam = findTeamSummary(match.homeTeam);
   const awayTeam = findTeamSummary(match.awayTeam);
   const homePlayers = getTopPlayersByTeam(match.homeTeam, 3);
@@ -1581,9 +1596,9 @@ function renderMatchArticlePage() {
     focus: [
       `${favoredTeam} 当前更像数据边所在的一侧`,
       favoredLead ? `${favoredLead.player_name} 是需要盯住的第一关键人` : "核心前场处理质量是第一观察点",
-      prediction?.scoreline ? `当前预测比分 ${prediction.scoreline}` : "先看开场节奏，再判断比赛走势会不会提前分层",
+      predictionView?.displayScore ? `当前预测 ${predictionView.displayScore}` : "先看开场节奏，再判断比赛走势会不会提前分层",
     ],
-    highlights: [match.kickoffCN, statusText, `预测 ${prediction?.scoreline || "待更新"}`, match.city || "World Cup 2026"],
+    highlights: [match.kickoffCN, statusText, `预测 ${predictionView?.displayScore || "待更新"}`, match.city || "World Cup 2026"],
     heroImage,
     heroImageAlt: `${match.homeTeam} vs ${match.awayTeam}`,
     visualKicker: isMember() ? "完整版本" : "比赛页",
@@ -1605,8 +1620,8 @@ function renderMatchArticlePage() {
         { label: "当前比分", value: scoreText, text: statusText },
         {
           label: "预测比分",
-          value: prediction?.scoreline || "待更新",
-          text: prediction?.confidenceLabel ? `置信 ${prediction.confidenceLabel}` : "实时修正中",
+          value: predictionView?.displayScore || "待更新",
+          text: predictionView?.locked ? "开通会员后查看具体预测" : (predictionView?.confidenceLabel ? `置信 ${predictionView.confidenceLabel}` : "实时修正中"),
         },
         {
           label: "数据边",
@@ -1614,20 +1629,20 @@ function renderMatchArticlePage() {
           text: `模型边差 ${Math.abs((homeModel?.edgeScore || 0) - (awayModel?.edgeScore || 0)).toFixed(1)}`,
         },
       ],
-      html: prediction
+      html: predictionView
         ? `
           <div class="prediction-panel">
             ${buildPredictionMarkup(prediction)}
             <div class="prediction-split">
               <article>
                 <span>${match.homeTeam}</span>
-                <strong>${prediction.homeGoals}</strong>
-                <p>预期进球 ${prediction.homeExpected}</p>
+                <strong>${predictionView.locked ? "会员可见" : prediction.homeGoals}</strong>
+                <p>${predictionView.locked ? "开通会员后查看主队预期进球" : `预期进球 ${prediction.homeExpected}`}</p>
               </article>
               <article>
                 <span>${match.awayTeam}</span>
-                <strong>${prediction.awayGoals}</strong>
-                <p>预期进球 ${prediction.awayExpected}</p>
+                <strong>${predictionView.locked ? "会员可见" : prediction.awayGoals}</strong>
+                <p>${predictionView.locked ? "开通会员后查看客队预期进球" : `预期进球 ${prediction.awayExpected}`}</p>
               </article>
             </div>
           </div>

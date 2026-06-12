@@ -6,6 +6,7 @@ const {
   buildMatchInsight,
   findTeamSummary,
   buildScorePrediction,
+  buildPredictionViewModel,
 } = require("../live-schedule-utils.js");
 
 test("normalizeScoreboardEvents sorts by kickoff and numbers matches", () => {
@@ -208,4 +209,21 @@ test("buildScorePrediction returns scoreline and confidence from team edges", ()
   assert.match(prediction.scoreline, /^\d+-\d+$/);
   assert.match(prediction.summary, /预测比分/);
   assert.match(prediction.confidenceLabel, /高|中|观察/);
+});
+
+test("buildPredictionViewModel hides exact scoreline for public visitors", () => {
+  const prediction = {
+    scoreline: "1-1",
+    summary: "预测比分 Mexico 1-1 South Africa",
+    confidenceLabel: "高",
+  };
+
+  const publicView = buildPredictionViewModel(prediction, false);
+  const memberView = buildPredictionViewModel(prediction, true);
+
+  assert.equal(publicView.title, "比分预测");
+  assert.equal(publicView.displayScore, "会员可见");
+  assert.match(publicView.summary, /开通会员|完整版本/);
+  assert.equal(memberView.displayScore, "1-1");
+  assert.match(memberView.summary, /Mexico 1-1 South Africa/);
 });
