@@ -20,10 +20,12 @@
   <div class="page-shell">
     <header class="site-header">
       <a class="brand" href="index.html" aria-label="World Cup Edge 首页">
-        <span class="brand-mark">W</span>
+        <span class="brand-mark brand-logo-shell">
+          <img class="brand-logo" src="assets/images/world-cup-edge-logo.svg" alt="World Cup Edge logo">
+        </span>
         <span class="brand-copy">
           <strong>World Cup Edge</strong>
-          <span>世界杯数据分析站</span>
+          <span>专业分析，专业赚钱</span>
         </span>
       </a>
       <nav class="site-nav" aria-label="主导航">
@@ -40,88 +42,97 @@
     </header>
 
     <main id="top">
-      <section class="hero">
-        <div class="hero-copy">
+      <section class="hero hero-vs-layout">
+        <div class="hero-copy hero-intro-copy">
           <p class="hero-kicker">WORLD CUP EDGE</p>
           <h1>
             <span class="hero-headline-single">人永远赚不到认知以外的钱</span>
           </h1>
           <p class="hero-text">
-            基于真实世界杯历史数据与实时赛程，持续更新球队档案、球员档案和单场比赛分析。
+            每场世界杯比赛都先给公开分析，深入比分预测、赛前修正和完整比赛判断继续放在会员层。
           </p>
           <div class="hero-actions">
             <a class="button button-primary" href="#matches">查看今日比赛</a>
-            <a class="button button-secondary" href="members.html">进入完整版本</a>
+            <a class="button button-secondary" href="members.html">查看完整分析</a>
           </div>
-          <ul class="hero-metrics hero-sell-points">
-            <li>
-              <strong>104 场赛程</strong>
-              <span>从开幕战到决赛，站内统一接入。</span>
-            </li>
-            <li>
-              <strong>球队与球员档案</strong>
-              <span>焦点球队、核心球员集中展开。</span>
-            </li>
-            <li>
-              <strong>赛前修正</strong>
-              <span>重点场次会继续补齐名单与节奏变化。</span>
-            </li>
-          </ul>
-          <div class="hero-match-stage" id="hero-match-stage">
-            <article class="hero-match-main">
-              <div class="hero-match-main-head">
-                <span class="article-meta">世界杯比赛进程</span>
-                <span class="hero-match-status">实时同步</span>
+        </div>
+
+        <div class="hero-vs-board" id="hero-match-stage">
+          <div class="hero-vs-topline">
+            <span class="hero-vs-stage" id="hero-cinematic-kicker">世界杯比赛进程</span>
+            <span class="hero-match-status" id="hero-vs-status">实时同步</span>
+          </div>
+
+          <div class="hero-vs-main">
+            <article class="hero-team-panel hero-team-home">
+              <div class="hero-team-crest">
+                <img id="hero-home-team-badge" src="assets/images/argentina-team.png" alt="主队队徽" loading="lazy">
               </div>
-              <div class="hero-match-main-body">
-                <strong id="hero-match-title">正在载入今日焦点战</strong>
-                <p id="hero-match-copy">这里展示开幕战、第二场和当前焦点比赛的赛程进程、球队对位与公开分析。</p>
-              </div>
-              <div class="hero-match-main-tags" id="hero-match-tags">
-                <span>开幕战</span>
-                <span>第二场</span>
-                <span>重点对位</span>
+              <h2 id="hero-home-team-name">主队</h2>
+              <p id="hero-home-team-summary">正在读取主队真实样本与公开判断。</p>
+              <div class="hero-team-metrics" id="hero-home-team-metrics">
+                <span>胜率 --</span>
+                <span>场均 xG --</span>
+                <span>场均进球 --</span>
               </div>
             </article>
-            <div class="hero-match-rail" id="hero-match-rail">
-              <article class="hero-match-rail-card">
-                <span>Match 01</span>
-                <strong>正在载入</strong>
-                <p>开幕战</p>
+
+            <div class="hero-vs-center">
+              <div class="hero-vs-match-label" id="hero-match-number">焦点战</div>
+              <strong class="hero-vs-mark">VS</strong>
+              <p class="hero-vs-kickoff" id="hero-match-title">正在载入今日焦点战</p>
+              <p class="hero-vs-copy" id="hero-match-copy">这里展示当前场次、球队对位和公开分析。</p>
+              <div class="hero-vs-tags" id="hero-match-tags">
+                <span>公开分析</span>
+                <span>会员深读</span>
+                <span>实时更新</span>
+              </div>
+              <div class="hero-vs-actions">
+                <a class="button button-primary" id="hero-match-primary" href="article.html">查看完整分析</a>
+                <a class="button button-secondary" href="members.html">查看精准预测</a>
+              </div>
+            </div>
+
+            <article class="hero-team-panel hero-team-away">
+              <div class="hero-team-crest">
+                <img id="hero-away-team-badge" src="assets/images/france-team.png" alt="客队队徽" loading="lazy">
+              </div>
+              <h2 id="hero-away-team-name">客队</h2>
+              <p id="hero-away-team-summary">正在读取客队真实样本与公开判断。</p>
+              <div class="hero-team-metrics" id="hero-away-team-metrics">
+                <span>胜率 --</span>
+                <span>场均 xG --</span>
+                <span>场均进球 --</span>
+              </div>
+            </article>
+          </div>
+
+          <div class="hero-vs-bottom">
+            <article class="hero-next-match-card" id="hero-next-match-card">
+              <div>
+                <span class="article-meta">后续比赛</span>
+                <strong id="hero-next-match-title">正在载入第二场比赛</strong>
+                <p id="hero-next-match-copy">下一场比赛的对阵、公开判断和会员预测入口会继续在这里展示。</p>
+              </div>
+              <a class="article-link" id="hero-next-match-link" href="article.html">查看精准预测</a>
+            </article>
+
+            <div class="hero-cinematic-mini hero-visual-stack">
+              <article class="hero-trophy-card">
+                <img id="hero-cinematic-image" src="assets/images/argentina-champion.jpg" alt="世界杯夺冠时刻" loading="lazy">
+                <span id="hero-cinematic-title">夺冠时刻</span>
               </article>
-              <article class="hero-match-rail-card">
-                <span>Match 02</span>
-                <strong>正在载入</strong>
-                <p>第二场</p>
+              <article class="hero-star-card">
+                <img id="hero-cinematic-player-image" src="assets/images/mbappe.jpg" alt="焦点球星" loading="lazy">
+                <span id="hero-cinematic-player-label">头部球星</span>
               </article>
-              <article class="hero-match-rail-card">
-                <span>Live</span>
-                <strong>正在载入</strong>
-                <p>今日重点场</p>
+              <article class="hero-team-visual-card">
+                <img id="hero-cinematic-team-image" src="assets/images/brazil-team.png" alt="热门球队" loading="lazy">
+                <span id="hero-cinematic-team-label">热门球队</span>
               </article>
             </div>
           </div>
         </div>
-        <aside class="hero-cinematic-panel">
-          <article class="hero-cinematic-main">
-            <img id="hero-cinematic-image" src="assets/images/argentina-champion.jpg" alt="世界杯夺冠时刻" loading="lazy">
-            <div class="hero-cinematic-overlay">
-              <span id="hero-cinematic-kicker">冠军样本</span>
-              <strong id="hero-cinematic-title">从开幕战到决赛，把比赛气质看透</strong>
-              <p id="hero-cinematic-text">真正重要的不是热度本身，而是谁能先把比赛带进自己的节奏。</p>
-            </div>
-          </article>
-          <div class="hero-cinematic-mini">
-            <article>
-              <img id="hero-cinematic-player-image" src="assets/images/mbappe.jpg" alt="焦点球星" loading="lazy">
-              <span id="hero-cinematic-player-label">头部球星</span>
-            </article>
-            <article>
-              <img id="hero-cinematic-team-image" src="assets/images/brazil-team.png" alt="热门球队" loading="lazy">
-              <span id="hero-cinematic-team-label">热门球队</span>
-            </article>
-          </div>
-        </aside>
       </section>
 
       <section class="section" id="matches">

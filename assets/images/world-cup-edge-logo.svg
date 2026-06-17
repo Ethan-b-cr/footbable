@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">World Cup Edge gold football logo</title>
+  <desc id="desc">Original gold football emblem with premium metallic highlights.</desc>
+  <defs>
+    <linearGradient id="ringGrad" x1="38" y1="34" x2="212" y2="220" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8d5b18"/>
+      <stop offset="0.26" stop-color="#d7a24c"/>
+      <stop offset="0.5" stop-color="#f6df9f"/>
+      <stop offset="0.72" stop-color="#c6892a"/>
+      <stop offset="1" stop-color="#7a4b11"/>
+    </linearGradient>
+    <radialGradient id="coreGrad" cx="0.67" cy="0.28" r="0.82">
+      <stop offset="0" stop-color="#fff2c8"/>
+      <stop offset="0.22" stop-color="#f5d98e"/>
+      <stop offset="0.52" stop-color="#d8a246"/>
+      <stop offset="1" stop-color="#8e5d19"/>
+    </radialGradient>
+    <linearGradient id="panelWarm" x1="72" y1="80" x2="186" y2="186" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f4d687"/>
+      <stop offset="1" stop-color="#a96d1f"/>
+    </linearGradient>
+    <linearGradient id="panelBright" x1="126" y1="66" x2="160" y2="190" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fff0be"/>
+      <stop offset="1" stop-color="#be8227"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="128" cy="128" r="114" fill="#14110e"/>
+  <circle cx="128" cy="128" r="104" fill="none" stroke="url(#ringGrad)" stroke-width="14"/>
+  <circle cx="128" cy="128" r="86" fill="url(#coreGrad)" stroke="#1a140d" stroke-width="7"/>
+
+  <path d="M128 86L155 105L145 137H111L101 105Z" fill="url(#panelBright)" stroke="#1b150e" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M104 77L128 60L152 77L155 105L128 86L101 105Z" fill="url(#panelBright)" stroke="#1b150e" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M82 86L104 77L101 105L78 119L63 96Z" fill="url(#panelWarm)" stroke="#1b150e" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M152 77L174 86L193 96L178 119L155 105Z" fill="url(#panelBright)" stroke="#1b150e" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M63 96L78 119L82 150L62 163L49 132L50 109Z" fill="url(#panelWarm)" stroke="#1b150e" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M178 119L193 96L206 109L207 132L194 163L174 150Z" fill="url(#panelBright)" stroke="#1b150e" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M82 150L111 137L122 169L103 191L73 184L62 163Z" fill="url(#panelWarm)" stroke="#1b150e" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M145 137L174 150L194 163L183 184L153 191L134 169Z" fill="url(#panelBright)" stroke="#1b150e" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M122 169H134L153 191H103Z" fill="url(#panelWarm)" stroke="#1b150e" stroke-width="6" stroke-linejoin="round"/>
+</svg>

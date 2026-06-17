@@ -284,6 +284,52 @@ function buildPredictionMarkup(prediction, compact = false) {
   `;
 }
 
+function buildHeroTeamPanel(teamName, side) {
+  const fallbackTeam = pickFeaturedTeams(state.teams)[side === "home" ? 0 : 1] || state.teams[0] || null;
+  const resolvedName = teamName || fallbackTeam?.team || (side === "home" ? "主队" : "客队");
+  const team = findTeamSummary(resolvedName);
+  const model = buildTeamModel(team);
+  const summaryNode = qs(`#hero-${side}-team-summary`);
+  const metricsNode = qs(`#hero-${side}-team-metrics`);
+  const nameNode = qs(`#hero-${side}-team-name`);
+  const badgeNode = qs(`#hero-${side}-team-badge`);
+  const panelNode = qs(`.hero-team-${side}`);
+
+  if (nameNode) nameNode.textContent = resolvedName;
+  if (badgeNode) {
+    badgeNode.src = getTeamImage(resolvedName);
+    badgeNode.alt = `${resolvedName}队徽`;
+  }
+  if (panelNode) {
+    panelNode.style.setProperty(
+      side === "home" ? "--hero-home-cover" : "--hero-away-cover",
+      `url('${getTeamBackdrop(resolvedName)}')`
+    );
+  }
+
+  if (summaryNode) {
+    if (team && model) {
+      summaryNode.textContent = `${team.matches} 场真实样本，胜率 ${model.winRate}，重点先看 ${model.xgForRate} 场均 xG 和 ${model.goalsForRate} 场均进球。`;
+    } else {
+      summaryNode.textContent = "正在读取该队历史样本与公开判断。";
+    }
+  }
+
+  if (metricsNode) {
+    if (team && model) {
+      metricsNode.innerHTML = [
+        `胜率 ${model.winRate}`,
+        `场均 xG ${model.xgForRate}`,
+        `场均进球 ${model.goalsForRate}`,
+      ]
+        .map((item) => `<span>${item}</span>`)
+        .join("");
+    } else {
+      metricsNode.innerHTML = ["胜率 --", "场均 xG --", "场均进球 --"].map((item) => `<span>${item}</span>`).join("");
+    }
+  }
+}
+
 function isFreeTeam(teamName, teams = state.teams) {
   return (
     isMember() ||
@@ -477,15 +523,21 @@ function renderLiveSchedule() {
   const heroMatchTitle = qs("#hero-match-title");
   const heroMatchCopy = qs("#hero-match-copy");
   const heroMatchTags = qs("#hero-match-tags");
-  const heroMatchRail = qs("#hero-match-rail");
+  const heroMatchPrimary = qs("#hero-match-primary");
+  const heroMatchNumber = qs("#hero-match-number");
+  const heroVsStatus = qs("#hero-vs-status");
+  const heroNextMatchTitle = qs("#hero-next-match-title");
+  const heroNextMatchCopy = qs("#hero-next-match-copy");
+  const heroNextMatchLink = qs("#hero-next-match-link");
   const publicGrid = qs("#public-live-match-grid");
   const memberHero = qs("#member-live-schedule-hero");
   const memberMeta = qs("#member-live-schedule-meta");
   const memberGrid = qs("#member-live-match-grid");
 
-  if (heroMatchTitle && heroMatchCopy && heroMatchTags && heroMatchRail) {
+  if (heroMatchTitle && heroMatchCopy && heroMatchTags) {
     const featuredMatches = payload.matches.slice(0, 3);
     const featured = featuredMatches[0];
+    const nextMatch = featuredMatches[1] || payload.matches[1] || null;
     const featuredPrediction = predictionUtils.buildPredictionViewModel
       ? predictionUtils.buildPredictionViewModel(featured.prediction, isMember())
       : null;
@@ -493,33 +545,33 @@ function renderLiveSchedule() {
       ? predictionUtils.buildMatchPhaseViewModel(featured)
       : buildPhaseFallback(featured);
     heroMatchTitle.textContent = `${featured.homeTeam} vs ${featured.awayTeam}`;
-    heroMatchCopy.textContent = `${featured.kickoffCN} 开球，当前阶段 ${featuredPhase?.label || "赛前分析"}。先看比赛轮廓，具体比分和临场修正继续放在完整版本里。`;
+    heroMatchCopy.textContent = `${featured.kickoffCN} 开球，当前阶段 ${featuredPhase?.label || "赛前分析"}。公开层先给比赛轮廓，具体比分预测继续放在完整版本里。`;
     heroMatchTags.innerHTML = [
       `开幕战 ${opening?.homeTeam || ""} vs ${opening?.awayTeam || ""}`,
       `第二场 ${second?.homeTeam || ""} vs ${second?.awayTeam || ""}`,
-      `预测 ${getPredictionDisplayLabel(featuredPrediction)}`,
+      `比分 ${getPredictionDisplayLabel(featuredPrediction)}`,
     ]
       .map((item) => `<span>${item}</span>`)
       .join("");
-    heroMatchRail.innerHTML = featuredMatches
-      .map(
-        (match) => {
-          const matchPrediction = predictionUtils.buildPredictionViewModel
-            ? predictionUtils.buildPredictionViewModel(match.prediction, isMember())
-            : null;
-          const matchPhase = predictionUtils.buildMatchPhaseViewModel
-            ? predictionUtils.buildMatchPhaseViewModel(match)
-            : buildPhaseFallback(match);
-          return `
-          <a class="hero-match-rail-card" href="${getMatchDetailHref(match)}">
-            <span>Match ${String(match.matchNumber).padStart(2, "0")}</span>
-            <strong>${match.homeTeam} vs ${match.awayTeam}</strong>
-            <p>${match.kickoffCN} · ${matchPhase?.label || "赛前分析"} · 预测 ${getPredictionDisplayLabel(matchPrediction)}</p>
-          </a>
-        `;
-        }
-      )
-      .join("");
+
+    if (heroMatchPrimary) heroMatchPrimary.href = getMatchDetailHref(featured);
+    if (heroMatchNumber) heroMatchNumber.textContent = `Match ${String(featured.matchNumber).padStart(2, "0")}`;
+    if (heroVsStatus) heroVsStatus.textContent = featuredPhase?.badge || "实时同步";
+
+    buildHeroTeamPanel(featured.homeTeam, "home");
+    buildHeroTeamPanel(featured.awayTeam, "away");
+
+    if (heroNextMatchTitle && nextMatch) {
+      const nextPrediction = predictionUtils.buildPredictionViewModel
+        ? predictionUtils.buildPredictionViewModel(nextMatch.prediction, isMember())
+        : null;
+      heroNextMatchTitle.textContent = `${nextMatch.homeTeam} vs ${nextMatch.awayTeam}`;
+      if (heroNextMatchCopy) {
+        heroNextMatchCopy.textContent = `${nextMatch.kickoffCN} 开球，先看公开分析；比分预测显示为 ${getPredictionDisplayLabel(nextPrediction)}，完整判断继续放在会员层。`;
+      }
+      if (heroNextMatchLink) heroNextMatchLink.href = getMatchDetailHref(nextMatch);
+    }
+
     updateHeroCinematic(featured);
   }
 
@@ -618,6 +670,26 @@ function renderLiveFallback() {
       </article>
     `;
   }
+
+  buildHeroTeamPanel("", "home");
+  buildHeroTeamPanel("", "away");
+
+  const heroMatchNumber = qs("#hero-match-number");
+  const heroMatchTitle = qs("#hero-match-title");
+  const heroMatchCopy = qs("#hero-match-copy");
+  const heroMatchTags = qs("#hero-match-tags");
+  const heroVsStatus = qs("#hero-vs-status");
+  const heroNextMatchTitle = qs("#hero-next-match-title");
+  const heroNextMatchCopy = qs("#hero-next-match-copy");
+  if (heroMatchNumber) heroMatchNumber.textContent = "焦点战";
+  if (heroMatchTitle) heroMatchTitle.textContent = "今日重点场正在同步";
+  if (heroMatchCopy) heroMatchCopy.textContent = "实时赛程恢复前，先看热门球队真实样本与公开判断结构。";
+  if (heroMatchTags) {
+    heroMatchTags.innerHTML = ["公开分析", "实时同步", "会员预测"].map((item) => `<span>${item}</span>`).join("");
+  }
+  if (heroVsStatus) heroVsStatus.textContent = "等待同步";
+  if (heroNextMatchTitle) heroNextMatchTitle.textContent = "正在载入第二场比赛";
+  if (heroNextMatchCopy) heroNextMatchCopy.textContent = "下一场比赛的对阵、公开判断和会员预测入口会继续在这里展示。";
 }
 
 function renderSnapshotCards() {
