@@ -488,7 +488,7 @@ function buildHeroTeamPanel(teamName, side) {
     if (team && model) {
       summaryNode.textContent = `${team.matches} 场真实样本，胜率 ${model.winRate}，重点先看 ${model.xgForRate} 场均 xG 和 ${model.goalsForRate} 场均进球。`;
     } else {
-      summaryNode.textContent = "正在读取该队历史样本与公开判断。";
+      summaryNode.textContent = `${resolvedName} 的公开判断将围绕对位强弱、推进效率和关键球员展开。`;
     }
   }
 
@@ -502,7 +502,7 @@ function buildHeroTeamPanel(teamName, side) {
         .map((item) => `<span>${item}</span>`)
         .join("");
     } else {
-      metricsNode.innerHTML = ["胜率 --", "场均 xG --", "场均进球 --"].map((item) => `<span>${item}</span>`).join("");
+      metricsNode.innerHTML = ["强弱边", "推进效率", "临场修正"].map((item) => `<span>${item}</span>`).join("");
     }
   }
 }

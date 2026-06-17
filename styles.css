@@ -3119,6 +3119,45 @@ a {
   border-color: rgba(184, 61, 30, 0.18);
 }
 
+.tier-pro {
+  box-shadow: 0 24px 60px rgba(184, 61, 30, 0.14);
+  transform: translateY(-4px);
+}
+
+.tier-badge {
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(184, 61, 30, 0.12);
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tier-price {
+  margin: 4px 0 8px;
+  font-family: "Barlow Condensed", sans-serif;
+  font-size: 3rem;
+  line-height: 0.9;
+  color: #1c140f;
+}
+
+.tier-price span {
+  font-size: 1rem;
+  color: var(--muted);
+  margin-left: 6px;
+}
+
+.tier-copy {
+  margin: 0 0 6px;
+  color: var(--muted);
+  line-height: 1.68;
+}
+
 .pricing-card {
   display: grid;
   gap: 14px;
