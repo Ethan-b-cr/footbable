@@ -657,7 +657,7 @@ function buildEntityCard(teamOrPlayer, options) {
   return `
     <article class="entity-card ${locked ? "locked-card" : ""}">
       <div class="entity-media">
-        <img src="${getPlayerImage(player.player_name)}" alt="${player.player_name} 球员画面" loading="lazy">
+        <img src="${getPlayerImage(player.player_name, player.team_name)}" alt="${player.player_name} 球员画面" loading="lazy">
       </div>
       <div class="entity-body">
         <span class="article-meta">${badgeText}</span>
@@ -698,13 +698,22 @@ function buildLiveMatchCard(match, index) {
         </div>
         <div class="live-card-score">
           <div class="live-team-stack">
+            <div class="live-team-badge">
+              <img src="${getTeamImage(match.homeTeam)}" alt="${match.homeTeam} 队徽" loading="lazy">
+            </div>
             <span>主队</span>
-            <strong>${match.homeTeam}</strong>
+            <strong class="live-team-name">${match.homeTeam}</strong>
           </div>
-          <strong>${scoreText}</strong>
+          <div class="live-score-core">
+            <strong class="live-score-value">${scoreText}</strong>
+            <span>${statusText}</span>
+          </div>
           <div class="live-team-stack">
+            <div class="live-team-badge">
+              <img src="${getTeamImage(match.awayTeam)}" alt="${match.awayTeam} 队徽" loading="lazy">
+            </div>
             <span>客队</span>
-            <strong>${match.awayTeam}</strong>
+            <strong class="live-team-name">${match.awayTeam}</strong>
           </div>
         </div>
         <div class="live-insight-copy">
@@ -861,11 +870,11 @@ function renderLiveFallback() {
       hero.innerHTML = `
         <div class="live-schedule-copy">
           <span class="article-meta">实时赛程</span>
-          <h3>赛程接口暂时不可用</h3>
-          <p>刷新后会继续接入实时世界杯赛程和浅层分析。</p>
+          <h3>实时赛程同步中</h3>
+          <p>最新赛程暂未回到本页时，球队、球员和历史样本仍然可以继续查看。</p>
         </div>
         <div class="live-schedule-meta">
-          <span>等待恢复</span>
+          <span>自动刷新</span>
         </div>
       `;
     }
@@ -873,12 +882,12 @@ function renderLiveFallback() {
       grid.innerHTML = `
         <article class="live-match-card loading-card" style="--card-cover:url('assets/images/argentina-champion.jpg')">
           <span class="time-badge">Live</span>
-          <strong>稍后刷新</strong>
+          <strong>公开分析仍可查看</strong>
         </article>
       `;
     }
     if (footer) {
-      footer.innerHTML = `<span>实时接口恢复后会继续更新</span><a class="article-link" href="members.html">查看完整内容</a>`;
+      footer.innerHTML = `<span>刷新后会自动拉取最新赛程</span><a class="article-link" href="members.html">查看完整内容</a>`;
     }
   });
 
@@ -887,7 +896,7 @@ function renderLiveFallback() {
     publicGrid.innerHTML = `
       <article class="live-match-card loading-card" style="--card-cover:url('assets/images/argentina-champion.jpg')">
         <span class="time-badge">Live</span>
-        <strong>比赛流稍后刷新</strong>
+        <strong>焦点比赛入口保留</strong>
       </article>
     `;
   }
@@ -903,14 +912,14 @@ function renderLiveFallback() {
   const heroNextMatchTitle = qs("#hero-next-match-title");
   const heroNextMatchCopy = qs("#hero-next-match-copy");
   if (heroMatchNumber) heroMatchNumber.textContent = "焦点战";
-  if (heroMatchTitle) heroMatchTitle.textContent = "今日重点场正在同步";
-  if (heroMatchCopy) heroMatchCopy.textContent = "实时赛程恢复前，先看热门球队真实样本与公开判断结构。";
+  if (heroMatchTitle) heroMatchTitle.textContent = "世界杯焦点战入口";
+  if (heroMatchCopy) heroMatchCopy.textContent = "免费先看公开判断，比分预测与临场修正继续放在会员层。";
   if (heroMatchTags) {
     heroMatchTags.innerHTML = ["公开分析", "实时同步", "会员预测"].map((item) => `<span>${item}</span>`).join("");
   }
-  if (heroVsStatus) heroVsStatus.textContent = "等待同步";
-  if (heroNextMatchTitle) heroNextMatchTitle.textContent = "正在载入第二场比赛";
-  if (heroNextMatchCopy) heroNextMatchCopy.textContent = "下一场比赛的对阵、公开判断和会员预测入口会继续在这里展示。";
+  if (heroVsStatus) heroVsStatus.textContent = "同步中";
+  if (heroNextMatchTitle) heroNextMatchTitle.textContent = "下一场比赛入口";
+  if (heroNextMatchCopy) heroNextMatchCopy.textContent = "对阵、开球时间和会员预测会在这里持续切换。";
 }
 
 function renderSnapshotCards() {
@@ -975,7 +984,7 @@ function renderSnapshotCards() {
   if (scorerSpotlight && leadScorer) {
     scorerSpotlight.innerHTML = `
       <article class="pulse-media-card">
-        <img src="${getPlayerImage(leadScorer.player_name)}" alt="${leadScorer.player_name} 球员画面" loading="lazy">
+        <img src="${getPlayerImage(leadScorer.player_name, leadScorer.team_name)}" alt="${leadScorer.player_name} 球员画面" loading="lazy">
         <div class="pulse-media-copy">
           <span>头号球星</span>
           <h2>${leadScorer.player_name}</h2>
@@ -1805,7 +1814,7 @@ function renderPlayerPage() {
   title.textContent = `${player.player_name} 球员分析页`;
   summary.textContent = `${player.player_name} 当前归属 ${player.team_name}，历史样本出场 ${player.appearances} 次。这里会集中展示他的出场样本、角色定位和效率表现。`;
   if (heroImage) {
-    heroImage.src = getPlayerImage(player.player_name);
+    heroImage.src = getPlayerImage(player.player_name, player.team_name);
     heroImage.alt = `${player.player_name} 球员画面`;
   }
   if (heroHighlights) {
