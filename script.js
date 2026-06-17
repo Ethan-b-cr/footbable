@@ -1590,13 +1590,13 @@ function renderTeamLibraryVisual() {
     <img
       class="hero-side-image"
       src="${getTeamBackdrop(primary.team)}"
-      alt="${primary.team} 鐞冮槦鐢婚潰"
+      alt="${primary.team} 球队画面"
       loading="lazy"
     >
     <div class="hero-highlights compact-hero-highlights">
       <span>${primary.team}</span>
-      <span>${primary.matches} 鍦烘牱鏈�</span>
-      <span>${secondary ? `鍚屾 ${secondary.team}` : "World Cup sample"}</span>
+      <span>${primary.matches} 场真实样本</span>
+      <span>${secondary ? `同步 ${secondary.team}` : "World Cup sample"}</span>
     </div>
   `;
 }
