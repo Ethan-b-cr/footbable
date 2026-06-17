@@ -9,6 +9,7 @@ const state = {
 
 const LIVE_REFRESH_INTERVAL_MS = 60000;
 const predictionUtils = window.LiveScheduleUtils || {};
+const LIVE_SCHEDULE_ENDPOINT = `/api/worldcup/live?v=20260617b`;
 
 function readMemberSession() {
   const raw = window.localStorage.getItem("worldCupEdgeMember");
@@ -2100,7 +2101,7 @@ async function loadData() {
     fetch("data/summary/worldcup_team_summary.json").then((response) => response.ok ? response.json() : []).catch(() => []),
     fetch("data/summary/worldcup_player_summary.json").then((response) => response.ok ? response.json() : []).catch(() => []),
     fetch("data/summary/worldcup_matches.json").then((response) => response.ok ? response.json() : []).catch(() => []),
-    fetch("/api/worldcup/live").then((response) => response.ok ? response.json() : null).catch(() => null),
+    fetch(LIVE_SCHEDULE_ENDPOINT, { cache: "no-store" }).then((response) => response.ok ? response.json() : null).catch(() => null),
   ]);
 
   state.snapshot = snapshot;
@@ -2112,7 +2113,7 @@ async function loadData() {
 
 async function refreshLiveScheduleInBackground() {
   try {
-    const liveSchedule = await fetch("/api/worldcup/live").then((response) => response.ok ? response.json() : null);
+    const liveSchedule = await fetch(LIVE_SCHEDULE_ENDPOINT, { cache: "no-store" }).then((response) => response.ok ? response.json() : null);
     if (!liveSchedule?.ok) return;
     state.liveSchedule = liveSchedule;
     renderLiveSchedule();

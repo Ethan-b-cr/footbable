@@ -79,7 +79,9 @@ export async function onRequestGet(context) {
       status: 200,
       headers: {
         "content-type": "application/json; charset=UTF-8",
-        "cache-control": "public, max-age=300",
+        "cache-control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        pragma: "no-cache",
+        expires: "0",
       },
     });
   } catch (error) {
