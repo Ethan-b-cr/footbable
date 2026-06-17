@@ -9,7 +9,7 @@ const state = {
 
 const LIVE_REFRESH_INTERVAL_MS = 60000;
 const predictionUtils = window.LiveScheduleUtils || {};
-const LIVE_SCHEDULE_ENDPOINT = `/api/worldcup/live?v=20260617b`;
+const LIVE_SCHEDULE_ENDPOINT = `/api/worldcup/live?v=20260617d`;
 
 function readMemberSession() {
   const raw = window.localStorage.getItem("worldCupEdgeMember");
@@ -59,47 +59,27 @@ function normalizeName(value) {
 
 const teamArtwork = {
   Argentina: "assets/images/argentina-team.png",
-  France: "assets/images/france-team.png",
+  Belgium: "assets/images/belgium-team.png",
   Brazil: "assets/images/brazil-team.png",
   England: "assets/images/england-team.png",
-  Croatia: "assets/images/france-team.png",
-  Morocco: "assets/images/argentina-team.png",
-  Netherlands: "assets/images/england-team.png",
+  France: "assets/images/france-team.png",
   Portugal: "assets/images/portugal-team.png",
-  Belgium: "assets/images/belgium-team.png",
-  Spain: "assets/images/france-team.png",
 };
 
 const teamBackdropArtwork = {
   Argentina: "assets/images/argentina-champion.jpg",
-  France: "assets/images/argentina-champion.jpg",
-  Brazil: "assets/images/argentina-champion.jpg",
-  England: "assets/images/argentina-champion.jpg",
-  Croatia: "assets/images/argentina-champion.jpg",
-  Morocco: "assets/images/argentina-champion.jpg",
-  Netherlands: "assets/images/argentina-champion.jpg",
-  Portugal: "assets/images/argentina-champion.jpg",
-  Belgium: "assets/images/argentina-champion.jpg",
-  Spain: "assets/images/argentina-champion.jpg",
 };
 
 const playerArtwork = {
   "Lionel Andres Messi Cuccittini": "assets/images/messi.jpg",
   "Kylian Mbappe Lottin": "assets/images/mbappe.jpg",
-  "Antoine Griezmann": "assets/images/mbappe.jpg",
   "Luka Modric": "assets/images/modric.jpg",
   "Harry Kane": "assets/images/harry-kane.jpg",
-  "Kevin De Bruyne": "assets/images/ronaldo.jpg",
-  "Olivier Giroud": "assets/images/mbappe.jpg",
-  "Achraf Hakimi Mouh": "assets/images/mbappe.jpg",
-  "Neymar da Silva Santos Junior": "assets/images/ronaldo.jpg",
   "Cristiano Ronaldo dos Santos Aveiro": "assets/images/ronaldo.jpg",
-  "Jair Ventura Filho": "assets/images/ronaldo.jpg",
 };
 
 const fallbackArtwork = {
-  team: "assets/images/argentina-champion.jpg",
-  player: "assets/images/mbappe.jpg",
+  team: "assets/images/world-cup-trophy.jpg",
 };
 
 const featuredTeamOrder = ["Argentina", "Brazil", "France", "England", "Belgium", "Portugal"];
@@ -132,6 +112,180 @@ const articleTeamAliases = {
 };
 
 const liveSourceKeys = ["statsbomb_open", "fifa_platform"];
+const teamPalettePresets = {
+  Argentina: { primary: "#7fd6ff", secondary: "#0c56b7", dark: "#082346", light: "#f6fbff" },
+  Belgium: { primary: "#f1bf2b", secondary: "#c61d23", dark: "#171717", light: "#fff7dd" },
+  Brazil: { primary: "#ffde3b", secondary: "#179b4a", dark: "#072d69", light: "#fffbe6" },
+  Croatia: { primary: "#ef4340", secondary: "#ffffff", dark: "#18365b", light: "#fff4f2" },
+  England: { primary: "#e7eefc", secondary: "#0c4db8", dark: "#081d42", light: "#ffffff" },
+  France: { primary: "#2552d4", secondary: "#ffffff", dark: "#111827", light: "#f5f7ff" },
+  Germany: { primary: "#f4d03f", secondary: "#ffffff", dark: "#111111", light: "#fff9df" },
+  Morocco: { primary: "#d33a3a", secondary: "#14855f", dark: "#1c1720", light: "#fff3f1" },
+  Netherlands: { primary: "#ff8f1f", secondary: "#ffb347", dark: "#10203d", light: "#fff6eb" },
+  Portugal: { primary: "#c9232d", secondary: "#1f8e54", dark: "#12251d", light: "#fff4e8" },
+  Spain: { primary: "#d3232a", secondary: "#f0b21b", dark: "#3c1620", light: "#fff5dd" },
+  Uruguay: { primary: "#70c9ff", secondary: "#f6f7fb", dark: "#10335e", light: "#f7fbff" },
+};
+const artworkCache = {
+  playerPoster: new Map(),
+  teamBadge: new Map(),
+  teamBackdrop: new Map(),
+  matchBackdrop: new Map(),
+};
+
+function hashString(value) {
+  return [...String(value || "")].reduce((hash, char) => ((hash << 5) - hash + char.charCodeAt(0)) | 0, 0);
+}
+
+function buildSvgDataUri(svg) {
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
+function escapeSvgText(value) {
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
+function trimVisualLabel(value, maxLength = 24) {
+  const text = String(value || "").trim();
+  if (text.length <= maxLength) return text;
+  return `${text.slice(0, Math.max(0, maxLength - 3))}...`;
+}
+
+function getNameInitials(value, maxLetters = 3) {
+  const parts = String(value || "")
+    .split(/\s+/)
+    .filter(Boolean);
+  if (!parts.length) return "WC";
+  if (parts.length === 1) return parts[0].slice(0, maxLetters).toUpperCase();
+  return parts
+    .slice(0, maxLetters)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
+}
+
+function derivePalette(teamName) {
+  const seed = Math.abs(hashString(teamName));
+  const baseHue = seed % 360;
+  return {
+    primary: `hsl(${baseHue} 84% 60%)`,
+    secondary: `hsl(${(baseHue + 32) % 360} 74% 46%)`,
+    dark: `hsl(${(baseHue + 190) % 360} 60% 14%)`,
+    light: `hsl(${(baseHue + 12) % 360} 88% 95%)`,
+  };
+}
+
+function getPaletteForTeam(teamName) {
+  return teamPalettePresets[teamName] || derivePalette(teamName || "World Cup");
+}
+
+function buildTeamBadgeFallback(teamName) {
+  const palette = getPaletteForTeam(teamName);
+  const initials = escapeSvgText(getNameInitials(teamName, 2));
+  const label = escapeSvgText(trimVisualLabel(teamName, 18));
+  return buildSvgDataUri(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320">
+      <defs>
+        <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0%" stop-color="${palette.primary}" />
+          <stop offset="100%" stop-color="${palette.secondary}" />
+        </linearGradient>
+      </defs>
+      <rect width="320" height="320" rx="64" fill="${palette.dark}" />
+      <circle cx="160" cy="160" r="118" fill="url(#g)" />
+      <circle cx="160" cy="160" r="94" fill="none" stroke="${palette.light}" stroke-width="6" opacity="0.85" />
+      <text x="160" y="152" text-anchor="middle" font-family="Barlow Condensed, Arial, sans-serif" font-size="88" font-weight="700" fill="${palette.light}">${initials}</text>
+      <text x="160" y="214" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" fill="${palette.light}" opacity="0.92">${label}</text>
+    </svg>
+  `);
+}
+
+function buildTeamBackdropFallback(teamName) {
+  const palette = getPaletteForTeam(teamName);
+  const initials = escapeSvgText(getNameInitials(teamName, 2));
+  const label = escapeSvgText(trimVisualLabel(teamName, 22));
+  return buildSvgDataUri(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1040">
+      <defs>
+        <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0%" stop-color="${palette.dark}" />
+          <stop offset="48%" stop-color="${palette.secondary}" />
+          <stop offset="100%" stop-color="${palette.primary}" />
+        </linearGradient>
+      </defs>
+      <rect width="1600" height="1040" fill="url(#bg)" />
+      <circle cx="1270" cy="260" r="190" fill="${palette.light}" opacity="0.12" />
+      <circle cx="1240" cy="770" r="280" fill="${palette.light}" opacity="0.08" />
+      <text x="120" y="170" font-family="Arial, sans-serif" font-size="40" letter-spacing="5" fill="${palette.light}" opacity="0.7">WORLD CUP EDGE</text>
+      <text x="120" y="520" font-family="Barlow Condensed, Arial, sans-serif" font-size="290" font-weight="700" fill="${palette.light}" opacity="0.16">${initials}</text>
+      <text x="120" y="700" font-family="Barlow Condensed, Arial, sans-serif" font-size="132" font-weight="700" fill="${palette.light}">${label}</text>
+      <text x="126" y="772" font-family="Arial, sans-serif" font-size="36" fill="${palette.light}" opacity="0.92">Data-driven team sample and match context</text>
+    </svg>
+  `);
+}
+
+function buildPlayerPosterFallback(playerName, teamName) {
+  const palette = getPaletteForTeam(teamName || playerName || "World Cup");
+  const initials = escapeSvgText(getNameInitials(playerName, 2));
+  const playerLabel = escapeSvgText(trimVisualLabel(playerName, 24));
+  const teamLabel = escapeSvgText(trimVisualLabel(teamName || "World Cup", 18));
+  return buildSvgDataUri(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 1200">
+      <defs>
+        <linearGradient id="pg" x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0%" stop-color="${palette.dark}" />
+          <stop offset="60%" stop-color="${palette.secondary}" />
+          <stop offset="100%" stop-color="${palette.primary}" />
+        </linearGradient>
+      </defs>
+      <rect width="960" height="1200" fill="url(#pg)" />
+      <circle cx="735" cy="245" r="180" fill="${palette.light}" opacity="0.12" />
+      <circle cx="185" cy="980" r="220" fill="${palette.light}" opacity="0.08" />
+      <text x="88" y="120" font-family="Arial, sans-serif" font-size="30" letter-spacing="4" fill="${palette.light}" opacity="0.72">${teamLabel}</text>
+      <text x="88" y="530" font-family="Barlow Condensed, Arial, sans-serif" font-size="240" font-weight="700" fill="${palette.light}" opacity="0.14">${initials}</text>
+      <text x="88" y="770" font-family="Barlow Condensed, Arial, sans-serif" font-size="94" font-weight="700" fill="${palette.light}">${playerLabel}</text>
+      <text x="92" y="840" font-family="Arial, sans-serif" font-size="28" fill="${palette.light}" opacity="0.9">Player sample, role profile and efficiency context</text>
+    </svg>
+  `);
+}
+
+function buildMatchBackdropFallback(homeTeam, awayTeam) {
+  const cacheKey = `${homeTeam}__${awayTeam}`;
+  if (artworkCache.matchBackdrop.has(cacheKey)) return artworkCache.matchBackdrop.get(cacheKey);
+
+  const home = getPaletteForTeam(homeTeam);
+  const away = getPaletteForTeam(awayTeam);
+  const value = buildSvgDataUri(`
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820">
+      <defs>
+        <linearGradient id="home" x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0%" stop-color="${home.dark}" />
+          <stop offset="100%" stop-color="${home.secondary}" />
+        </linearGradient>
+        <linearGradient id="away" x1="1" x2="0" y1="0" y2="1">
+          <stop offset="0%" stop-color="${away.dark}" />
+          <stop offset="100%" stop-color="${away.secondary}" />
+        </linearGradient>
+      </defs>
+      <rect width="600" height="820" fill="url(#home)" />
+      <rect x="600" width="600" height="820" fill="url(#away)" />
+      <rect x="548" width="104" height="820" fill="#0b0f18" opacity="0.45" />
+      <text x="122" y="150" font-family="Arial, sans-serif" font-size="24" fill="#ffffff" opacity="0.7">MATCH FOCUS</text>
+      <text x="122" y="355" font-family="Barlow Condensed, Arial, sans-serif" font-size="88" font-weight="700" fill="#ffffff">${escapeSvgText(trimVisualLabel(homeTeam, 14))}</text>
+      <text x="680" y="355" font-family="Barlow Condensed, Arial, sans-serif" font-size="88" font-weight="700" fill="#ffffff">${escapeSvgText(trimVisualLabel(awayTeam, 14))}</text>
+      <text x="600" y="460" text-anchor="middle" font-family="Barlow Condensed, Arial, sans-serif" font-size="130" font-weight="700" fill="#ffffff" opacity="0.92">VS</text>
+      <text x="600" y="540" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#ffffff" opacity="0.76">Live schedule and match entry</text>
+    </svg>
+  `);
+
+  artworkCache.matchBackdrop.set(cacheKey, value);
+  return value;
+}
 
 function canonicalTeamName(name) {
   return articleTeamAliases[name] || name;
@@ -143,19 +297,38 @@ function sameTeam(left, right) {
   return Boolean(a && b) && (a === b || a.includes(b) || b.includes(a));
 }
 
-function getPlayerImage(playerName) {
-  return (
-    Object.entries(playerArtwork).find(([name]) => normalizeName(name) === normalizeName(playerName))?.[1] ||
-    fallbackArtwork.player
-  );
+function resolvePlayerTeamName(playerName, fallbackTeamName = "") {
+  if (fallbackTeamName) return fallbackTeamName;
+  return state.players.find((player) => normalizeName(player.player_name) === normalizeName(playerName))?.team_name || "";
+}
+
+function getPlayerImage(playerName, fallbackTeamName = "") {
+  const direct = Object.entries(playerArtwork).find(([name]) => normalizeName(name) === normalizeName(playerName))?.[1];
+  if (direct) return direct;
+
+  const teamName = resolvePlayerTeamName(playerName, fallbackTeamName);
+  const cacheKey = `${playerName}__${teamName}`;
+  if (!artworkCache.playerPoster.has(cacheKey)) {
+    artworkCache.playerPoster.set(cacheKey, buildPlayerPosterFallback(playerName, teamName));
+  }
+  return artworkCache.playerPoster.get(cacheKey);
 }
 
 function getTeamImage(teamName) {
-  return teamArtwork[teamName] || "assets/images/argentina-team.png";
+  if (teamArtwork[teamName]) return teamArtwork[teamName];
+  if (!artworkCache.teamBadge.has(teamName)) {
+    artworkCache.teamBadge.set(teamName, buildTeamBadgeFallback(teamName));
+  }
+  return artworkCache.teamBadge.get(teamName);
 }
 
 function getTeamBackdrop(teamName) {
-  return teamBackdropArtwork[teamName] || fallbackArtwork.team;
+  if (teamBackdropArtwork[teamName]) return teamBackdropArtwork[teamName];
+  if (!teamName) return fallbackArtwork.team;
+  if (!artworkCache.teamBackdrop.has(teamName)) {
+    artworkCache.teamBackdrop.set(teamName, buildTeamBackdropFallback(teamName));
+  }
+  return artworkCache.teamBackdrop.get(teamName);
 }
 
 function pickFeaturedTeams(teams) {
@@ -233,7 +406,10 @@ function getHeadToHead(homeTeam, awayTeam, limit = 3) {
     .slice(0, limit);
 }
 
-function getLiveCardArtwork(index) {
+function getLiveCardArtwork(index, match = null) {
+  if (match?.homeTeam && match?.awayTeam) {
+    return buildMatchBackdropFallback(match.homeTeam, match.awayTeam);
+  }
   return liveCardArtwork[index % liveCardArtwork.length];
 }
 
@@ -509,7 +685,7 @@ function buildLiveMatchCard(match, index) {
   const statusText = phase.badge;
   const ctaText = isMember() ? "进入完整比赛页" : "进入比赛页";
   return `
-    <article class="live-match-card" style="--card-cover:url('${getLiveCardArtwork(index)}')">
+    <article class="live-match-card" style="--card-cover:url('${getLiveCardArtwork(index, match)}')">
       <div class="card-top">
         <span class="time-badge">Match ${String(match.matchNumber).padStart(2, "0")}</span>
         <span class="access access-free">${phase.label}</span>
@@ -773,7 +949,11 @@ function renderSnapshotCards() {
   }
 
   const leadScorer = snapshot.top_scorers?.[0];
-  const latestFinal = snapshot.latest_matches?.[0];
+  const latestFinal =
+    [...state.matches]
+      .filter((match) => /final/i.test(String(match.stage || "")))
+      .sort((a, b) => String(b.match_date).localeCompare(String(a.match_date)) || Number(b.match_id) - Number(a.match_id))[0] ||
+    snapshot.latest_matches?.[0];
 
   const insightBoard = qs("#data-insight-board");
   if (insightBoard) {
@@ -813,9 +993,15 @@ function renderSnapshotCards() {
 
   const finalsBoard = qs("#homepage-finals-board");
   if (finalsBoard && latestFinal) {
+    const winnerTeam =
+      Number(latestFinal.home_score) > Number(latestFinal.away_score)
+        ? latestFinal.home_team
+        : Number(latestFinal.away_score) > Number(latestFinal.home_score)
+          ? latestFinal.away_team
+          : latestFinal.home_team;
     finalsBoard.innerHTML = `
       <article class="pulse-media-card pulse-media-card-final">
-        <img src="assets/images/argentina-champion.jpg" alt="冠军比赛画面" loading="lazy">
+        <img src="${getTeamBackdrop(winnerTeam)}" alt="${winnerTeam} 冠军比赛画面" loading="lazy">
         <div class="pulse-media-copy">
           <span>冠军样本</span>
           <h2>${latestFinal.home_team} vs ${latestFinal.away_team}</h2>
@@ -996,6 +1182,8 @@ function renderTeamCards() {
       )
       .join("");
   }
+
+  renderTeamLibraryVisual();
 }
 
 function renderPlayerCards() {
@@ -1042,6 +1230,8 @@ function renderPlayerCards() {
       )
       .join("");
   }
+
+  renderPlayerLibraryVisuals(featured);
 }
 
 function renderMemberPage() {
@@ -1378,16 +1568,63 @@ function buildArticleSignalCards(match, phase, predictionView, favoredTeam) {
   `;
 }
 
+function renderTeamLibraryVisual() {
+  const container = qs("#teams-library-visual");
+  if (!container) return;
+
+  const featured = pickFeaturedTeams(state.teams);
+  const primary = featured[0];
+  const secondary = featured[1];
+  if (!primary) return;
+
+  container.innerHTML = `
+    <img
+      class="hero-side-image"
+      src="${getTeamBackdrop(primary.team)}"
+      alt="${primary.team} 鐞冮槦鐢婚潰"
+      loading="lazy"
+    >
+    <div class="hero-highlights compact-hero-highlights">
+      <span>${primary.team}</span>
+      <span>${primary.matches} 鍦烘牱鏈�</span>
+      <span>${secondary ? `鍚屾 ${secondary.team}` : "World Cup sample"}</span>
+    </div>
+  `;
+}
+
+function renderPlayerLibraryVisuals(players) {
+  const container = qs("#players-library-visuals");
+  if (!container) return;
+
+  const visuals = (players || []).slice(0, 3);
+  if (!visuals.length) return;
+
+  container.innerHTML = `
+    <div class="visual-mosaic">
+      ${visuals
+        .map(
+          (player, index) => `
+            <article class="visual-mosaic-tile ${index < 2 ? "visual-mosaic-tile-tall" : "visual-mosaic-tile-wide"}">
+              <img src="${getPlayerImage(player.player_name, player.team_name)}" alt="${player.player_name} 鐢婚潰" loading="lazy">
+              <span>${player.player_name}</span>
+            </article>
+          `
+        )
+        .join("")}
+    </div>
+  `;
+}
+
 function updateHeroCinematic(featuredMatch) {
   const cinematicImage = qs("#hero-cinematic-image");
   const cinematicKicker = qs("#hero-cinematic-kicker");
   const cinematicTitle = qs("#hero-cinematic-title");
-  const cinematicText = qs("#hero-cinematic-text");
+  const cinematicText = qs("#hero-cinematic-text") || { textContent: "" };
   const playerImage = qs("#hero-cinematic-player-image");
   const playerLabel = qs("#hero-cinematic-player-label");
   const teamImage = qs("#hero-cinematic-team-image");
   const teamLabel = qs("#hero-cinematic-team-label");
-  if (!cinematicImage || !cinematicKicker || !cinematicTitle || !cinematicText || !playerImage || !playerLabel || !teamImage || !teamLabel) return;
+  if (!cinematicImage || !cinematicKicker || !cinematicTitle || !playerImage || !playerLabel || !teamImage || !teamLabel) return;
 
   if (!featuredMatch) return;
 
@@ -1407,7 +1644,7 @@ function updateHeroCinematic(featuredMatch) {
   cinematicText.textContent = `${featuredMatch.kickoffCN} 开球，先看谁能把比赛推进到自己的节奏区。`;
 
   if (focusedPlayer) {
-    playerImage.src = getPlayerImage(focusedPlayer.player_name);
+    playerImage.src = getPlayerImage(focusedPlayer.player_name, focusedPlayer.team_name);
     playerImage.alt = focusedPlayer.player_name;
     playerLabel.textContent = focusedPlayer.player_name;
   }
@@ -1907,8 +2144,8 @@ function renderMatchArticlePage() {
   const favoredLead = getTopPlayersByTeam(favoredTeam, 1)[0];
   const heroImage =
     getTeamBackdrop(favoredTeam) ||
-    getLiveCardArtwork((match.matchNumber || 1) - 1) ||
-    (favoredLead && getPlayerImage(favoredLead.player_name));
+    getLiveCardArtwork((match.matchNumber || 1) - 1, match) ||
+    (favoredLead && getPlayerImage(favoredLead.player_name, favoredLead.team_name));
   const scoreText = match.statusState === "pre" ? "VS" : `${match.homeScore}-${match.awayScore}`;
   const statusText = phase.badge;
   const headToHead = getHeadToHead(match.homeTeam, match.awayTeam, 3);
