@@ -330,6 +330,45 @@ function buildHeroTeamPanel(teamName, side) {
   }
 }
 
+function chooseFeaturedMatches(matches) {
+  const list = [...(matches || [])];
+  if (!list.length) {
+    return { featured: null, nextMatch: null, rail: [] };
+  }
+
+  const liveIndex = list.findIndex((match) => match.statusState === "in");
+  if (liveIndex >= 0) {
+    return {
+      featured: list[liveIndex],
+      nextMatch: list[liveIndex + 1] || list[liveIndex - 1] || null,
+      rail: list.slice(liveIndex, liveIndex + 3),
+    };
+  }
+
+  const upcomingIndex = list.findIndex((match) => match.statusState === "pre");
+  if (upcomingIndex > 0) {
+    return {
+      featured: list[upcomingIndex - 1],
+      nextMatch: list[upcomingIndex],
+      rail: list.slice(Math.max(0, upcomingIndex - 1), upcomingIndex + 2),
+    };
+  }
+
+  if (upcomingIndex === 0) {
+    return {
+      featured: list[0],
+      nextMatch: list[1] || null,
+      rail: list.slice(0, 3),
+    };
+  }
+
+  return {
+    featured: list[list.length - 1],
+    nextMatch: list[list.length - 2] || null,
+    rail: list.slice(Math.max(0, list.length - 3)),
+  };
+}
+
 function isFreeTeam(teamName, teams = state.teams) {
   return (
     isMember() ||
@@ -515,6 +554,11 @@ function renderLiveSchedule() {
 
   const opening = payload.openingMatch;
   const second = payload.secondMatch;
+  const { featured, nextMatch, rail } = chooseFeaturedMatches(payload.matches);
+  if (!featured) {
+    renderLiveFallback();
+    return;
+  }
 
   const homeHero = qs("#live-schedule-hero");
   const homeMeta = qs("#live-schedule-meta");
@@ -535,9 +579,6 @@ function renderLiveSchedule() {
   const memberGrid = qs("#member-live-match-grid");
 
   if (heroMatchTitle && heroMatchCopy && heroMatchTags) {
-    const featuredMatches = payload.matches.slice(0, 3);
-    const featured = featuredMatches[0];
-    const nextMatch = featuredMatches[1] || payload.matches[1] || null;
     const featuredPrediction = predictionUtils.buildPredictionViewModel
       ? predictionUtils.buildPredictionViewModel(featured.prediction, isMember())
       : null;
@@ -547,8 +588,8 @@ function renderLiveSchedule() {
     heroMatchTitle.textContent = `${featured.homeTeam} vs ${featured.awayTeam}`;
     heroMatchCopy.textContent = `${featured.kickoffCN} 开球，当前阶段 ${featuredPhase?.label || "赛前分析"}。公开层先给比赛轮廓，具体比分预测继续放在完整版本里。`;
     heroMatchTags.innerHTML = [
-      `开幕战 ${opening?.homeTeam || ""} vs ${opening?.awayTeam || ""}`,
-      `第二场 ${second?.homeTeam || ""} vs ${second?.awayTeam || ""}`,
+      `${featuredPhase?.label || "焦点战"} ${featured.homeTeam} vs ${featured.awayTeam}`,
+      nextMatch ? `下一场 ${nextMatch.homeTeam} vs ${nextMatch.awayTeam}` : `开幕战 ${opening?.homeTeam || ""} vs ${opening?.awayTeam || ""}`,
       `比分 ${getPredictionDisplayLabel(featuredPrediction)}`,
     ]
       .map((item) => `<span>${item}</span>`)
@@ -576,11 +617,14 @@ function renderLiveSchedule() {
   }
 
   if (homeHero && homeGrid && homeFooter) {
+    const featuredPhase = predictionUtils.buildMatchPhaseViewModel
+      ? predictionUtils.buildMatchPhaseViewModel(featured)
+      : buildPhaseFallback(featured);
     homeHero.innerHTML = `
       <div class="live-schedule-copy">
         <span class="article-meta">2026 美加墨世界杯</span>
-        <h3>第一场 ${opening?.homeTeam || ""} vs ${opening?.awayTeam || ""}</h3>
-        <p>第二场 ${second?.homeTeam || ""} vs ${second?.awayTeam || ""}。今日比赛已同步到站内，点击单场直接进入公开分析页。</p>
+        <h3>${featuredPhase?.label || "当前焦点战"} ${featured.homeTeam} vs ${featured.awayTeam}</h3>
+        <p>${nextMatch ? `下一场 ${nextMatch.homeTeam} vs ${nextMatch.awayTeam}。` : ""}今日比赛已同步到站内，点击单场直接进入公开分析页。</p>
       </div>
       <div class="live-schedule-meta">
         <span>更新 ${new Date(payload.updatedAt).toLocaleString("zh-CN", { hour12: false })}</span>
@@ -588,16 +632,16 @@ function renderLiveSchedule() {
         <span>实时赛程 + 历史样本</span>
       </div>
     `;
-    homeGrid.innerHTML = payload.matches.slice(0, 6).map((match, index) => buildLiveMatchCard(match, index)).join("");
+    homeGrid.innerHTML = (rail.length ? rail : payload.matches.slice(0, 3)).map((match, index) => buildLiveMatchCard(match, index)).join("");
     homeFooter.innerHTML = `
       <span>全部比赛持续更新，单场入口已全部打开。</span>
       <a class="article-link" href="data.html">查看全部比赛</a>
     `;
     if (homeMeta) {
       homeMeta.innerHTML = `
-        <span>开幕战 ${opening?.kickoffCN || ""}</span>
-        <span>第二场 ${second?.kickoffCN || ""}</span>
-        <span>全部比赛已接入</span>
+        <span>焦点战 ${featured.kickoffCN || ""}</span>
+        <span>${nextMatch ? `下一场 ${nextMatch.kickoffCN || ""}` : `开幕战 ${opening?.kickoffCN || ""}`}</span>
+        <span>已接入 ${payload.matches.length} 场</span>
       `;
     }
   }
